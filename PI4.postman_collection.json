@@ -1,0 +1,132 @@
+{
+	"info": {
+		"_postman_id": "d7184485-cba3-4207-96d3-8de4420e6e6f",
+		"name": "PI4",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "19749345"
+	},
+	"item": [
+		{
+			"name": "cliente",
+			"item": [
+				{
+					"name": "LIST CLIENTES",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/cliente/clienteList"
+					},
+					"response": []
+				},
+				{
+					"name": "LIST DETALHADA CLIENTES",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/cliente/listDetalhada"
+					},
+					"response": []
+				},
+				{
+					"name": "GET CLIENTE",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/cliente/1"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE CLIENTE",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/cliente/delete/1"
+					},
+					"response": []
+				},
+				{
+					"name": "ADD CLIENTE",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Cleito Ribeiro da Silva\",\r\n    \"email\": \"cleiton_ribeiro@live.com\",\r\n    \"cpf\":\"58880191004\",\r\n    \"senha\":\"Senha12345\",\r\n    \"tipoConta\": 1\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/cliente/add"
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE CLIENTE",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"nome\": \"Cleiton Ribeiro da Silva Santos\",\r\n    \"email\": \"cleiton_ribeiro@live.com\",\r\n    \"cpf\":\"58880191004\",\r\n    \"senha\":\"Senha12345\",\r\n    \"tipoConta\" :1,\r\n    \"statusConta\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/cliente/update"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
