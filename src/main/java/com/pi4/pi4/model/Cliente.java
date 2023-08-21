@@ -35,9 +35,6 @@ public class Cliente {
     private String senha;
 
     @Column(nullable = false)
-    private int tipoConta = -1;
-
-    @Column(nullable = false)
     private Byte statusConta ;
 
     @CreatedDate

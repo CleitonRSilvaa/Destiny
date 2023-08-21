@@ -58,9 +58,6 @@ public class ClienteController {
             errors.add("senha é obrigatório.");
         }
 
-        if (cliente.getTipoConta() == -1){
-            errors.add("tipoConta é obrigatório.");
-        }
 
         if (clienteRepository.findByEmail(cliente.getEmail()) != null) {
             errors.add("email já está cadastrado.");
@@ -125,10 +122,6 @@ public class ClienteController {
         }
         if (cliente.getSenha() == null) {
             errors.add("senha é obrigatório.");
-        }
-
-        if (cliente.getTipoConta() == -1){
-            errors.add("tipoConta é obrigatório.");
         }
 
         if (cliente.getStatusConta() == null){
