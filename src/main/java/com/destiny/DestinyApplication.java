@@ -1,4 +1,4 @@
-package com.pi4.pi4;
+package com.destiny;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,10 +6,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 @EnableJpaAuditing
-public class Pi4Application {
+public class DestinyApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Pi4Application.class, args);
+		SpringApplication.run(DestinyApplication.class, args);
 	}
 
 }

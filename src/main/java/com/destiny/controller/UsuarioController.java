@@ -1,10 +1,9 @@
-package com.pi4.pi4.controller;
+package com.destiny.controller;
 
-
-import com.pi4.pi4.model.Cliente;
-import com.pi4.pi4.model.MensagemResponse;
-import com.pi4.pi4.model.ValidationException;
-import com.pi4.pi4.repository.ClienteRepository;
+import com.destiny.model.MensagemResponse;
+import com.destiny.model.Usuario;
+import com.destiny.model.ValidationException;
+import com.destiny.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,54 +15,55 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("cliente")
-public class ClienteController {
-
+@RequestMapping("usuario")
+public class UsuarioController {
     @Autowired
-    private ClienteRepository clienteRepository;
+    private UsuarioRepository usuarioRepository;
 
-    @RequestMapping("clienteList")
+    @RequestMapping("usuarioList")
     @GetMapping
     public List<Map<String, Object>> list(){
-        return clienteRepository.findAllCustom();
+        return usuarioRepository.findAllCustom();
     }
 
 
     @RequestMapping("/listDetalhada")
     @GetMapping
-    public List<Cliente> listAllDetalhes(){
-        return clienteRepository.findAll();
+    public List<Usuario> listAllDetalhes(){
+        return usuarioRepository.findAll();
     }
 
     @RequestMapping("add")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<MensagemResponse> insertCliente(@RequestBody Cliente cliente) {
+    public ResponseEntity<MensagemResponse> insertCliente(@RequestBody Usuario usuario) {
         List<String> errors = new ArrayList<>();
         MensagemResponse mensagemResponse = new MensagemResponse();
         List<String> detalhes = new ArrayList<>();
 
-        cliente.setStatusConta((byte) 1);
+        usuario.setStatusConta((byte) 1);
 
-        if (cliente.getNome() == null) {
+        if (usuario.getNome() == null) {
             errors.add("nome é obrigatório.");
         }
-        if (cliente.getEmail() == null) {
+        if (usuario.getEmail() == null) {
             errors.add("email é obrigatório.");
         }
-        if (cliente.getCpf() == null) {
+        if (usuario.getCpf() == null) {
             errors.add("cpf é obrigatório.");
         }
-        if (cliente.getSenha() == null) {
+        if (usuario.getSenha() == null) {
             errors.add("senha é obrigatório.");
         }
+        if (usuario.getTipoConta() == -1){
+            errors.add("tipoConta é obrigatório.");
+        }
 
-
-        if (clienteRepository.findByEmail(cliente.getEmail()) != null) {
+        if (usuarioRepository.findByEmail(usuario.getEmail()) != null) {
             errors.add("email já está cadastrado.");
         }
 
-        if (clienteRepository.findByCpf(cliente.getCpf()) != null) {
+        if (usuarioRepository.findByCpf(usuario.getCpf()) != null) {
             errors.add("cpf já está cadastrado.");
         }
 
@@ -71,7 +71,7 @@ public class ClienteController {
             throw new ValidationException("parametros invalidos", errors);
         }
 
-        clienteRepository.save(cliente);
+        usuarioRepository.save(usuario);
 
         mensagemResponse.setStatus(201);
         mensagemResponse.setMessage("sucess");
@@ -84,56 +84,60 @@ public class ClienteController {
     @RequestMapping("update")
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<MensagemResponse> updateCliente(@RequestBody Cliente cliente) {
+    public ResponseEntity<MensagemResponse> updateCliente(@RequestBody Usuario usuario) {
         MensagemResponse mensagemResponse = new MensagemResponse();
         List<String> detalhes = new ArrayList<>();
         List<String> errors = new ArrayList<>();
 
 
-       if (!clienteRepository.existsById(cliente.getId())){
+        if (!usuarioRepository.existsById(usuario.getId())){
 
-           mensagemResponse.setStatus(400);
+            mensagemResponse.setStatus(400);
 
-           mensagemResponse.setMessage("erro");
-           if (cliente.getId()==0){
-               detalhes.add("parementro id nao definido");
-           }else {
-               detalhes.add("id invalido");
-           }
+            mensagemResponse.setMessage("erro");
+            if (usuario.getId()==0){
+                detalhes.add("parementro id nao definido");
+            }else {
+                detalhes.add("id invalido");
+            }
 
-           mensagemResponse.setDetails(detalhes);
+            mensagemResponse.setDetails(detalhes);
 
-           return new ResponseEntity<>(mensagemResponse, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(mensagemResponse, HttpStatus.BAD_REQUEST);
 
-       }
-
-
-        clienteRepository.existsById(cliente.getId());
+        }
 
 
-        if (cliente.getNome() == null) {
+        usuarioRepository.existsById(usuario.getId());
+
+
+        if (usuario.getNome() == null) {
             errors.add("nome é obrigatório.");
         }
-        if (cliente.getEmail() == null) {
+        if (usuario.getEmail() == null) {
             errors.add("email é obrigatório.");
         }
-        if (cliente.getCpf() == null) {
+        if (usuario.getCpf() == null) {
             errors.add("cpf é obrigatório.");
         }
-        if (cliente.getSenha() == null) {
+        if (usuario.getSenha() == null) {
             errors.add("senha é obrigatório.");
         }
 
-        if (cliente.getStatusConta() == null){
+        if (usuario.getTipoConta() == -1){
+            errors.add("tipoConta é obrigatório.");
+        }
+
+        if (usuario.getStatusConta() == null){
             errors.add("statusConta é obrigatório.");
         }
 
-        if (clienteRepository.existsByEmailAndIdNot(cliente.getEmail(), cliente.getId())) {
-            errors.add("E-mail já associado a outro cliente.");
+        if (usuarioRepository.existsByEmailAndIdNot(usuario.getEmail(), usuario.getId())) {
+            errors.add("E-mail já associado a outro usuario.");
         }
 
-        if (clienteRepository.existsByCpfAndIdNot(cliente.getCpf(), cliente.getId())) {
-            errors.add("CPF já associado a outro cliente.");
+        if (usuarioRepository.existsByCpfAndIdNot(usuario.getCpf(), usuario.getId())) {
+            errors.add("CPF já associado a outro usuario.");
         }
 
         if (!errors.isEmpty()) {
@@ -141,7 +145,7 @@ public class ClienteController {
         }
 
 
-        clienteRepository.save(cliente);
+        usuarioRepository.save(usuario);
 
         mensagemResponse.setStatus(200);
         mensagemResponse.setMessage("sucess");
@@ -168,7 +172,7 @@ public class ClienteController {
         }
 
 
-        if(!clienteRepository.existsById(longId)){
+        if(!usuarioRepository.existsById(longId)){
             mensagemResponse.setStatus(400);
             mensagemResponse.setMessage("erro");
             detalhes.add("Id não existe");
@@ -176,7 +180,7 @@ public class ClienteController {
             return new ResponseEntity<>(mensagemResponse, HttpStatus.BAD_REQUEST);
         }
 
-        clienteRepository.deleteById(longId);
+        usuarioRepository.deleteById(longId);
         mensagemResponse.setStatus(200);
         mensagemResponse.setMessage("sucess");
         mensagemResponse.setDetails(detalhes);
@@ -187,7 +191,7 @@ public class ClienteController {
     @GetMapping
     @RequestMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Optional<Cliente> buscarCliente(@PathVariable String id){
+    public Optional<Usuario> buscarCliente(@PathVariable String id){
         List<String> errors = new ArrayList<>();
         long longId = 0;
 
@@ -201,9 +205,7 @@ public class ClienteController {
             throw new ValidationException("parametro invalido", errors);
         }
 
-        return clienteRepository.findById(longId);
+        return usuarioRepository.findById(longId);
 
     }
-
-
 }

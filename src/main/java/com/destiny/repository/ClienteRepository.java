@@ -1,31 +1,37 @@
-package com.pi4.pi4.repository;
+package com.destiny.repository;
 
-import com.pi4.pi4.model.Usuario;
+import com.destiny.model.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Map;
 
-public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
-
-    Usuario findByEmail(String email);
-    Usuario findByCpf(String cpf);
+public interface ClienteRepository extends JpaRepository<Cliente,Long> {
+    Cliente findByEmail(String email);
+    Cliente findByCpf(String cpf);
     boolean existsByEmailAndIdNot(String email, Long id);
     boolean existsByCpfAndIdNot(String cpf, Long id);
 
-    public interface UsuarioResumo {
+    public interface ClienteResumo {
         Long getId();
         String getNome();
         String getCpf();
         String getEmail();
         Byte statusConta();
-        int tipoConta();
 
     }
 
-    @Query("SELECT new map(u.id as id, u.nome as nome, u.email as email, u.tipoConta as tipoConta, u.statusConta as statusConta ) FROM Usuario u")
+    @Query("SELECT new map(c.id as id, c.nome as nome, c.email as email, c.statusConta as statusConta ) FROM Cliente c")
     List<Map<String, Object>> findAllCustom();
+
+
+
+
+
+
+
+
 
 
 }

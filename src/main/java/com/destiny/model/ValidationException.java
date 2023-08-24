@@ -1,4 +1,4 @@
-package com.pi4.pi4.model;
+package com.destiny.model;
 
 import lombok.Data;
 import java.util.List;

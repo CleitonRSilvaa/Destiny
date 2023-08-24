@@ -1,7 +1,6 @@
-package com.pi4.pi4.model;
+package com.destiny.model;
 
-
-import com.pi4.pi4.utils.EncriptSenha;
+import com.destiny.utils.EncriptSenha;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -12,7 +11,7 @@ import java.util.Date;
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Usuario {
+public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,9 +33,6 @@ public class Usuario {
     private String senha;
 
     @Column(nullable = false)
-    private int tipoConta = -1;
-
-    @Column(nullable = false)
     private Byte statusConta ;
 
     @CreatedDate
@@ -46,5 +42,4 @@ public class Usuario {
     public void setSenha(String senha) {
         this.senha = EncriptSenha.md5(senha);
     }
-
 }

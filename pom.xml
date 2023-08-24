@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.2</version>
+		<version>3.0.11-SNAPSHOT</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.pi4</groupId>
-	<artifactId>pi4</artifactId>
+	<groupId>com.destiny</groupId>
+	<artifactId>destiny</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>pi4</name>
+	<name>Destiny</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>

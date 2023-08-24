@@ -1,10 +1,10 @@
-package com.pi4.pi4;
+package com.destiny;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class Pi4ApplicationTests {
+class DestinyApplicationTests {
 
 	@Test
 	void contextLoads() {

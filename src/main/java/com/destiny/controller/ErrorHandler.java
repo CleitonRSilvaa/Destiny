@@ -1,7 +1,7 @@
-package com.pi4.pi4.controller;
+package com.destiny.controller;
 
-import com.pi4.pi4.model.MensagemResponse;
-import com.pi4.pi4.model.ValidationException;
+import com.destiny.model.MensagemResponse;
+import com.destiny.model.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
