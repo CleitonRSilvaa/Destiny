@@ -35,13 +35,10 @@ production:
     script:
       - which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )
       - eval $(ssh-agent -s)
-      - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-      - mkdir ~/.ssh  # Cria o diretório ~/.ssh
-      - ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-      #- echo "$SSH_PRIVATE_KEY" > deploy_key.pem
-      #- chmod 600 deploy_key.pem
-      - scp -o StrictHostKeyChecking=no target/destiny-0.0.1-SNAPSHOT.jar ubuntu@ec2-18-118-4-34.us-east-2.compute.amazonaws.com:/opt/
-      #- rm -f deploy_key.pem
+      - echo "$SSH_PRIVATE_KEY" > deploy_key.pem
+      - chmod 600 deploy_key.pem
+      - scp -i deploy_key.pem -o StrictHostKeyChecking=no target/destiny-0.0.1-SNAPSHOT.jar ubuntu@ec2-18-118-4-34.us-east-2.compute.amazonaws.com:/opt/destiny/
+      - rm -f deploy_key.pem
       - echo "Deploy sucess"
     only: 
         - main
