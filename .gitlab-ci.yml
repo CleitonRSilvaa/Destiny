@@ -1,4 +1,5 @@
-image: maven:4.0.0
+image: maven:latest
+
 
 variables:
   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
