@@ -27,7 +27,7 @@ build:
 teste:
     stage: test
     #script : ./mvnw test
-    script: -eco 'teste pass'
+    script: -echo 'teste pass'
 
 
 production:
