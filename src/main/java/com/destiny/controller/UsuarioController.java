@@ -17,24 +17,21 @@ import java.util.Optional;
 @RestController
 @RequestMapping("usuario")
 public class UsuarioController {
+
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @RequestMapping("usuarioList")
-    @GetMapping
+    @GetMapping("usuarioList")
     public List<Map<String, Object>> list(){
         return usuarioRepository.findAllCustom();
     }
 
-
-    @RequestMapping("/listDetalhada")
-    @GetMapping
+    @GetMapping("/listDetalhada")
     public List<Usuario> listAllDetalhes(){
         return usuarioRepository.findAll();
     }
 
-    @RequestMapping("add")
-    @PostMapping
+    @PostMapping("add")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<MensagemResponse> insertCliente(@RequestBody Usuario usuario) {
         List<String> errors = new ArrayList<>();
@@ -80,9 +77,7 @@ public class UsuarioController {
         return new ResponseEntity<>(mensagemResponse, HttpStatus.CREATED);
     }
 
-
-    @RequestMapping("update")
-    @PutMapping
+    @PutMapping("update")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MensagemResponse> updateCliente(@RequestBody Usuario usuario) {
         MensagemResponse mensagemResponse = new MensagemResponse();
@@ -154,8 +149,7 @@ public class UsuarioController {
         return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
     }
 
-    @DeleteMapping
-    @RequestMapping("delete/{id}")
+    @DeleteMapping("delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MensagemResponse> deleteCliente(@PathVariable String id) {
         MensagemResponse mensagemResponse = new MensagemResponse();
@@ -185,11 +179,10 @@ public class UsuarioController {
         mensagemResponse.setMessage("sucess");
         mensagemResponse.setDetails(detalhes);
 
-        return new ResponseEntity<>(mensagemResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
     }
 
-    @GetMapping
-    @RequestMapping("/{id}")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Optional<Usuario> buscarCliente(@PathVariable String id){
         List<String> errors = new ArrayList<>();
@@ -206,6 +199,5 @@ public class UsuarioController {
         }
 
         return usuarioRepository.findById(longId);
-
     }
 }

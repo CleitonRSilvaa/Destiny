@@ -22,21 +22,19 @@ public class ClienteController {
     @Autowired
     private ClienteRepository clienteRepository;
 
-    @RequestMapping("clienteList")
-    @GetMapping
+    @GetMapping("clienteList")
     public List<Map<String, Object>> list(){
         return clienteRepository.findAllCustom();
     }
 
 
-    @RequestMapping("/listDetalhada")
-    @GetMapping
+    @GetMapping("/listDetalhada")
     public List<Cliente> listAllDetalhes(){
         return clienteRepository.findAll();
     }
 
-    @RequestMapping("add")
-    @PostMapping
+
+    @PostMapping("add")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<MensagemResponse> insertCliente(@RequestBody Cliente cliente) {
         List<String> errors = new ArrayList<>();
@@ -81,8 +79,8 @@ public class ClienteController {
     }
 
 
-    @RequestMapping("update")
-    @PutMapping
+
+    @PutMapping("update")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MensagemResponse> updateCliente(@RequestBody Cliente cliente) {
         MensagemResponse mensagemResponse = new MensagemResponse();
@@ -90,22 +88,22 @@ public class ClienteController {
         List<String> errors = new ArrayList<>();
 
 
-       if (!clienteRepository.existsById(cliente.getId())){
+        if (!clienteRepository.existsById(cliente.getId())){
 
-           mensagemResponse.setStatus(400);
+            mensagemResponse.setStatus(400);
 
-           mensagemResponse.setMessage("erro");
-           if (cliente.getId()==0){
-               detalhes.add("parementro id nao definido");
-           }else {
-               detalhes.add("id invalido");
-           }
+            mensagemResponse.setMessage("erro");
+            if (cliente.getId()==0){
+                detalhes.add("parementro id nao definido");
+            }else {
+                detalhes.add("id invalido");
+            }
 
-           mensagemResponse.setDetails(detalhes);
+            mensagemResponse.setDetails(detalhes);
 
-           return new ResponseEntity<>(mensagemResponse, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(mensagemResponse, HttpStatus.BAD_REQUEST);
 
-       }
+        }
 
 
         clienteRepository.existsById(cliente.getId());
@@ -150,8 +148,7 @@ public class ClienteController {
         return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
     }
 
-    @DeleteMapping
-    @RequestMapping("delete/{id}")
+    @DeleteMapping("delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MensagemResponse> deleteCliente(@PathVariable String id) {
         MensagemResponse mensagemResponse = new MensagemResponse();
@@ -181,11 +178,10 @@ public class ClienteController {
         mensagemResponse.setMessage("sucess");
         mensagemResponse.setDetails(detalhes);
 
-        return new ResponseEntity<>(mensagemResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
     }
 
-    @GetMapping
-    @RequestMapping("/{id}")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Optional<Cliente> buscarCliente(@PathVariable String id){
         List<String> errors = new ArrayList<>();
