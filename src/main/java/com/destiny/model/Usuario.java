@@ -21,23 +21,21 @@ public class Usuario {
     @Column(nullable = false)
     private String nome;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false, updatable = false)
     private String email;
 
     @Column(nullable = false,unique = true)
     private String cpf;
-
-    @Column(length = 12)
-    private String telefone;
-
     @Column(nullable = false)
     private String senha;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private int tipoConta = -1;
+    private TipoConta tipoConta;
+
 
     @Column(nullable = false)
-    private Byte statusConta ;
+    private StatusConta statusConta ;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -47,4 +45,7 @@ public class Usuario {
         this.senha = EncriptSenha.md5(senha);
     }
 
+    public void setNome(String nome) {
+        this.nome = nome.toUpperCase();
+    }
 }
