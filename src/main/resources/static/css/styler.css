@@ -1,0 +1,19 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+.custon-container {
+  padding-top: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 10px;
+}
+
+#btnNovaSenha {
+  width: 100%;
+}
+
+.bntDeAcoes {
+  display: flex;
+  justify-content: space-between;
+}
