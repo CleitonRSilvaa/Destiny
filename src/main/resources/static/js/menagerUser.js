@@ -1,29 +1,136 @@
 $(document).ready(function () {
-  $("#cpf").mask("000.000.000-00");
-  $("#editCpf").mask("000.000.000-00");
+  $("#cpf, #editCpf").mask("000.000.000-00");
 });
 
-function regexNumero(dado) {
-  dado = dado.replace(/[^\d]+/g, "");
-  return dado;
-}
+const BASE_URL = "http://localhost:8080";
 
-function isValidEmail(email) {
+const FormManager = {
+  regexNumero(dado) {
+    return dado.replace(/[^\d]+/g, "");
+  },
+
+  isValidEmail(email) {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
-}
+  },
 
-function clearForm(fields, alertId, defaultValues = {}) {
-  const alert = document.getElementById(alertId);
-  fields.forEach((field) => $(`#${field}`).val(defaultValues[field] || ""));
-  alert.textContent = "";
-  alert.style.display = "none";
-}
+  showAlert(alert, message) {
+    alert.textContent = message;
+    alert.style.display = "block";
+  },
 
+  hideAlert(alert) {
+    alert.textContent = "";
+    alert.style.display = "none";
+  },
+
+  clearForm(fields, alertId, defaultValues = {}) {
+    const alert = document.getElementById(alertId);
+    fields.forEach((field) => $(`#${field}`).val(defaultValues[field] || ""));
+    this.hideAlert(alert);
+  },
+
+  senhasSaoIguais(idSenha, idSenhaConfime, alert) {
+    const senha = document.getElementById(idSenha).value;
+    const senhaConfime = document.getElementById(idSenhaConfime).value;
+
+    if (!senha || !senhaConfime) {
+      this.showAlert(alert, "As senhas são obrigatórias!");
+      return false;
+    }
+
+    if (senha !== senhaConfime) {
+      document.getElementById(idSenha).classList.add("alert", "alert-danger");
+      document
+        .getElementById(idSenhaConfime)
+        .classList.add("alert", "alert-danger");
+      return false;
+    } else {
+      document
+        .getElementById(idSenha)
+        .classList.remove("alert", "alert-danger");
+      document
+        .getElementById(idSenhaConfime)
+        .classList.remove("alert", "alert-danger");
+      return true;
+    }
+  },
+
+  validateForm(fields, alertId, isCreating) {
+    const alert = document.getElementById(alertId);
+
+    // Valores dos campos de senha e edição de senha
+    const editSenhaValue = document.getElementById("editSenha")
+      ? document.getElementById("editSenha").value.trim()
+      : "";
+    const editSenhaConfimeValue = document.getElementById("editSenhaConfime")
+      ? document.getElementById("editSenhaConfime").value.trim()
+      : "";
+    const senhaValue = document.getElementById("senha")
+      ? document.getElementById("senha").value.trim()
+      : "";
+    const senhaConfimeValue = document.getElementById("senhaConfime")
+      ? document.getElementById("senhaConfime").value.trim()
+      : "";
+
+    // Se apenas um dos campos de senha de edição estiver preenchido
+    if (
+      (editSenhaValue && !editSenhaConfimeValue) ||
+      (!editSenhaValue && editSenhaConfimeValue)
+    ) {
+      this.showAlert(
+        alert,
+        "Ambos os campos de senha de edição devem ser preenchidos ou ambos devem ser deixados em branco!"
+      );
+      return false;
+    }
+
+    // Se estamos criando um novo usuário e os campos senha ou senhaConfime estiverem vazios
+    if (isCreating && (!senhaValue || !senhaConfimeValue)) {
+      this.showAlert(alert, "Os campos de senha são obrigatórios!");
+      return false;
+    }
+
+    for (let field of fields) {
+      let value = $(`#${field}`).val().trim();
+
+      if (
+        (field === "email" || field === "editEmail") &&
+        !this.isValidEmail(value)
+      ) {
+        this.showAlert(alert, "Email inválido!");
+        return false;
+      }
+
+      // Ignoramos a validação de obrigatoriedade para os campos editSenha e editSenhaConfime, pois já tratamos acima
+      if (!value && !["editSenha", "editSenhaConfime"].includes(field)) {
+        this.showAlert(alert, "Todos os campos são obrigatórios!");
+        return false;
+      }
+    }
+
+    if (editSenhaValue || editSenhaConfimeValue) {
+      if (!this.senhasSaoIguais("editSenha", "editSenhaConfime", alert)) {
+        this.showAlert(alert, "As senhas de edição não coincidem!");
+        return false;
+      }
+    }
+
+    if (isCreating && !this.senhasSaoIguais("senha", "senhaConfime", alert)) {
+      this.showAlert(alert, "As senhas não coincidem!");
+      return false;
+    }
+
+    this.hideAlert(alert);
+    return true;
+  },
+};
+
+// Event Listeners para fechar modais
 document
   .getElementById("staticBackdrop")
   .addEventListener("hidden.bs.modal", function () {
-    clearForm(
+    FormManager.clearForm(
       ["nome", "email", "senha", "cpf", "senhaConfime", "tipoConta"],
       "usuarioAlert",
       { tipoConta: "ESTOQUISTA" }
@@ -33,7 +140,7 @@ document
 document
   .getElementById("modalEdicao")
   .addEventListener("hidden.bs.modal", function () {
-    clearForm(
+    FormManager.clearForm(
       [
         "editId",
         "editNome",
@@ -48,59 +155,41 @@ document
     );
   });
 
-function validateForm(fields, alertId) {
-  const alert = document.getElementById(alertId);
-  for (let field of fields) {
+function openEditModal(button) {
+  const tr = button.closest("tr");
 
-    // Pega o valor do campo
-    let value = $(`#${field}`).val().trim();
+  const dataAttrs = ["id", "nome", "email", "cpf", "tipoConta", "status"];
+  dataAttrs.forEach((attr) => {
+    const elementId = `edit${attr.charAt(0).toUpperCase() + attr.slice(1)}`;
+    const element = document.getElementById(elementId);
 
-    // Se for um campo de email, verifica a validade do email
-    if ((field === "email" || field === "editEmail") && !isValidEmail(value)) {
-        alert.textContent = "Email inválido!";
-        alert.style.display = "block";
-        return false;
+    if (!element) {
+      console.error(`Element with ID ${elementId} not found!`);
+      return;
     }
 
-    if (field === "editSenha" || field === "editSenhaConfime" || field === "senha" || field === "senhaConfime") {
-        continue;
+    const dataValue = tr.getAttribute(`data-${attr}`);
+
+    if (dataValue === null) {
+      console.error(`Data attribute data-${attr} not found on the row!`);
+      return;
     }
 
-    if (!value) {
-      alert.textContent = "Todos os campos são obrigatórios!";
-      alert.style.display = "block";
-      return false;
-    }
-  }
+    element.value = dataValue;
+  });
 
-  if (fields.includes("editSenha")) {
-      if (!senhasSaoIguais('editSenha', 'editSenhaConfime')) {
-            alert.textContent = "As senhas não coincidem!";
-            alert.style.display = "block";
-            return false;
-        }
-  } else {
-
-      if (!senhasSaoIguais('senha', 'senhaConfime')) {
-            alert.textContent = "As senhas não coincidem!";
-            alert.style.display = "block";
-            return false;
-        }
-  }
-
-
-  alert.textContent = "";
-  alert.style.display = "none";
-  return true;
+  const modal = new bootstrap.Modal(document.getElementById("modalEdicao"));
+  modal.show();
 }
 
-
-function postData(type, url, data, successMessage) {
+function makeRequest(type, url, data, successMessage) {
+  console.log(data);
   $.ajax({
     type: type,
-    url: url,
+    url: `${BASE_URL}${url}`,
     data: JSON.stringify(data),
     contentType: "application/json; charset=utf-8",
+
     success: function (response) {
       if (
         [200, 201].includes(response.status) &&
@@ -140,64 +229,11 @@ function postData(type, url, data, successMessage) {
   });
 }
 
-function submitForm() {
-  if (
-    !validateForm(
-      ["nome", "email", "senha","senhaConfime", "cpf", "tipoConta"],
-      "usuarioAlert"
-    )
-  ) {
-    return;
-  }
-  const data = {
-    nome: $("#nome").val().trim(),
-    email: $("#email").val().trim(),
-    cpf: cpf = regexNumero($("#cpf").val().trim()),
-    senha: $("#senha").val().trim(),
-    tipoConta: $("#tipoConta").val().trim(),
-  };
-  postData(
-    "POST",
-    "http://localhost:8080/usuario/add",
-    data,
-    "Usuário adicionado com sucesso!"
-  );
-}
-
-function openEditModal(button) {
-
-  const tr = button.closest("tr");
-
-  const dataAttrs = ["id", "nome", "email", "cpf", "tipoConta", "status"];
-  dataAttrs.forEach((attr) => {
-    const elementId = `edit${attr.charAt(0).toUpperCase() + attr.slice(1)}`;
-    const element = document.getElementById(elementId);
-
-    if (!element) {
-      console.error(`Element with ID ${elementId} not found!`);
-      return;
-    }
-
-    const dataValue = tr.getAttribute(`data-${attr}`);
-
-    if (dataValue === null) {
-      console.error(`Data attribute data-${attr} not found on the row!`);
-      return;
-    }
-
-    element.value = dataValue;
-  });
-
-  const modal = new bootstrap.Modal(document.getElementById("modalEdicao"));
-  modal.show();
-}
-
 function updateStatusConta(button) {
   const tr = button.closest("tr");
   const id = tr.getAttribute("data-id");
   const status = tr.getAttribute("data-status");
   const newStatus = status === "ATIVA" ? "INATIVA" : "ATIVA";
-
   const data = { id, status: newStatus };
 
   Swal.fire({
@@ -206,9 +242,9 @@ function updateStatusConta(button) {
     confirmButtonText: "Sim",
   }).then((result) => {
     if (result.isConfirmed) {
-      postData(
+      makeRequest(
         "POST",
-        "http://localhost:8080/usuario/updateStatus",
+        "/usuario/updateStatus",
         data,
         "Status atualizado com sucesso!"
       );
@@ -216,9 +252,37 @@ function updateStatusConta(button) {
   });
 }
 
+function getFormData(fields, mapping = null) {
+  let data = {};
+  fields.forEach((field) => {
+    const key = mapping && mapping[field] ? mapping[field] : field;
+
+    data[key] = $(`#${field}`).val().trim();
+
+    if (field.includes("cpf")) {
+      data[key] = FormManager.regexNumero(data[key]); // Fixed method call
+    }
+  });
+  return data;
+}
+
+function submitForm() {
+  if (
+    !FormManager.validateForm(
+      ["nome", "email", "senha", "senhaConfime", "cpf", "tipoConta"],
+      "usuarioAlert",
+      true
+    )
+  ) {
+    return;
+  }
+  const data = getFormData(["nome", "email", "senha", "cpf", "tipoConta"]);
+  makeRequest("POST", "/usuario/add", data, "Usuário adicionado com sucesso!");
+}
+
 function updateUsuario() {
   if (
-    !validateForm(
+    !FormManager.validateForm(
       [
         "editId",
         "editNome",
@@ -228,55 +292,37 @@ function updateUsuario() {
         "editTipoConta",
         "editStatus",
       ],
-      "edicaoUsuarioAlert"
+      "edicaoUsuarioAlert",
+      false
     )
   ) {
     return;
   }
-
-  const data = {
-    id: $("#editId").val().trim(),
-    nome: $("#editNome").val().trim(),
-    email: $("#editEmail").val().trim(),
-    cpf: cpf = regexNumero($("#editCpf").val().trim()),
-    senha: $("#editSenha").val().trim(),
-    tipoConta: $("#editTipoConta").val().trim(),
-    statusConta: $("#editStatus").val().trim(),
+  const mapping = {
+    editId: "id",
+    editNome: "nome",
+    editEmail: "email",
+    editCpf: "cpf",
+    editSenha: "senha",
+    editTipoConta: "tipoConta",
+    editStatus: "statusConta",
   };
-
-  postData(
+  const data = getFormData(
+    [
+      "editId",
+      "editNome",
+      "editEmail",
+      "editCpf",
+      "editSenha",
+      "editTipoConta",
+      "editStatus",
+    ],
+    mapping
+  );
+  makeRequest(
     "PUT",
-    "http://localhost:8080/usuario/update",
+    "/usuario/update",
     data,
     "Usuário atualizado com sucesso!"
   );
 }
-
-
-function senhasSaoIguais(idSenha, idSenhaConfime) {
-    const alert = document.getElementById("usuarioAlert");
-    const senha = document.getElementById(idSenha).value;
-    const senhaConfime = document.getElementById(idSenhaConfime).value;
-    console.log('Senha:', senha, 'Senha Confirmação:', senhaConfime); // Depuração
-    if(idSenha ==="senha"){
-       let value = senha.trim();
-       if (!value) {
-             alert.textContent = "As senhas são obrigatorias!";
-             alert.style.display = "block";
-             document.getElementById(idSenha).classList.add("alert", "alert-danger");
-             document.getElementById(idSenhaConfime).classList.add("alert", "alert-danger");
-             return false;
-           }
-    }
-    if (senha !== senhaConfime) {
-        document.getElementById(idSenha).classList.add("alert", "alert-danger");
-        document.getElementById(idSenhaConfime).classList.add("alert", "alert-danger");
-        return false;
-    } else {
-        document.getElementById(idSenha).classList.remove("alert", "alert-danger");
-        document.getElementById(idSenhaConfime).classList.remove("alert", "alert-danger");
-        return true;
-    }
-}
-
-
