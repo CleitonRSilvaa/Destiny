@@ -1,36 +1,55 @@
 package com.destiny.controller;
 
 import com.destiny.model.MensagemResponse;
+import com.destiny.model.StatusConta;
 import com.destiny.model.Usuario;
 import com.destiny.model.ValidationException;
 import com.destiny.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping("usuario")
 public class UsuarioController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @GetMapping("usuarioList")
-    public List<Map<String, Object>> list(){
-        return usuarioRepository.findAllCustom();
+    @GetMapping("/lista")
+    public String listarSenhas(@RequestParam(required = false) String nomeBusca,Model model){
+        List<UsuarioRepository.UsuarioResumo> listaDeUsuarios;
+
+        if (nomeBusca != null && !nomeBusca.trim().isEmpty()) {
+            listaDeUsuarios = usuarioRepository.findByNomeContainingIgnoreCase(nomeBusca);
+        } else {
+            listaDeUsuarios = usuarioRepository.findAllCustom();
+        }
+
+        model.addAttribute("listaDeUsuarios", listaDeUsuarios);
+        return "index";
     }
 
+    @ResponseBody  // Assegura que a resposta será o corpo da mensagem
+    @GetMapping("usuarioList")
+    public List<Usuario> list(){
+        return usuarioRepository.findAll();
+    }
+
+    @ResponseBody  // Assegura que a resposta será o corpo da mensagem
     @GetMapping("/listDetalhada")
     public List<Usuario> listAllDetalhes(){
         return usuarioRepository.findAll();
     }
 
+    @ResponseBody
     @PostMapping("add")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<MensagemResponse> insertCliente(@RequestBody Usuario usuario) {
@@ -38,7 +57,7 @@ public class UsuarioController {
         MensagemResponse mensagemResponse = new MensagemResponse();
         List<String> detalhes = new ArrayList<>();
 
-        usuario.setStatusConta((byte) 1);
+        usuario.setStatusConta(StatusConta.ATIVA);
 
         if (usuario.getNome() == null) {
             errors.add("nome é obrigatório.");
@@ -49,17 +68,17 @@ public class UsuarioController {
         if (usuario.getCpf() == null) {
             errors.add("cpf é obrigatório.");
         }
+
         if (usuario.getSenha() == null) {
             errors.add("senha é obrigatório.");
         }
-        if (usuario.getTipoConta() == -1){
+        if (usuario.getTipoConta() == null){
             errors.add("tipoConta é obrigatório.");
         }
 
         if (usuarioRepository.findByEmail(usuario.getEmail()) != null) {
             errors.add("email já está cadastrado.");
         }
-
         if (usuarioRepository.findByCpf(usuario.getCpf()) != null) {
             errors.add("cpf já está cadastrado.");
         }
@@ -77,6 +96,7 @@ public class UsuarioController {
         return new ResponseEntity<>(mensagemResponse, HttpStatus.CREATED);
     }
 
+    @ResponseBody
     @PutMapping("update")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MensagemResponse> updateCliente(@RequestBody Usuario usuario) {
@@ -102,9 +122,8 @@ public class UsuarioController {
 
         }
 
-
-        usuarioRepository.existsById(usuario.getId());
-
+        Optional<Usuario> userInDb = usuarioRepository.findById(usuario.getId());
+        Usuario existingUser = userInDb.get();
 
         if (usuario.getNome() == null) {
             errors.add("nome é obrigatório.");
@@ -112,16 +131,20 @@ public class UsuarioController {
         if (usuario.getEmail() == null) {
             errors.add("email é obrigatório.");
         }
+
         if (usuario.getCpf() == null) {
             errors.add("cpf é obrigatório.");
         }
-        if (usuario.getSenha() == null) {
-            errors.add("senha é obrigatório.");
+
+        if (usuario.getSenha() != null && !usuario.getSenha().trim().isEmpty()) {
+            existingUser.setSenha(usuario.getSenha());
         }
 
-        if (usuario.getTipoConta() == -1){
+
+        if (usuario.getTipoConta() == null){
             errors.add("tipoConta é obrigatório.");
         }
+
 
         if (usuario.getStatusConta() == null){
             errors.add("statusConta é obrigatório.");
@@ -134,6 +157,7 @@ public class UsuarioController {
         if (usuarioRepository.existsByCpfAndIdNot(usuario.getCpf(), usuario.getId())) {
             errors.add("CPF já associado a outro usuario.");
         }
+
 
         if (!errors.isEmpty()) {
             throw new ValidationException("parametros invalidos", errors);
@@ -148,7 +172,7 @@ public class UsuarioController {
 
         return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
     }
-
+    @ResponseBody
     @DeleteMapping("delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MensagemResponse> deleteCliente(@PathVariable String id) {
@@ -182,6 +206,41 @@ public class UsuarioController {
         return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
     }
 
+    @ResponseBody
+    @PostMapping("/updateStatus")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<MensagemResponse> updateStatus(@RequestBody StatusUpdateRequest statusConta) {
+        MensagemResponse mensagemResponse = new MensagemResponse();
+        List<String> detalhes = new ArrayList<>();
+        long longId = 0;
+
+        try {
+            longId = Long.valueOf(statusConta.getId());
+        } catch (NumberFormatException e) {
+            detalhes.add("id not INT");
+        }
+        if (!detalhes.isEmpty()) {
+            throw new ValidationException("parametro invalido", detalhes);
+        }
+
+
+        if(!usuarioRepository.existsById(longId)){
+            mensagemResponse.setStatus(400);
+            mensagemResponse.setMessage("erro");
+            detalhes.add("Id não existe");
+            mensagemResponse.setDetails(detalhes);
+            return new ResponseEntity<>(mensagemResponse, HttpStatus.BAD_REQUEST);
+        }
+
+        usuarioRepository.updateStatusConta(statusConta.getStatus(), longId);
+        mensagemResponse.setStatus(200);
+        mensagemResponse.setMessage("sucess");
+        mensagemResponse.setDetails(detalhes);
+
+        return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
+    }
+
+    //@ResponseBody
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Optional<Usuario> buscarCliente(@PathVariable String id){
@@ -199,5 +258,25 @@ public class UsuarioController {
         }
 
         return usuarioRepository.findById(longId);
+    }
+
+    public static class StatusUpdateRequest {
+
+        private StatusConta status;
+        private Long id;
+        public StatusConta getStatus() {
+            return status;
+        }
+        public void setStatus(StatusConta status) {
+            this.status = status;
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
     }
 }
