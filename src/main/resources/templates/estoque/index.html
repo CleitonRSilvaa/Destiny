@@ -72,42 +72,25 @@
   </nav>
 
   <!-- Conteúdo principal (pode adicionar o conteúdo da sua página aqui) -->
-  <div style="flex-grow: 1;" class="container mt-4 flex-grow-1">
-
+  <div class="container mt-4 flex-grow-1">
 
     <div class="container p-5">
-      <div sec:authorize="isAuthenticated()">
 
-
-      </div>
     </div>
   </div>
 
-
-
-  <footer class="text-center text-lg-start bg-dark text-muted p-0 w-100">
+  <footer style="position: absolute; bottom: 0;" class="text-center text-lg-start bg-dark text-muted p-0 w-100">
     <div class="text-center text-white">
       &copy; 2023 Destiny. Todos os direitos reservados.</p>
     </div>
   </footer>
   <!-- Footer -->
 
-  <span th:if="${errorMessage}">
-    <script th:inline="javascript">
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: /*[[${errorMessage}]]*/"",
-        showConfirmButton: false,
-        timer: 1700
-      });
-    </script>
-  </span>
-
 
   <script src="../jquery/jquery.min.js"></script>
   <script src="../jquery/jquery.mask.min.js"></script>
   <script src="../js/bootstrap.bundle.min.js"></script>
+  <script src="../js/admin/main.js"></script>
   <script src="../js/popper.min.js"></script>
 
 </body>

@@ -6,7 +6,8 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tela Exemplo</title>
+  <title>Destiny
+    dashboard</title>
   <link href="../css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../css/sweetalert2.min.css">
   <link href="../css/style.css" rel="stylesheet">
@@ -72,18 +73,12 @@
   </nav>
 
   <!-- Conteúdo principal (pode adicionar o conteúdo da sua página aqui) -->
-  <div style="flex-grow: 1;" class="container mt-4 flex-grow-1">
-
+  <div class="container mt-4 flex-grow-1">
 
     <div class="container p-5">
-      <div sec:authorize="isAuthenticated()">
 
-
-      </div>
     </div>
   </div>
-
-
 
   <footer class="text-center text-lg-start bg-dark text-muted p-0 w-100">
     <div class="text-center text-white">
@@ -92,22 +87,11 @@
   </footer>
   <!-- Footer -->
 
-  <span th:if="${errorMessage}">
-    <script th:inline="javascript">
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: /*[[${errorMessage}]]*/"",
-        showConfirmButton: false,
-        timer: 1700
-      });
-    </script>
-  </span>
-
 
   <script src="../jquery/jquery.min.js"></script>
   <script src="../jquery/jquery.mask.min.js"></script>
   <script src="../js/bootstrap.bundle.min.js"></script>
+  <script src="../js/admin/main.js"></script>
   <script src="../js/popper.min.js"></script>
 
 </body>
