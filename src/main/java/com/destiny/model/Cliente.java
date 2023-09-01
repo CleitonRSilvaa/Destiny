@@ -1,7 +1,7 @@
 package com.destiny.model;
 
 import com.destiny.utils.EncriptSenha;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -23,7 +23,7 @@ public class Cliente {
     @Column(unique = true)
     private String email;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private String cpf;
 
     @Column(length = 12)
@@ -33,7 +33,7 @@ public class Cliente {
     private String senha;
 
     @Column(nullable = false)
-    private Byte statusConta ;
+    private Byte statusConta;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
