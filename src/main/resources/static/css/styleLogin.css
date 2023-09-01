@@ -1,0 +1,82 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background-image: url(../img/greyscale-modern-skyscraper-cloudy-sky.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  touch-action: none;
+}
+
+.login {
+  width: 400px;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.email,
+.senha {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  padding: 30px;
+}
+
+.butao button {
+  width: 120px;
+  height: 30px;
+  border-radius: 20px;
+}
+
+.btn.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  background: linear-gradient(to left, purple, blue);
+}
+
+input {
+  border: none;
+}
+
+main h1 {
+  justify-content: center;
+  text-align: center;
+  color: rgb(255, 255, 255);
+  margin-bottom: 40px;
+  font-family: "Exo 2", sans-serif;
+}
+
+.linha {
+  position: relative;
+  display: flex;
+  top: 50px;
+  right: 50px;
+}
+
+input:focus {
+  border: none;
+  outline: none;
+}
+.butao {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+.butao:hover {
+  transform: translateZ(5px) rotateY(20deg); /* Aplica a transformação 3D quando o mouse passa sobre o botão */
+}
