@@ -116,7 +116,7 @@
             <th scope="row" th:text="${iterStat.count}"></th>
             <td th:text="${usuario.nome}"></td>
             <td th:text="${usuario.email}"></td>
-            <td th:text="${usuario.cpf}"></td>
+            <td class="cpftable" th:text="${usuario.cpf}"></td>
             <td th:text="${usuario.tipoConta}">ADMIN</td>
 
             <td>
@@ -163,9 +163,7 @@
             <div class="form-group">
               <label for="cpf">CPF:</label>
               <input type="text" class="form-control" id="cpf" name="cpf" placeholder="Ex: 000.000.000-0" autocomplete="off" required>
-            </div>
-
-            <div id="identidadeMAlert" class="alert alert-danger" role="alert" style="display: none;">
+              <div id="cpfAlert" class="alert alert-danger" role="alert" style="display: none;"></div>
             </div>
             <div class="form-group">
               <label for="tipoConta">Grupo:</label>
@@ -214,8 +212,9 @@
               <input type="email" class="form-control" id="editEmail" name="editEmail" placeholder="Ex: exemplo@destiny.com.br" autocomplete="off" disabled>
             </div>
             <div class="form-group">
-              <label for="editEmail">CPF:</label>
+              <label for="editCpf">CPF:</label>
               <input type="text" class="form-control" id="editCpf" name="editCpf" placeholder="Ex: 000.000.000-0" autocomplete="off" required>
+              <div id="cpfEditAlert" class="alert alert-danger" role="alert" style="display: none;"></div>
             </div>
             <div class="row text-center">
               <div class="col-md-6 form-group">

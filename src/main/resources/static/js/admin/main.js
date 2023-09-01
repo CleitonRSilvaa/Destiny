@@ -1,6 +1,20 @@
 $(document).ready(function () {
   $("#cpf, #editCpf").mask("000.000.000-00");
+
+  $(".cpftable").each(function () {
+    let cpfText = $(this).text().trim();
+
+    // Se o CPF já tiver delimitadores, remova-os primeiro.
+    cpfText = cpfText.replace(/\D/g, "");
+
+    let cpfMasked = cpfText.replace(
+      /(\d{3})(\d{3})(\d{3})(\d{2})/,
+      "$1.$2.$3-$4"
+    );
+    $(this).text(cpfMasked);
+  });
 });
+
 const BASE_URL = "http://localhost:8080",
   FormManager = {
     regexNumero: (e) => e.replace(/[^\d]+/g, ""),
@@ -167,6 +181,19 @@ function getFormData(e, t = null) {
   );
 }
 function submitForm() {
+  let cpfInput = document.getElementById("cpf");
+  let cpf = cpfInput.value;
+  let alert = document.getElementById("cpfAlert");
+
+  if (!validarCPF(cpf)) {
+    alert.textContent = "Por favor, digite um CPF válido!";
+    alert.style.display = "block";
+    return;
+  } else {
+    alert.textContent = "";
+    alert.style.display = "none";
+  }
+
   if (
     !FormManager.validateForm(
       ["nome", "email", "senha", "senhaConfime", "cpf", "tipoConta"],
@@ -175,10 +202,26 @@ function submitForm() {
     )
   )
     return;
+
   let e = getFormData(["nome", "email", "senha", "cpf", "tipoConta"]);
   makeRequest("POST", "/usuario/add", e, "Usu\xe1rio adicionado com sucesso!");
 }
 function updateUsuario() {
+  let cpfInput = document.getElementById("editCpf").value;
+  let alert2 = document.getElementById("cpfEditAlert");
+
+  console.log(cpfInput, alert2);
+
+  if (!validarCPF(cpfInput)) {
+    alert2.textContent = "Por favor, digite um CPF válido!";
+    alert2.style.display = "block";
+    console.log("cpf invalido edit");
+    return;
+  } else {
+    // alert.textContent = "";
+    // alert.style.display = "none";
+  }
+
   if (
     !FormManager.validateForm(
       [
@@ -195,6 +238,7 @@ function updateUsuario() {
     )
   )
     return;
+
   let e = getFormData(
     [
       "editId",
@@ -225,6 +269,10 @@ function updateUsuario() {
 document
   .getElementById("staticBackdrop")
   .addEventListener("hidden.bs.modal", function () {
+    let alert = document.getElementById("cpfAlert");
+    alert.textContent = "";
+    alert.style.display = "none";
+
     FormManager.clearForm(
       ["nome", "email", "senha", "cpf", "senhaConfime", "tipoConta"],
       "usuarioAlert",
@@ -234,6 +282,9 @@ document
   document
     .getElementById("modalEdicao")
     .addEventListener("hidden.bs.modal", function () {
+      let alert = document.getElementById("cpfEditAlert");
+      alert.textContent = "";
+      alert.style.display = "none";
       FormManager.clearForm(
         [
           "editId",
@@ -263,8 +314,13 @@ $(document).ready(function () {
   }
 });
 
+function regexNumeroCpf(dado) {
+  dado = dado.replace(/[^\d]+/g, "");
+  return dado;
+}
+
 function validarCPF(cpf) {
-  cpf = regexNumero(cpf);
+  cpf = regexNumeroCpf(cpf);
 
   if (cpf.length !== 11 || /^(.)\1+$/.test(cpf)) {
     return false;
@@ -305,3 +361,34 @@ function validarCPF(cpf) {
 
   return true;
 }
+
+document.getElementById("cpf").addEventListener("input", function () {
+  let cpfInput = this;
+  let cpf = cpfInput.value;
+  let alert = document.getElementById("cpfAlert");
+  if (validarCPF(cpf)) {
+    cpfInput.setCustomValidity("");
+    alert.textContent = "";
+    alert.style.display = "none";
+  } else {
+    cpfInput.setCustomValidity("CPF inválido");
+    alert.textContent = "Por favor, digite um CPF válido!";
+    alert.style.display = "block";
+  }
+});
+
+document.getElementById("editCpf").addEventListener("input", function () {
+  let cpfInput = this;
+  let cpf = cpfInput.value;
+  let alert = document.getElementById("cpfEditAlert");
+
+  if (validarCPF(cpf)) {
+    cpfInput.setCustomValidity("");
+    alert.textContent = "";
+    alert.style.display = "none";
+  } else {
+    cpfInput.setCustomValidity("CPF inválido");
+    alert.textContent = "Por favor, digite um CPF válido!";
+    alert.style.display = "block";
+  }
+});
