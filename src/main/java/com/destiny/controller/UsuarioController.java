@@ -34,16 +34,16 @@ public class UsuarioController {
         }
 
         model.addAttribute("listaDeUsuarios", listaDeUsuarios);
-        return "index";
+        return "/admin/index";
     }
 
-    @ResponseBody  // Assegura que a resposta será o corpo da mensagem
+    @ResponseBody
     @GetMapping("usuarioList")
     public List<Usuario> list(){
         return usuarioRepository.findAll();
     }
 
-    @ResponseBody  // Assegura que a resposta será o corpo da mensagem
+    @ResponseBody
     @GetMapping("/listDetalhada")
     public List<Usuario> listAllDetalhes(){
         return usuarioRepository.findAll();
