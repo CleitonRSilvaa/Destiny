@@ -5,6 +5,8 @@ import com.destiny.model.StatusConta;
 import com.destiny.model.Usuario;
 import com.destiny.model.ValidationException;
 import com.destiny.repository.UsuarioRepository;
+import com.destiny.utils.CpfValidator;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,13 +65,15 @@ public class UsuarioController {
 
         usuario.setStatusConta(StatusConta.ATIVA);
 
+        usuario.setCpf(usuario.getCpf().replaceAll("[^0-9]", ""));
+
         if (usuario.getNome() == null) {
             errors.add("nome é obrigatório.");
         }
         if (usuario.getEmail() == null) {
             errors.add("email é obrigatório.");
         }
-        if (usuario.getCpf() == null) {
+        if (usuario.getCpf() == null || usuario.getCpf().trim().isEmpty()) {
             errors.add("cpf é obrigatório.");
         }
 
@@ -129,6 +133,8 @@ public class UsuarioController {
         Optional<Usuario> userInDb = usuarioRepository.findById(usuario.getId());
         Usuario existingUser = userInDb.get();
 
+        usuario.setCpf(usuario.getCpf().replaceAll("[^0-9]", ""));
+
         if (usuario.getNome() == null) {
             errors.add("nome é obrigatório.");
         }
@@ -136,7 +142,7 @@ public class UsuarioController {
             errors.add("email é obrigatório.");
         }
 
-        if (usuario.getCpf() == null) {
+        if (usuario.getCpf() == null || usuario.getCpf().trim().isEmpty()) {
             errors.add("cpf é obrigatório.");
         }
 
@@ -160,17 +166,21 @@ public class UsuarioController {
             errors.add("CPF já associado a outro usuario.");
         }
 
-        // Obtenha as autoridades do usuário autenticado
+        if (CpfValidator.isValid(usuario.getCpf())) {
+            errors.add("CPF inválido.");
+        }
+
         Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
 
-        // Verifique se alguma dessas autoridades corresponde ao tipo de conta do
-        // usuário que está sendo editado
-        boolean hasSameRole = authorities.stream().anyMatch(
-                authority -> ("ROLE_" + usuario.getTipoConta()).equals(authority.getAuthority()));
+        GrantedAuthority firstAuthority = authorities.iterator().next();
+        String authorityValue = firstAuthority.getAuthority();
 
-        if (!hasSameRole) {
-            // A lógica se o tipo de conta não for o mesmo
-            errors.add("Você não tem permissão para editar seu propio grupo.");
+        boolean hasSameRole = ("ROLE_" + usuario.getTipoConta()).equals(authorityValue);
+
+        boolean isSameUser = auth.getName().equals(usuario.getEmail());
+
+        if (!hasSameRole && isSameUser) {
+            errors.add("Você não tem permissão para editar seu próprio grupo.");
         }
 
         if (!errors.isEmpty()) {
@@ -197,7 +207,7 @@ public class UsuarioController {
         try {
             longId = Long.parseLong(id);
         } catch (NumberFormatException e) {
-            detalhes.add("id not INT");
+            detalhes.add("id not int");
         }
         if (!detalhes.isEmpty()) {
             throw new ValidationException("parametro invalido", detalhes);
