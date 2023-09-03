@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="https://thymeleaf.org">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tela Exemplo</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/sweetalert2.min.css">
+  <link href="../css/style.css" rel="stylesheet">
+  <script src="../js/sweetalert2.min.js"></script>
+</head>
+
+<body class="d-flex flex-column">
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand px-2" href="/">Destiny</a>
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+          <!-- Link para Home. Todos os usuários terão acesso -->
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/">home</a>
+          </li>
+
+          <!-- Links exclusivos para ROLE_ADMIN -->
+          <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/usuario/lista">Listar Usuários</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="#">Listar Clientes</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Relatorios
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Usuários Conectados</a></li>
+                <li><a class="dropdown-item" href="#">Esquipamentos</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled">Disabled</a>
+            </li>
+          </th:block>
+
+          <!-- Link para Listar Produtos. Todos os usuários, incluindo ROLE_ADMIN, terão acesso -->
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="#">Listar Produtos</a>
+          </li>
+
+        </ul>
+      </div>
+
+      <div sec:authorize="isAuthenticated()">
+        <spam class='text-white px-2' th:text="${#authentication.name}"></spam>
+      </div>
+
+      <a class="btn btn-outline-danger" href="/logout"><i class="bi bi-box-arrow-right px-1"></i>Sair</a>
+    </div>
+  </nav>
+</body>
+</html>
