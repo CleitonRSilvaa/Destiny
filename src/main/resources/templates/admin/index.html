@@ -1,12 +1,21 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
+<html lang="pt-BR" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+=======
 <html lang="pt-BR" xmlns:th="https://thymeleaf.org">
+>>>>>>> cf07f48f69dafac30984a3ddc94efe8706363e87
 
 
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tela Exemplo</title>
+<<<<<<< HEAD
+  <title>Destiny</title>
+=======
+  <title>Destiny
+    dashboard</title>
+>>>>>>> cf07f48f69dafac30984a3ddc94efe8706363e87
   <link href="../css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../css/sweetalert2.min.css">
   <link href="../css/style.css" rel="stylesheet">
@@ -16,232 +25,120 @@
 <body class="d-flex flex-column">
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Destiny</a>
+    <a class="navbar-brand px-2" href="/">Destiny</a>
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+          <!-- Link para Home. Todos os usuários terão acesso -->
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/usuario/lista">Listar Usuários</a>
+            <a class="nav-link" aria-current="page" href="/">home</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#">Listar Clientes</a>
-          </li>
+
+          <!-- Links exclusivos para ROLE_ADMIN -->
+          <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/usuario/lista">Listar Usuários</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="#">Listar Clientes</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Relatorios
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Usuários Conectados</a></li>
+                <li><a class="dropdown-item" href="#">Esquipamentos</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled">Disabled</a>
+            </li>
+          </th:block>
+
+          <!-- Link para Listar Produtos. Todos os usuários, incluindo ROLE_ADMIN, terão acesso -->
           <li class="nav-item">
             <a class="nav-link" aria-current="page" href="#">Listar Produtos</a>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Relatorios
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Usuários Conectados</a></li>
-              <li><a class="dropdown-item" href="#">Esquipamentos</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled">Disabled</a>
-          </li>
+
         </ul>
-        <a class="btn btn-outline-danger" href="#"><i class="bi bi-box-arrow-right px-1"></i>Sair</a>
       </div>
+
+      <div sec:authorize="isAuthenticated()">
+        <spam class='text-white px-2' th:text="${#authentication.name}"></spam>
+      </div>
+
+      <a class="btn btn-outline-danger" href="/logout"><i class="bi bi-box-arrow-right px-1"></i>Sair</a>
     </div>
   </nav>
 
   <!-- Conteúdo principal (pode adicionar o conteúdo da sua página aqui) -->
+<<<<<<< HEAD
+  <div style="flex-grow: 1;" class="container mt-4 flex-grow-1">
+
+
+    <div class="container p-5">
+      <div sec:authorize="isAuthenticated()">
+
+
+      </div>
+    </div>
+  </div>
+
+
+
+<<<<<<<< HEAD:src/main/resources/templates/admin/index.html
+  <footer style="bottom: 0;" class="text-center text-lg-start bg-dark text-muted w-100">
+========
+  <footer class="text-center text-lg-start bg-dark text-muted p-0 w-100">
+>>>>>>>> cf07f48f69dafac30984a3ddc94efe8706363e87:src/main/resources/templates/index.html
+=======
   <div class="container mt-4 flex-grow-1">
 
     <div class="container p-5">
 
-      <div class="row d-flex justify-content-between ">
-        <div class="col-md-auto">
-          <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Novo Usuario</button>
-        </div>
-        <div class="col-md-auto">
-          <div class="input-group mb-3">
-            <form class="input-group mb-3" action="">
-              <input type="text" class="form-control " id="nomeBusca" name="nomeBusca" placeholder="Ex: jose" autocomplete="off">
-              <button class="btn btn-outline-primary" type="submit">Buscar<i class="bi bi-search px-1"></i></button>
-            </form>
-          </div>
-        </div>
-      </div>
-
-
-      <h5>Lista de Usuários</h5>
-      <table class="table table-striped table-hover">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Nome</th>
-            <th scope="col">Email</th>
-            <th scope="col">CPF</th>
-            <th scope="col">Grupo</th>
-            <th scope="col">Status</th>
-            <th class="text-center" scope="col">Opções</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr th:if="${#lists.isEmpty(listaDeUsuarios)}" class="table">
-            <td colspan="7" class="text-center">
-              <h4>Nenhum usuário cadastrado.</h4>
-            </td>
-          </tr>
-          <tr th:each="usuario, iterStat : ${listaDeUsuarios}" th:attr="data-id=${usuario.id},data-nome=${usuario.nome},data-email=${usuario.email},data-cpf=${usuario.cpf}, data-tipoConta= ${usuario.tipoConta}, data-status=${usuario.statusConta} ">
-            <th scope="row" th:text="${iterStat.count}"></th>
-            <td th:text="${usuario.nome}"></td>
-            <td th:text="${usuario.email}"></td>
-            <td th:text="${usuario.cpf}"></td>
-            <td th:text="${usuario.tipoConta}">ADMIN</td>
-
-            <td>
-              <div class="text-center" role="group">
-                <span th:if="${#strings.equalsIgnoreCase(usuario.statusConta, 'ATIVA')}" class="text-success">ativa</span>
-                <span th:unless="${#strings.equalsIgnoreCase(usuario.statusConta, 'ATIVA')}" class="text-danger">inativa</span>
-              </div>
-            </td>
-            <td class='text-center'>
-              <div class='d-flex justify-content-center'>
-                <button type='button' class='btn border border-warning meuBotao me-3' onclick="openEditModal(this)">
-                  <i class="bi bi-pencil-square px-1"></i>Editar
-                </button>
-                <button th:if="${#strings.equalsIgnoreCase(usuario.statusConta, 'ATIVA')}" type="button" class="btn btn-danger btn-sm" onclick="updateStatusConta(this)">INATIVAR</button>
-                <button th:unless="${#strings.equalsIgnoreCase(usuario.statusConta, 'ATIVA')}" type="button" class="btn btn-success btn-sm" onclick="updateStatusConta(this)">ATIVAR</button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 
-  <!-- ModalCriacao-->
-  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div id="usuarioAlert" class="alert alert-danger" role="alert" style="display: none;"></div>
-        <form id="userForm">
-          <div class="modal-header">
-            <h5 class="modal-title" id="staticBackdropLabel">Cadastrar usuário</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-
-            <div class="form-group">
-              <label for="nome">Nome completo:</label>
-              <input type="text" class="form-control" id="nome" name="nome" placeholder="insira seu nome completo" autocomplete="off" required>
-            </div>
-            <div class="form-group">
-              <label for="email">Email:</label>
-              <input type="email" class="form-control" id="email" name="email" placeholder="Ex: exemplo@destiny.com.br" autocomplete="off" required>
-            </div>
-            <div class="form-group">
-              <label for="cpf">CPF:</label>
-              <input type="text" class="form-control" id="cpf" name="cpf" placeholder="Ex: 000.000.000-0" autocomplete="off" required>
-            </div>
-
-            <div id="identidadeMAlert" class="alert alert-danger" role="alert" style="display: none;">
-            </div>
-            <div class="form-group">
-              <label for="tipoConta">Grupo:</label>
-              <select name="tipoConta" id="tipoConta" class="form-select" aria-label=".form-select-lg example" required>
-                <option value="ADMIN">ADMIN</option>
-                <option selected value="ESTOQUISTA">ESTOQUISTA</option>
-              </select>
-            </div>
-
-            <div class="p-3 form-group">
-              <label for="tipoConta">Senha:</label>
-              <input class="form-control" type="password" name="senha" id="senha">
-              <label for="tipoConta">Confimar senha:</label>
-              <input class="form-control" type="password" name="senhaConfime" id="senhaConfime">
-            </div>
-          </div>
-          <div class="modal-footer p-3">
-            <button type="button" onclick="submitForm()" class="btn btn-outline-success">Salvar</button>
-            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Fechar</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- ModalEdicao -->
-  <div class="modal fade" id="modalEdicao" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalEdicaoLabel" aria-hidden="true">
-    <div class="modal-dialog  modal-lg">
-      <div class="modal-content">
-        <div id="edicaoUsuarioAlert" class="alert alert-danger py-o mg-0" role="alert" style="display: none;"></div>
-        <form id="editUserForm">
-          <div class="modal-header">
-            <h5 class="modal-title" id="modalEdicaoLabel">Editar usuário</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <!-- Adicione um campo oculto para o ID do usuário, que será útil ao atualizar o usuário -->
-            <input type="hidden" id="editId" name="editId">
-
-            <div class="form-group">
-              <label for="editNome">Nome completo:</label>
-              <input type="text" class="form-control" id="editNome" name="editNome" placeholder="insira seu nome completo" autocomplete="off" required>
-            </div>
-            <div class="form-group">
-              <label for="editEmail">Email:</label>
-              <input type="email" class="form-control" id="editEmail" name="editEmail" placeholder="Ex: exemplo@destiny.com.br" autocomplete="off" disabled>
-            </div>
-            <div class="form-group">
-              <label for="editEmail">CPF:</label>
-              <input type="text" class="form-control" id="editCpf" name="editCpf" placeholder="Ex: 000.000.000-0" autocomplete="off" required>
-            </div>
-            <div class="row text-center">
-              <div class="col-md-6 form-group">
-                <label for="editTipoConta">Grupo:</label>
-                <select name="editTipoConta" id="editTipoConta" class="form-select" aria-label=".form-select-lg example" required>
-                  <option value="ADMIN">ADMIN</option>
-                  <option value="ESTOQUISTA">ESTOQUISTA</option>
-                </select>
-              </div>
-              <div class="col-md-6 form-group">
-                <label for="editStatus">Status:</label>
-                <select name="editStatus" id="editStatus" class="form-select" aria-label=".form-select-lg example" required>
-                  <option value="ATIVA">ATIVA</option>
-                  <option value="INATIVA">INATIVA</option>
-                </select>
-              </div>
-            </div>
-            <div class="p-3 form-group">
-              <label for="editSenha">Senha:</label>
-              <input class="form-control" type="password" name="editSenha" id="editSenha">
-              <label for="editSenhaConfime">Confimar senha:</label>
-              <input class="form-control" type="password" name="editSenhaConfime" id="editSenhaConfime">
-            </div>
-          </div>
-          <div class="modal-footer p-3">
-            <button type="button" onclick="updateUsuario()" class="btn btn-outline-success">Atualizar</button>
-            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Fechar</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <footer style="bottom: 0;" class="text-center text-lg-start bg-dark text-muted w-100">
+  <footer class="text-center text-lg-start bg-dark text-muted p-0 w-100">
+>>>>>>> cf07f48f69dafac30984a3ddc94efe8706363e87
     <div class="text-center text-white">
       &copy; 2023 Destiny. Todos os direitos reservados.</p>
     </div>
   </footer>
   <!-- Footer -->
 
+<<<<<<< HEAD
+  <span th:if="${errorMessage}">
+    <script th:inline="javascript">
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: /*[[${errorMessage}]]*/"",
+        showConfirmButton: false,
+        timer: 1700
+      });
+    </script>
+  </span>
+
+=======
+>>>>>>> cf07f48f69dafac30984a3ddc94efe8706363e87
 
   <script src="../jquery/jquery.min.js"></script>
   <script src="../jquery/jquery.mask.min.js"></script>
   <script src="../js/bootstrap.bundle.min.js"></script>
-  <script src="../js/main.js"></script>
+<<<<<<< HEAD
+=======
+  <script src="../js/admin/main.js"></script>
+>>>>>>> cf07f48f69dafac30984a3ddc94efe8706363e87
   <script src="../js/popper.min.js"></script>
 
 </body>

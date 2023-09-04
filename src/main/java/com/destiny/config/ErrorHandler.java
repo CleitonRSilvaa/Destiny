@@ -5,6 +5,9 @@ import com.destiny.model.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -35,4 +38,42 @@ public class ErrorHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 
     }
+
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<MensagemResponse> handleDisabledException(DisabledException ex) {
+
+        MensagemResponse error = new MensagemResponse();
+        error.setMessage("Conta de usuário inativa");
+        List<String> detalhes = new ArrayList<>();
+        detalhes.add(ex.getMessage());
+        error.setDetails(detalhes);
+        error.setStatus(401); // Unauthorized
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(InternalAuthenticationServiceException.class)
+    public ResponseEntity<MensagemResponse> handleInternalAuthenticationException(
+            InternalAuthenticationServiceException ex) {
+        System.out.println("esta no erroHandler ex:" + ex.getMessage());
+        MensagemResponse error = new MensagemResponse();
+        error.setMessage("Conta de usuário inativa");
+        List<String> detalhes = new ArrayList<>();
+        detalhes.add(ex.getMessage());
+        error.setDetails(detalhes);
+        error.setStatus(401); // Unauthorized
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<MensagemResponse> handleBadCredentialsException(BadCredentialsException ex) {
+        System.out.println("esta no erroHandler ex:" + ex.getMessage());
+        MensagemResponse error = new MensagemResponse();
+        error.setMessage("Email ou senha incorretos");
+        List<String> detalhes = new ArrayList<>();
+        detalhes.add(ex.getMessage());
+        error.setDetails(detalhes);
+        error.setStatus(401); // Unauthorized
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
 }

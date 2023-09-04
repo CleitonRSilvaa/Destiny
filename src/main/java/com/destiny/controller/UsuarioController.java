@@ -5,14 +5,20 @@ import com.destiny.model.StatusConta;
 import com.destiny.model.Usuario;
 import com.destiny.model.ValidationException;
 import com.destiny.repository.UsuarioRepository;
+import com.destiny.utils.CpfValidator;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +30,7 @@ public class UsuarioController {
     private UsuarioRepository usuarioRepository;
 
     @GetMapping("/lista")
-    public String listarSenhas(@RequestParam(required = false) String nomeBusca,Model model){
+    public String listarSenhas(@RequestParam(required = false) String nomeBusca, Model model) {
         List<UsuarioRepository.UsuarioResumo> listaDeUsuarios;
 
         if (nomeBusca != null && !nomeBusca.trim().isEmpty()) {
@@ -34,18 +40,18 @@ public class UsuarioController {
         }
 
         model.addAttribute("listaDeUsuarios", listaDeUsuarios);
-        return "/admin/index";
+
+        return "admin/admin-menager_usuarios";
     }
 
-    @ResponseBody
     @GetMapping("usuarioList")
-    public List<Usuario> list(){
+    public List<Usuario> list() {
         return usuarioRepository.findAll();
     }
 
-    @ResponseBody
+    @ResponseBody // Assegura que a resposta será o corpo da mensagem
     @GetMapping("/listDetalhada")
-    public List<Usuario> listAllDetalhes(){
+    public List<Usuario> listAllDetalhes() {
         return usuarioRepository.findAll();
     }
 
@@ -59,20 +65,22 @@ public class UsuarioController {
 
         usuario.setStatusConta(StatusConta.ATIVA);
 
+        usuario.setCpf(usuario.getCpf().replaceAll("[^0-9]", ""));
+
         if (usuario.getNome() == null) {
             errors.add("nome é obrigatório.");
         }
         if (usuario.getEmail() == null) {
             errors.add("email é obrigatório.");
         }
-        if (usuario.getCpf() == null) {
+        if (usuario.getCpf() == null || usuario.getCpf().trim().isEmpty()) {
             errors.add("cpf é obrigatório.");
         }
 
         if (usuario.getSenha() == null) {
             errors.add("senha é obrigatório.");
         }
-        if (usuario.getTipoConta() == null){
+        if (usuario.getTipoConta() == null) {
             errors.add("tipoConta é obrigatório.");
         }
 
@@ -104,15 +112,14 @@ public class UsuarioController {
         List<String> detalhes = new ArrayList<>();
         List<String> errors = new ArrayList<>();
 
-
-        if (!usuarioRepository.existsById(usuario.getId())){
+        if (!usuarioRepository.existsById(usuario.getId())) {
 
             mensagemResponse.setStatus(400);
 
             mensagemResponse.setMessage("erro");
-            if (usuario.getId()==0){
+            if (usuario.getId() == 0) {
                 detalhes.add("parementro id nao definido");
-            }else {
+            } else {
                 detalhes.add("id invalido");
             }
 
@@ -122,8 +129,11 @@ public class UsuarioController {
 
         }
 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Optional<Usuario> userInDb = usuarioRepository.findById(usuario.getId());
         Usuario existingUser = userInDb.get();
+
+        usuario.setCpf(usuario.getCpf().replaceAll("[^0-9]", ""));
 
         if (usuario.getNome() == null) {
             errors.add("nome é obrigatório.");
@@ -132,7 +142,7 @@ public class UsuarioController {
             errors.add("email é obrigatório.");
         }
 
-        if (usuario.getCpf() == null) {
+        if (usuario.getCpf() == null || usuario.getCpf().trim().isEmpty()) {
             errors.add("cpf é obrigatório.");
         }
 
@@ -140,13 +150,11 @@ public class UsuarioController {
             existingUser.setSenha(usuario.getSenha());
         }
 
-
-        if (usuario.getTipoConta() == null){
+        if (usuario.getTipoConta() == null) {
             errors.add("tipoConta é obrigatório.");
         }
 
-
-        if (usuario.getStatusConta() == null){
+        if (usuario.getStatusConta() == null) {
             errors.add("statusConta é obrigatório.");
         }
 
@@ -158,11 +166,26 @@ public class UsuarioController {
             errors.add("CPF já associado a outro usuario.");
         }
 
+        if (CpfValidator.isValid(usuario.getCpf())) {
+            errors.add("CPF inválido.");
+        }
+
+        Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
+
+        GrantedAuthority firstAuthority = authorities.iterator().next();
+        String authorityValue = firstAuthority.getAuthority();
+
+        boolean hasSameRole = ("ROLE_" + usuario.getTipoConta()).equals(authorityValue);
+
+        boolean isSameUser = auth.getName().equals(usuario.getEmail());
+
+        if (!hasSameRole && isSameUser) {
+            errors.add("Você não tem permissão para editar seu próprio grupo.");
+        }
 
         if (!errors.isEmpty()) {
             throw new ValidationException("parametros invalidos", errors);
         }
-
 
         usuarioRepository.save(usuario);
 
@@ -172,6 +195,7 @@ public class UsuarioController {
 
         return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
     }
+
     @ResponseBody
     @DeleteMapping("delete/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -183,14 +207,13 @@ public class UsuarioController {
         try {
             longId = Long.parseLong(id);
         } catch (NumberFormatException e) {
-            detalhes.add("id not INT");
+            detalhes.add("id not int");
         }
         if (!detalhes.isEmpty()) {
             throw new ValidationException("parametro invalido", detalhes);
         }
 
-
-        if(!usuarioRepository.existsById(longId)){
+        if (!usuarioRepository.existsById(longId)) {
             mensagemResponse.setStatus(400);
             mensagemResponse.setMessage("erro");
             detalhes.add("Id não existe");
@@ -223,8 +246,7 @@ public class UsuarioController {
             throw new ValidationException("parametro invalido", detalhes);
         }
 
-
-        if(!usuarioRepository.existsById(longId)){
+        if (!usuarioRepository.existsById(longId)) {
             mensagemResponse.setStatus(400);
             mensagemResponse.setMessage("erro");
             detalhes.add("Id não existe");
@@ -240,10 +262,10 @@ public class UsuarioController {
         return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
     }
 
-    //@ResponseBody
+    // @ResponseBody
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Optional<Usuario> buscarCliente(@PathVariable String id){
+    public Optional<Usuario> buscarCliente(@PathVariable String id) {
         List<String> errors = new ArrayList<>();
         long longId = 0;
 
@@ -264,9 +286,11 @@ public class UsuarioController {
 
         private StatusConta status;
         private Long id;
+
         public StatusConta getStatus() {
             return status;
         }
+
         public void setStatus(StatusConta status) {
             this.status = status;
         }

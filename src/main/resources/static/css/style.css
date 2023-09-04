@@ -4,3 +4,13 @@
   max-height: 800px; /* Assumindo que cada linha tem 40px de altura: 20 linhas x 40px = 800px */
   overflow-y: auto;
 }
+
+thead {
+  border-top: 1px SOLID BLACK;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
