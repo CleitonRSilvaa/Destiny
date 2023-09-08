@@ -10,6 +10,7 @@
   <link href="../css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../css/sweetalert2.min.css">
   <link href="../css/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styleProduto.css">
   <script src="../js/sweetalert2.min.js"></script>
 </head>
 
@@ -74,14 +75,58 @@
   </nav>
 
   <main>
-    <h1>Cadastrar Produto</h1>
-    <form action="submitProduto">
-    <label for="nomeProduto"></label>
-    <input type="text" id="nomeProduto">
-    <input type="text" id="descricaoProduto">
-    <input type="text" id="valor">
-    <input type="text" id="qntProduto">
+    <div class="container">
 
+      <h1 class="mb-3">Cadastro de Produto</h1>
+      <form class="needs-validation" novalidate>
+        <div class="row g-3">
+          <div class="">
+            <label for="nomeProduto" class="form-label">Nome do Produto</label>
+            <input type="text" class="form-control" width="700px" id="nomeProduto" placeholder="Nome do Produto" value="" required>
+          </div>
+<div class="caixa">
+          <div class="">
+            <label class=""  for="avaliacao">Avaliação</label>
+            <select class="form-select" id="avaliacao">
+              <option selected>Choose...</option>
+              <option value="0.5">0.5</option>
+              <option value="1.0">1.0</option>
+              <option value="1.5">1.5</option>
+              <option value="2.0">2.0</option>
+              <option value="2.5">2.5</option>
+              <option value="3.0">3.0</option>
+              <option value="3.5">3.5</option>
+              <option value=">4.0">4.0</option>
+              <option value="4.5">4.5</option>
+              <option value="5.0">5.0</option>
+
+            </select>
+          </div>
+        </div>
+          <div class=" mb-3">
+            <label  for="avaliacao">Valor</label>
+            <input type="text" class="form-control" id="valor" placeholder="Digite o valor do produto">
+          </div>
+          
+          <div class=" mb-3">
+            <label for="qntProduto" class="form-label">Nome do Produto</label>
+            <input type="text" class="form-control" placeholder="Digite a Quantidade no Estoque" id="qntProduto" >
+          </div>
+
+          <div class="">
+            <label for="descricao" class="form-label">Descrição</label>
+            <textarea class="form-control" aria-label="With textarea" id="descricao"></textarea>
+          </div>
+
+          <div class="col-md-3">
+            <label for="zip" class="form-label">Zip</label>
+            <input type="text" class="form-control" id="zip" placeholder="" required>
+            <div class="invalid-feedback">
+              Zip code required.
+            </div>
+          </div>
+        </div>
+      </div>
 </form>
   </main>
 

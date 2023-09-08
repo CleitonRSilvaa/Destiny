@@ -1,0 +1,20 @@
+.container{
+    justify-content: center;
+    align-items: center;
+}
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+    margin: auto;
+
+}
+.container{
+    padding: 30px;
+    width: 800px;
+}
+
+main h1{
+    text-align: center;
+}
