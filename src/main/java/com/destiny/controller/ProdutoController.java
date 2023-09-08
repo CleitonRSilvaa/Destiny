@@ -9,10 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -67,45 +64,58 @@ public class ProdutoController {
 
     @PostMapping("/add")
     @Transactional
-    public String cadastrarProduto(@RequestParam("nome") String nome, @RequestParam("imagem") MultipartFile[] imagens) {
-        if (imagens == null || imagens.length == 0) {
-            throw new IllegalArgumentException("Nome e imagens são requeridos");
-        }
-
-        Produto produto = new Produto();
-        produto.setNome(nome);
-        produtoRepository.save(produto);
-
+    public String cadastrarProduto(@ModelAttribute("nome") String nome,
+                                     @ModelAttribute("valor") double valor,
+                                     @ModelAttribute("quantidade") int quantidade,
+                                     @ModelAttribute("avaliacao") int avaliacao,
+                                     @ModelAttribute("descricao") String descricao,
+                                   @RequestParam("imagem") MultipartFile[] imagens,
+                                   @RequestParam("imgPrincipal") String imgPrincipal) {
 
 
-        for (MultipartFile imagem : imagens) {
-            System.out.println("entrou no for");
-            if (imagem != null && !imagem.isEmpty()) {
-                String nomeImagem =dataHoraStrg().concat(StringUtils.cleanPath(imagem.getOriginalFilename().replace(" ","_")));
-                String caminho = "imagens/produtos/" + nomeImagem;
-                Path path = Paths.get("src/main/resources/static/" + caminho);
-                try {
-                    Files.copy(imagem.getInputStream(), path,StandardCopyOption.REPLACE_EXISTING);
-                } catch (IOException e) {
-                    System.out.println("Falha ao armazenar a imagem " + nomeImagem + e);
-                }
 
-                Imagem novaImagem = new Imagem();
-                novaImagem.setCaminho(caminho);
-                novaImagem.setProduto(produto);
-                System.out.println(novaImagem);
-                imagemRepository.save(novaImagem);
-            }else {
-                String nomeImagem = "default.jpg";
-                String caminho = "imagens/produtos/" + nomeImagem;
-                Path path = Paths.get("src/main/resources/static/" + caminho);
-                Imagem novaImagem = new Imagem();
-                novaImagem.setCaminho(caminho);
-                novaImagem.setProduto(produto);
-                imagemRepository.save(novaImagem);
-                break;
-            }
-        }
+        System.out.println(nome+" "+valor+" "+quantidade+" "+avaliacao+" "+descricao+" "+imgPrincipal+"\n");
+
+        System.out.println(imagens.length);
+
+//        if (imagens == null || imagens.length == 0) {
+//            throw new IllegalArgumentException("Nome e imagens são requeridos");
+//        }
+//
+//        Produto produto = new Produto();
+//        produto.setNome(nome);
+//        produtoRepository.save(produto);
+//
+//
+//
+//        for (MultipartFile imagem : imagens) {
+//            System.out.println("entrou no for");
+//            if (imagem != null && !imagem.isEmpty()) {
+//                String nomeImagem =dataHoraStrg().concat(StringUtils.cleanPath(imagem.getOriginalFilename().replace(" ","_")));
+//                String caminho = "imagens/produtos/" + nomeImagem;
+//                Path path = Paths.get("src/main/resources/static/" + caminho);
+//                try {
+//                    Files.copy(imagem.getInputStream(), path,StandardCopyOption.REPLACE_EXISTING);
+//                } catch (IOException e) {
+//                    System.out.println("Falha ao armazenar a imagem " + nomeImagem + e);
+//                }
+//
+//                Imagem novaImagem = new Imagem();
+//                novaImagem.setCaminho(caminho);
+//                novaImagem.setProduto(produto);
+//                System.out.println(novaImagem);
+//                imagemRepository.save(novaImagem);
+//            }else {
+//                String nomeImagem = "default.jpg";
+//                String caminho = "imagens/produtos/" + nomeImagem;
+//                Path path = Paths.get("src/main/resources/static/" + caminho);
+//                Imagem novaImagem = new Imagem();
+//                novaImagem.setCaminho(caminho);
+//                novaImagem.setProduto(produto);
+//                imagemRepository.save(novaImagem);
+//                break;
+//            }
+//        }
 
 
 
