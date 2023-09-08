@@ -1,30 +1,40 @@
 package com.destiny.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.persistence.*;
 
-import org.springframework.data.annotation.Id;
+import lombok.Data;
 
+@Data
+@Entity
 public class Produto {
     
-@Id
- @GeneratedValue(strategy = GenerationType.IDENTITY)
-private long codigo;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    private String nome;
+
+    private float avaliacao;
+
+    private String descricao;
+
+    private BigDecimal valor;
+
+    private int quantidade;
+
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
+    private List<Imagem> imagens;
 
 
-private String nomeProduto;
-
-private float avaliacao;
-
-private String descricao;
-
-private BigDecimal valor;
-
-private int quantidade;
-
-private String imagens;
+    @Override
+    public String toString() {
+        return "Produto [id=" + id + ", nome=" + nome + " img="+ imagens+"]";
+    }
 
 
 
 }
+
