@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="https://thymeleaf.org">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tela Exemplo</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/sweetalert2.min.css">
+  <link href="../css/style.css" rel="stylesheet">
+  <script src="../js/sweetalert2.min.js"></script>
+</head>
+
+<body class="d-flex flex-column">
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand px-2" href="/">Destiny</a>
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+          <!-- Link para Home. Todos os usuários terão acesso -->
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/">home</a>
+          </li>
+
+          <!-- Links exclusivos para ROLE_ADMIN -->
+          <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/usuario/lista">Listar Usuários</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="#">Listar Clientes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/produto/listar">Listar Produtos</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Relatorios
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Usuários Conectados</a></li>
+                <li><a class="dropdown-item" href="/produto/addProduto">Add Produto</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled">Disabled</a>
+            </li>
+          </th:block>
+
+          <!-- Link para Listar Produtos. Todos os usuários, incluindo ROLE_ADMIN, terão acesso -->
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="#">Listar Produtos</a>
+          </li>
+
+        </ul>
+      </div>
+
+      <div sec:authorize="isAuthenticated()">
+        <spam class='text-white px-2' th:text="${#authentication.name}"></spam>
+        <input type="hidden" id="usernameBeingEdited" th:value="${#authentication.name}">
+
+      </div>
+
+      <a class="btn btn-outline-danger" href="/logout"><i class="bi bi-box-arrow-right px-1"></i>Sair</a>
+    </div>
+  </nav>
+
+  <!-- Conteúdo principal (pode adicionar o conteúdo da sua página aqui) -->
+  <div class="container mt-4 flex-grow-1">
+
+    <div class="container p-5">
+      <h2>Cadastro de Produto</h2>
+      <form action="/produto/add" method="post" enctype="multipart/form-data">
+        <label for="nome">Nome:</label><br>
+        <input type="text" id="nome" name="nome"><br>
+        <label for="imagem">Imagem:</label><br>
+        <input type="file" id="imagem" name="imagem" multiple>
+        <input type="submit" value="Submit">
+      </form>
+      <div class="container">
+        <div class="row">
+          <div th:each="imagem : ${imagens}" class="col-sm-4">
+            <div class="card">
+              <img th:src="${imagem.url}" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">Nome do Produto</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="preview" class="row">
+          <div th:each="imagem : ${imagens}" class="col-sm-4">
+            <div class="card">
+              <img th:src="${imagem.url}" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">Nome do Produto</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('imagem').addEventListener('change', function () {
+      var preview = document.getElementById('preview');
+      preview.innerHTML = '';
+
+      if (this.files.length > 4) {
+        alert('Você só pode selecionar no máximo 4 imagens.');
+        this.value = '';
+        return;
+      }
+
+      for (var i = 0; i < this.files.length; i++) {
+        var file = this.files[i];
+
+        if (!file.type.match('image/jpeg') && !file.type.match('image/png')) {
+          alert('Só são permitidos arquivos de imagem (jpg, jpeg, png).');
+          this.value = '';
+          return;
+        }
+
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+          var img = document.createElement('img');
+          img.src = e.target.result;
+          img.alt = 'Imagem';
+          img.className = 'card-img-top';
+
+          var cardBody = document.createElement('div');
+          cardBody.className = 'card-body';
+          var cardTitle = document.createElement('h5');
+          cardTitle.className = 'card-title';
+          cardTitle.textContent = 'Nome do Produto';
+          cardBody.appendChild(cardTitle);
+
+          var card = document.createElement('div');
+          card.className = 'card';
+          card.appendChild(img);
+          card.appendChild(cardBody);
+
+          var col = document.createElement('div');
+          col.className = 'col-sm-4';
+          col.appendChild(card);
+
+          preview.appendChild(col);
+        };
+
+        reader.readAsDataURL(file);
+      }
+    });
+
+
+  </script>
+
+  <footer class="text-center text-lg-start bg-dark text-muted p-0 w-100">
+    <div class="text-center text-white">
+      &copy; 2023 Destiny. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+
+
+  <script src="../jquery/jquery.min.js"></script>
+  <script src="../jquery/jquery.mask.min.js"></script>
+  <script src="../js/bootstrap.bundle.min.js"></script>
+  <script src="../js/admin/main.js"></script>
+  <script src="../js/popper.min.js"></script>
+
+</body>
+
+</html>
