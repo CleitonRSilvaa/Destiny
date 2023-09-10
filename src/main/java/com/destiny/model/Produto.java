@@ -25,10 +25,10 @@ public class Produto {
 
     private int quantidade;
 
+    private StatusProduto statusProduto;
+
     @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
     private List<Imagem> imagens;
-
-
     @Override
     public String toString() {
         return "Produto [id=" + id + ", nome=" + nome + " img="+ imagens+"]";
