@@ -13,176 +13,196 @@
 </head>
 
 <body>
-  <form action="Atualizar_produto" method="POST">
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label for="nome" class="form-label">Nome</label>
-        <input type="text" class="form-control" id="nome" name="nome" th:value="${produto.nome}" required>
-      </div>
-      <div class="col-md-6 mb-3">
-        <label for="valor" class="form-label">Valor</label>
-        <input type="number" class="form-control" id="valor" name="valor" th:value="${produto.valor}" required>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label for="quantidade" class="form-label">Quantidade</label>
-        <input type="number" class="form-control" id="quantidade" name="quantidade" th:value=${produto.quantidade} required>
-      </div>
-      <div class="col-md-6 mb-3">
-        <label for="avaliacao" class="form-label">Avaliação</label>
-        <select class="form-select" id="avaliacao" name="avaliacao" required>
-          <option th:text=${produto.avaliacao}>  </option>
-          <option value="1">0.5</option>
-          <option value="1">1.0</option>
-          <option value="1">1.5</option>
-          <option value="2">2.0</option>
-          <option value="2">2.5</option>
-          <option value="3">3.0</option>
-          <option value="3">3.5</option>
-          <option value="4">4.0</option>
-          <option value="4">4.5</option>
-          <option value="5">5.0</option>
-        </select>
-      </div>
-    </div>
-    <div class="mb-3">
-      <label for="descricao" class="form-label">Descrição</label>
-      <textarea class="form-control" id="descricao" name="descricao" rows="3" th:text="${produto.descricao}" required></textarea>
-    </div>
-    <div class="mb-3">
-      <label for="imagem" class="form-label">Imagens</label>
-      <input type="file" class="form-control" id="imagem" name="imagem"  multiple required>
-    </div>
-    
-    <div id="preview" class="row p-2 m">
-      <div th:each="imagem, iterStat : ${produto.imagens}">
-          <div class="card p-2 m-1" style="width: 18rem;">
-              <button type="button" class="btn-close" aria-label="Close"></button>
-              <img th:src="${'/'+imagem.caminho}" alt="Imagem-produto" class="card-img-top">
-              <div class="card-body d-flex flex-column">
-                  <div class="form-check mt-auto">
-                      <input class="form-check-input" type="radio" name="imgPrincipal" th:id="'exampleRadios' + ${iterStat.index}" th:value="${iterStat.index}">
-                      <label class="form-check-label" th:for="'exampleRadios' + ${iterStat.index}">Imagem principal</label>
-                  </div>
-              </div>
+  <div class="container mt-4 flex-grow-1">
+    <div class="container p-5">
+      <form id="FormsEditarProduto" action="#" method="">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="nome" class="form-label">Nome</label>
+            <input type="text" class="form-control" id="nome" name="nome" th:value="${produto.nome}" required>
           </div>
-      </div>
+          <div class="col-md-6 mb-3">
+            <label for="valor" class="form-label">Valor</label>
+            <input type="number" class="form-control" id="valor" name="valor" th:value="${produto.valor}" required>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="quantidade" class="form-label">Quantidade</label>
+            <input type="number" class="form-control" id="quantidade" name="quantidade" th:value=${produto.quantidade} required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="avaliacao" class="form-label">Avaliação</label>
+            <select class="form-select" id="avaliacao" name="avaliacao" required>
+              <option th:text=${produto.avaliacao}> </option>
+              <option value="1">0.5</option>
+              <option value="1">1.0</option>
+              <option value="1">1.5</option>
+              <option value="2">2.0</option>
+              <option value="2">2.5</option>
+              <option value="3">3.0</option>
+              <option value="3">3.5</option>
+              <option value="4">4.0</option>
+              <option value="4">4.5</option>
+              <option value="5">5.0</option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="descricao" class="form-label">Descrição</label>
+          <textarea class="form-control" id="descricao" name="descricao" rows="3" th:text="${produto.descricao}" required></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="imagem" class="form-label">Imagens</label>
+          <input type="file" class="form-control" id="imagem" name="imagem" multiple required>
+        </div>
+
+        <div id="preview" class="row p-2 m">
+          <div th:each="imagem, iterStat : ${produto.imagens}" class="card p-2 m-1" style="width: 18rem;">
+            <button type="button" class="btn-close" aria-label="Close"></button>
+            <img th:src="${'/'+imagem.caminho}" alt="Imagem-produto" class="card-img-top">
+            <div class="card-body d-flex flex-column">
+              <div class="form-check mt-auto">
+                <input class="form-check-input" type="radio" name="imgPrincipal" th:id="'exampleRadios' + ${iterStat.index}" th:value="${iterStat.index}">
+                <label class="form-check-label" th:for="'exampleRadios' + ${iterStat.index}">Imagem principal</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Alterar</button>
+      </form>
+
+    </div>
   </div>
-  
-    <button type="submit" class="btn btn-primary">Alterar</button>
-  </form>
 
   <script>
-  function updateRadioInputs() {
-    var preview = document.getElementById('preview');
-    var radios = preview.querySelectorAll('.form-check-input');
-    var labels = preview.querySelectorAll('.form-check-label');
-    for (var i = 0; i < radios.length; i++) {
-      radios[i].id = 'exampleRadios' + i;
-      radios[i].value = i;
-      labels[i].htmlFor = 'exampleRadios' + i;
-    }
-  }
-
-  function removeImage(card, file) {
-    var input = document.getElementById('imagem');
-    var preview = document.getElementById('preview');
-
-    preview.removeChild(card);
-
-    // Cria um novo objeto de FormData
-    var dataTransfer = new DataTransfer();
-    for (var i = 0; i < input.files.length; i++) {
-      if (input.files[i] !== file) {
-        dataTransfer.items.add(input.files[i]);
+    function updateRadioInputs() {
+      var preview = document.getElementById('preview');
+      var radios = preview.querySelectorAll('.form-check-input');
+      var labels = preview.querySelectorAll('.form-check-label');
+      for (var i = 0; i < radios.length; i++) {
+        radios[i].id = 'exampleRadios' + i;
+        radios[i].value = i;
+        labels[i].htmlFor = 'exampleRadios' + i;
       }
     }
 
-    // Atualiza o input com os arquivos restantes
-    input.files = dataTransfer.files;
-  }
+    function removeImage(card, file) {
+      var input = document.getElementById('imagem');
+      var preview = document.getElementById('preview');
 
+      preview.removeChild(card);
 
+      // Cria um novo objeto de FormData
+      var dataTransfer = new DataTransfer();
+      for (var i = 0; i < input.files.length; i++) {
+        if (input.files[i] !== file) {
+          dataTransfer.items.add(input.files[i]);
+        }
+      }
 
-  function handleFile(file, i) {
-    console.log(file.name);
-    if (!file.type.match('image/jpeg') && !file.type.match('image/png')) {
-      alert('Só são permitidos arquivos de imagem (jpg, jpeg, png).');
-      this.value = '';
-      return;
+      // Atualiza o input com os arquivos restantes
+      input.files = dataTransfer.files;
     }
 
-    var reader = new FileReader();
 
-    reader.onload = function (e) {
-      var img = document.createElement('img');
-      img.src = e.target.result;
-      img.alt = 'Imagem-produto';
-      img.className = 'card-img-top';
 
-      var cardBody = document.createElement('div');
-      cardBody.className = 'card-body d-flex flex-column';
-
-      var formCheck = document.createElement('div');
-      formCheck.className = 'form-check mt-auto';
-
-      var radioInput = document.createElement('input');
-      radioInput.className = 'form-check-input';
-      radioInput.type = 'radio';
-      radioInput.name = 'imgPrincipal';
-      radioInput.id = 'exampleRadios' + i;
-      radioInput.value = i;
-      var radioLabel = document.createElement('label');
-      radioLabel.className = 'form-check-label';
-      radioLabel.htmlFor = 'exampleRadios' + i;
-      radioLabel.textContent = 'Imagem principal';
-
-      formCheck.appendChild(radioInput);
-      formCheck.appendChild(radioLabel);
-      cardBody.appendChild(formCheck);
-
-      var closeButton = document.createElement('button');
-      closeButton.type = 'button';
-      closeButton.className = 'btn-close';
-      closeButton.setAttribute('aria-label', 'Close');
-
-      var card = document.createElement('div');
-      card.className = 'card p-2 m-1';
-      card.style.width = '18rem';
-      card.appendChild(closeButton);
-      card.appendChild(img);
-      card.appendChild(cardBody);
-
-      closeButton.addEventListener('click', function () {
-        removeImage(card, file);
-        updateRadioInputs()
-      });
-
-      preview.appendChild(card);
-    };
-
-    reader.readAsDataURL(file);
-  }
-
-  document.body.addEventListener('change', function (event) {
-    if (event.target.id === 'imagem') {
-      var preview = document.getElementById('preview');
-      preview.innerHTML = '';
-
-      if (event.target.files.length > 4) {
-        alert('Você só pode selecionar no máximo 4 imagens.');
-        event.target.value = '';
+    function handleFile(file, i) {
+      console.log(file.name);
+      if (!file.type.match('image/jpeg') && !file.type.match('image/png')) {
+        alert('Só são permitidos arquivos de imagem (jpg, jpeg, png).');
+        this.value = '';
         return;
       }
 
-      for (var i = 0; i < event.target.files.length; i++) {
-        handleFile(event.target.files[i], i);
-      }
-    }
-  });
+      var reader = new FileReader();
 
-</script>
+      reader.onload = function (e) {
+        var img = document.createElement('img');
+        img.src = e.target.result;
+        img.alt = 'Imagem-produto';
+        img.className = 'card-img-top';
+
+        var cardBody = document.createElement('div');
+        cardBody.className = 'card-body d-flex flex-column';
+
+        var formCheck = document.createElement('div');
+        formCheck.className = 'form-check mt-auto';
+
+        var radioInput = document.createElement('input');
+        radioInput.className = 'form-check-input';
+        radioInput.type = 'radio';
+        radioInput.name = 'imgPrincipal';
+        radioInput.id = 'exampleRadios' + i;
+        radioInput.value = i;
+        var radioLabel = document.createElement('label');
+        radioLabel.className = 'form-check-label';
+        radioLabel.htmlFor = 'exampleRadios' + i;
+        radioLabel.textContent = 'Imagem principal';
+
+        formCheck.appendChild(radioInput);
+        formCheck.appendChild(radioLabel);
+        cardBody.appendChild(formCheck);
+
+        var closeButton = document.createElement('button');
+        closeButton.type = 'button';
+        closeButton.className = 'btn-close';
+        closeButton.setAttribute('aria-label', 'Close');
+
+        var card = document.createElement('div');
+        card.className = 'card p-2 m-1';
+        card.style.width = '18rem';
+        card.appendChild(closeButton);
+        card.appendChild(img);
+        card.appendChild(cardBody);
+
+        closeButton.addEventListener('click', function () {
+          removeImage(card, file);
+          updateRadioInputs()
+        });
+
+        preview.appendChild(card);
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    document.body.addEventListener('change', function (event) {
+      if (event.target.id === 'imagem') {
+        var preview = document.getElementById('preview');
+        preview.innerHTML = '';
+
+        if (event.target.files.length > 4) {
+          alert('Você só pode selecionar no máximo 4 imagens.');
+          event.target.value = '';
+          return;
+        }
+
+        for (var i = 0; i < event.target.files.length; i++) {
+          handleFile(event.target.files[i], i);
+        }
+      }
+    });
+
+
+    document.getElementById('FormsEditarProduto').addEventListener('submit', function (e) {
+      var radios = document.getElementsByName('imgPrincipal');
+      var formValid = false;
+
+      var i = 0;
+      while (!formValid && i < radios.length) {
+        if (radios[i].checked) formValid = true;
+        i++;
+      }
+
+      if (!formValid) {
+        alert("Por favor, selecione uma imagem principal.");
+        e.preventDefault();
+      }
+    });
+
+  </script>
 
   <footer class="text-center text-lg-start bg-dark text-muted p-0 w-100">
     <div class="text-center text-white">
@@ -191,4 +211,5 @@
   </footer>
 
 </body>
+
 </html>

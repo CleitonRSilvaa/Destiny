@@ -84,7 +84,7 @@
 
       <div class="row d-flex justify-content-between ">
         <div class="col-md-auto">
-          <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalCadastroProd">Novo Produto</button>
+          <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalCadastroProd"><i class="bi bi-plus-circle"> Novo Produto</i></button>
         </div>
         <div class="col-md-auto">
           <div class="input-group mb-3">
@@ -134,9 +134,9 @@
             </td>
             <td class='text-center'>
               <div class='d-flex justify-content-center'>
-                <button type='button' id="alterarProduto" class='btn border border-warning meuBotao me-3'  onclick="openEditModal(this)">
-                  <i  class="bi bi-pencil-square px-1"></i><a th:href="@{'/produto/detalhes?id=' + ${produto.id}}">Editar</a> 
-                </button>
+                <a type='button' class='btn border border-warning meuBotao me-3' onclick="openEditModal(this)" th:href="@{'/produto/detalhes?id=' + ${produto.id}}">
+                  <i class="bi bi-pencil-square px-1"></i>Editar
+                </a>
                 <button th:if="${#strings.equalsIgnoreCase(produto.statusProduto, 'ATIVO')}" type="button" class="btn btn-danger btn-sm me-3" onclick="updateStatusConta(this)">INATIVAR</button>
                 <button th:unless="${#strings.equalsIgnoreCase(produto.statusProduto, 'ATIVO')}" type="button" class="btn btn-success btn-sm me-3" onclick="updateStatusConta(this)">ATIVAR</button>
                 <button type='button' class='btn border border-info meuBotaoView' onclick="openEditModal(this)">
@@ -172,6 +172,8 @@
         </div>
 
       </div>
+
+
 
 
 
@@ -286,8 +288,8 @@
   <script th:if="${mensagem}" th:inline="javascript">
     Swal.fire({
       position: 'top-end',
-      icon: ''/*[[${tipo}]]*/,
-      title: '' /*[[${mensagem}]]*/,
+      icon: /*[[${tipo}]]*/,
+      title: /*[[${mensagem}]]*/,
       showConfirmButton: false,
       timer: 1500
     });
