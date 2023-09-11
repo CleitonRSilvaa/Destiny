@@ -3,20 +3,26 @@ package com.destiny.controller;
 import com.destiny.model.Imagem;
 import com.destiny.model.Produto;
 import com.destiny.model.StatusProduto;
+import com.destiny.model.ValidationException;
 import com.destiny.repository.ImagemRepository;
 import com.destiny.repository.ProdutoRepository;
+import com.destiny.service.ProductDetailService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
@@ -25,6 +31,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller()
@@ -35,6 +43,8 @@ public class ProdutoController {
     private ProdutoRepository produtoRepository;
     @Autowired
     private ImagemRepository imagemRepository;
+    @Autowired
+    private ProductDetailService service;
 
 
     @GetMapping("/listar")
@@ -58,25 +68,6 @@ public class ProdutoController {
 
         return "admin/admin-menager_produtos";
     }
-
-
-
-
-
-    @GetMapping("/addProduto")
-    public String telaCadastro(Model model) {
-
-
-        model.getAttribute("nomeProduto");
-        model.getAttribute("descricaoProduto");
-        model.getAttribute("valor");
-        model.getAttribute("qntProduto");
-        model.getAttribute("");
-        model.getAttribute("");
-
-        return "estoque/addProduto.html";
-    }
-
 
     @PostMapping("/add")
     @Transactional
@@ -143,8 +134,28 @@ public class ProdutoController {
         }
     }
 
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Produto> updateProduto(@PathVariable long id,@RequestBody Produto produto){
+    Produto novProduto = service.update(id,produto);
+    return ResponseEntity.ok().body(novProduto);
+}
 
-    private String dataHoraStrg() {
+
+@GetMapping("/detalhes")
+public String buscarProdutoPorId(@RequestParam(name = "id", required = false) Long id, Model model) {
+    if (id != null) {
+        Optional<Produto> produto = service.findById(id);
+        List<Imagem> imagens = imagemRepository.findImageById(id);
+        model.addAttribute("produto", produto.orElse(null)); 
+
+    } else {
+
+    }
+    return "admin/alteration_produtos";
+}
+
+
+    private String dataHoraStrg(){
         LocalDateTime agora = LocalDateTime.now();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm:ss");
         String dataHoraFormatada = agora.format(formato).concat("-".trim().toLowerCase()).replace(':', '-');
@@ -155,7 +166,6 @@ public class ProdutoController {
         String template = "<div class=\"alert fade\" id=\"alert-{tipo}\" role=\"alert\" data-mdb-color=\"{tipo}\" data-mdb-position=\"top-right\" data-mdb-stacking=\"true\" data-mdb-width=\"535px\" data-mdb-width=\"535px\" data-mdb-append-to-body=\"true\" data-mdb-hidden=\"true\" data-mdb-autohide=\"true\" data-mdb-delay=\"2000\">{meu texto}</div>";
         return template.replace("{tipo}", tipo).replace("{meu texto}", texto);
     }
-
 
 
 }

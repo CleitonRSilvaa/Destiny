@@ -122,7 +122,7 @@
             </td>
             <td class='text-center'>
               <div class='d-flex justify-content-center'>
-                <button type='button' class='btn border border-warning meuBotao me-3' onclick="openEditModal(this)">
+                <button type='button'  class='btn border border-warning meuBotao me-3' onclick="openEditModal(this)">
                   <i class="bi bi-pencil-square px-1"></i>Editar
                 </button>
                 <button th:if="${#strings.equalsIgnoreCase(usuario.statusConta, 'ATIVA')}" type="button" class="btn btn-danger btn-sm" onclick="updateStatusConta(this)">INATIVAR</button>

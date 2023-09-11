@@ -29,6 +29,7 @@ public class Produto {
 
     @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
     private List<Imagem> imagens;
+    
     @Override
     public String toString() {
         return "Produto [id=" + id + ", nome=" + nome + " img="+ imagens+"]";
