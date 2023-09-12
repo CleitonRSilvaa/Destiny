@@ -155,6 +155,21 @@ public String buscarProdutoPorId(@RequestParam(name = "id", required = false) Lo
 }
 
 
+
+@GetMapping("/preview")
+public String trazerPorId(@RequestParam(name = "id", required = false) Long id, Model model) {
+    if (id != null) {
+        Optional<Produto> produto = service.findById(id);
+        List<Imagem> imagens = imagemRepository.findImageById(id);
+        model.addAttribute("produto", produto.orElse(null)); 
+
+    } else {
+
+    }
+    return "admin/preview-produto";
+}
+
+
     private String dataHoraStrg(){
         LocalDateTime agora = LocalDateTime.now();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm:ss");

@@ -139,9 +139,9 @@
                 </a>
                 <button th:if="${#strings.equalsIgnoreCase(produto.statusProduto, 'ATIVO')}" type="button" class="btn btn-danger btn-sm me-3" onclick="updateStatusConta(this)">INATIVAR</button>
                 <button th:unless="${#strings.equalsIgnoreCase(produto.statusProduto, 'ATIVO')}" type="button" class="btn btn-success btn-sm me-3" onclick="updateStatusConta(this)">ATIVAR</button>
-                <button type='button' class='btn border border-info meuBotaoView' onclick="openEditModal(this)">
+                <a type='button' class='btn border border-info meuBotaoView' onclick="openEditModal(this) " th:href="@{'/produto/preview?id=' + ${produto.id}}">
                   Visualizar
-                </button>
+                </a>
               </div>
             </td>
 
