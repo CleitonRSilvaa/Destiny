@@ -13,9 +13,10 @@
 </head>
 
 <body>
-  <div class="container mt-4 flex-grow-1">
-    <div class="container p-5">
-      <form id="FormsEditarProduto" action="#" method="">
+  <div class="container mt-2 flex-grow-1">
+    <div class="container p-3">
+      <form id="FormsEditarProduto" action="/produto/editarProduto" method="post" enctype="multipart/form-data">
+        <input type="hidden" id="id" name="id" th:value="${produto.id}">
         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="nome" class="form-label">Nome</label>
@@ -23,19 +24,18 @@
           </div>
           <div class="col-md-6 mb-3">
             <label for="valor" class="form-label">Valor</label>
-            <input type="number" class="form-control" id="valor" name="valor" th:value="${produto.valor}" required>
+            <input type="number" class="form-control" id="valor" name="valor" th:value="${produto.valor}" min="1" required>
           </div>
         </div>
         <div class="row">
-          <div class="col-md-6 mb-3">
+          <div class="col-md-4 mb-3">
             <label for="quantidade" class="form-label">Quantidade</label>
-            <input type="number" class="form-control" id="quantidade" name="quantidade" th:value=${produto.quantidade} required>
+            <input type="number" class="form-control" id="quantidade" name="quantidade" th:value=${produto.quantidade} min="1" required>
           </div>
-          <div class="col-md-6 mb-3">
+          <div class="col-md-4 mb-3">
             <label for="avaliacao" class="form-label">Avaliação</label>
             <select class="form-select" id="avaliacao" name="avaliacao" required>
               <option th:text=${produto.avaliacao}> </option>
-              <option value="1">0.5</option>
               <option value="1">1.0</option>
               <option value="1">1.5</option>
               <option value="2">2.0</option>
@@ -47,6 +47,13 @@
               <option value="5">5.0</option>
             </select>
           </div>
+          <div class="col-md-4 mb-3">
+            <label for="statusProduto" class="form-label">Status</label>
+            <select class="form-select" id="statusProduto" name="statusProduto" required>
+              <option value="ATIVO" th:selected="${#strings.equalsIgnoreCase(produto.statusProduto, 'ATIVO')}">ATIVO</option>
+              <option value="INATIVO" th:selected="${#strings.equalsIgnoreCase(produto.statusProduto, 'INATIVO')}">INATIVO</option>
+            </select>
+          </div>
         </div>
         <div class="mb-3">
           <label for="descricao" class="form-label">Descrição</label>
@@ -54,37 +61,71 @@
         </div>
         <div class="mb-3">
           <label for="imagem" class="form-label">Imagens</label>
-          <input type="file" class="form-control" id="imagem" name="imagem" multiple required>
+          <input type="file" class="form-control" id="imagem" name="imagem" multiple>
         </div>
+        <input type="hidden" id="imagensParaRemover" name="imagensParaRemover">
+        <th:block th:each="imagem, iterStat : ${produto.imagens}">
+          <input th:if="${imagem.principal}" type="hidden" id="imagenPrinclAt" name="imagenPrinclAt" th:value="${imagem.id}">
+        </th:block>
 
-        <div id="preview" class="row p-2 m">
-          <div th:each="imagem, iterStat : ${produto.imagens}" class="card p-2 m-1" style="width: 18rem;">
-            <button type="button" class="btn-close" aria-label="Close"></button>
+
+        <div id="preview2" class="row p-2 justify-content-center">
+          <span class="text-center">Imagens Cadastradas</span>
+          <div th:each="imagem, iterStat : ${produto.imagens}" class="card p-2 m-1" style="width: 15rem;">
+            <button type="button" class="btn btn-danger btn-remove m-2" aria-label="Remover" th:data-id="${imagem.id}">Remover</button>
             <img th:src="${'/'+imagem.caminho}" alt="Imagem-produto" class="card-img-top">
             <div class="card-body d-flex flex-column">
               <div class="form-check mt-auto">
-                <input class="form-check-input" type="radio" name="imgPrincipal" th:id="'exampleRadios' + ${iterStat.index}" th:value="${iterStat.index}">
-                <label class="form-check-label" th:for="'exampleRadios' + ${iterStat.index}">Imagem principal</label>
+                <input class="form-check-input" type="radio" name="imgPrincipal" th:id="'imgPrincipalRadio' + ${iterStat.index}" th:value="${imagem.id}" th:checked="${imagem.principal} ? 'checked' : null">
+                <label class="form-check-label" th:for="'imgPrincipalRadio' + ${iterStat.index}">Imagem principal</label>
               </div>
             </div>
           </div>
         </div>
-
-        <button type="submit" class="btn btn-primary">Alterar</button>
-      </form>
+        <div class="col-md-12">
+          <div id="preview" class="row p-2 justify-content-center">
+          </div>
+        </div>
 
     </div>
+
+    <button type="submit" class="btn btn-primary">Alterar</button>
+    </form>
+
+  </div>
   </div>
 
   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const imagenPrinclAt = document.getElementById('imagenPrinclAt');
+      const imgPrincipalRadios = document.querySelectorAll('input[name="imgPrincipal"]');
+
+      imgPrincipalRadios.forEach((radio, index) => {
+        radio.addEventListener('change', function () {
+          if (this.checked) {
+            imagenPrinclAt.value = this.value;
+          }
+        });
+      });
+    });
+
+    document.querySelectorAll('.btn-remove').forEach(btn => {
+      btn.addEventListener('click', (event) => {
+        const idImagem = event.target.dataset.id;
+        const imagensParaRemover = document.getElementById('imagensParaRemover');
+        imagensParaRemover.value += idImagem + ',';
+        event.target.closest('.card').remove();
+      });
+    });
+
     function updateRadioInputs() {
       var preview = document.getElementById('preview');
       var radios = preview.querySelectorAll('.form-check-input');
       var labels = preview.querySelectorAll('.form-check-label');
       for (var i = 0; i < radios.length; i++) {
-        radios[i].id = 'exampleRadios' + i;
+        radios[i].id = 'radios' + i;
         radios[i].value = i;
-        labels[i].htmlFor = 'exampleRadios' + i;
+        labels[i].htmlFor = 'radios' + i;
       }
     }
 
@@ -109,12 +150,13 @@
 
 
     function handleFile(file, i) {
-      console.log(file.name);
+
       if (!file.type.match('image/jpeg') && !file.type.match('image/png')) {
         alert('Só são permitidos arquivos de imagem (jpg, jpeg, png).');
         this.value = '';
         return;
       }
+
 
       var reader = new FileReader();
 
@@ -134,12 +176,19 @@
         radioInput.className = 'form-check-input';
         radioInput.type = 'radio';
         radioInput.name = 'imgPrincipal';
-        radioInput.id = 'exampleRadios' + i;
+        radioInput.id = 'radios' + i;
         radioInput.value = i;
         var radioLabel = document.createElement('label');
         radioLabel.className = 'form-check-label';
-        radioLabel.htmlFor = 'exampleRadios' + i;
+        radioLabel.htmlFor = 'radios' + i;
         radioLabel.textContent = 'Imagem principal';
+
+        radioInput.addEventListener('change', function () {
+          if (this.checked) {
+            imagenPrinclAt.value = '';
+            radioInput.value = this.value
+          }
+        });
 
         formCheck.appendChild(radioInput);
         formCheck.appendChild(radioLabel);
@@ -152,7 +201,7 @@
 
         var card = document.createElement('div');
         card.className = 'card p-2 m-1';
-        card.style.width = '18rem';
+        card.style.width = '15rem';
         card.appendChild(closeButton);
         card.appendChild(img);
         card.appendChild(cardBody);
@@ -172,6 +221,11 @@
       if (event.target.id === 'imagem') {
         var preview = document.getElementById('preview');
         preview.innerHTML = '';
+
+        let span = document.createElement('span');
+        span.innerText = 'Novas imagens';
+        span.className = 'text-center';
+        preview.appendChild(span);
 
         if (event.target.files.length > 4) {
           alert('Você só pode selecionar no máximo 4 imagens.');
@@ -201,6 +255,27 @@
         e.preventDefault();
       }
     });
+
+    function updateStatusConta(e) {
+      let t = e.closest("tr"),
+        a = t.getAttribute("data-id"),
+        i = t.getAttribute("data-status"),
+        o = "ATIVA" === i ? "INATIVA" : "ATIVA",
+        n = { id: a, status: o };
+      Swal.fire({
+        title: `${"ATIVA" === o ? "Ativar" : "Inativar"} usu\xe1rio?`,
+        showCancelButton: !0,
+        confirmButtonText: "Sim",
+      }).then((e) => {
+        e.isConfirmed &&
+          makeRequest(
+            "POST",
+            "/usuario/updateStatus",
+            n,
+            "Status atualizado com sucesso!"
+          );
+      });
+    }
 
   </script>
 

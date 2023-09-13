@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 @Entity
 public class Produto {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -29,13 +29,13 @@ public class Produto {
 
     @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
     private List<Imagem> imagens;
-    
+
     @Override
     public String toString() {
-        return "Produto [id=" + id + ", nome=" + nome + " img="+ imagens+"]";
+        return "Produto \n[id: " + id + ",\nnome: " + nome + ",\navaliacao: " + avaliacao + ",\nvalor: " + valor
+                + ",\nquantidade: " + quantidade + ",\nstatusProduto: " + statusProduto + ",\ndescricao: " + descricao
+                + ",\nimagens: " + imagens
+                + "]";
     }
 
-
-
 }
-
