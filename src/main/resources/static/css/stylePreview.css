@@ -1,4 +1,7 @@
-.carousel-indicators{
-    bottom: -60px;
-    left: -500px;
+.carousel-indicators {
+    bottom: -110px;
+    left: -220px;
+}
+.carousel-indicators [data-bs-target] {
+width: 120px;
 }
