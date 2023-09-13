@@ -6,12 +6,12 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Destiny
-    dashboard</title>
+  <title>Tela Exemplo</title>
   <link href="../css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../css/sweetalert2.min.css">
   <link href="../css/style.css" rel="stylesheet">
   <script src="../js/sweetalert2.min.js"></script>
+
 </head>
 
 <body class="d-flex flex-column">
@@ -41,91 +41,57 @@
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="/produto/listar">Listar Produtos</a>
             </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Relatorios
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Usuários Conectados</a></li>
-                <li><a class="dropdown-item" href="#">Esquipamentos</a></li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled">Disabled</a>
-            </li>
+
+
           </th:block>
 
-          <!-- Link para Listar Produtos. Todos os usuários, incluindo ROLE_ADMIN, terão acesso -->
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#">Listar Produtos</a>
-          </li>
+
 
         </ul>
       </div>
 
       <div sec:authorize="isAuthenticated()">
         <spam class='text-white px-2' th:text="${#authentication.name}"></spam>
+        <input type="hidden" id="usernameBeingEdited" th:value="${#authentication.name}">
+
       </div>
 
       <a class="btn btn-outline-danger" href="/logout"><i class="bi bi-box-arrow-right px-1"></i>Sair</a>
     </div>
   </nav>
 
-  <!-- Conteúdo principal (pode adicionar o conteúdo da sua página aqui) -->
-
-  <div style="flex-grow: 1;" class="container mt-4 flex-grow-1">
-
-
+  <div class="container mt-4 flex-grow-1">
     <div class="container p-5">
-      <div sec:authorize="isAuthenticated()">
-
-
-      </div>
     </div>
   </div>
 
 
+  <span th:if="${errorMessage}">
+    <script th:inline="javascript">
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: /*[[${errorMessage}]]*/"",
+        showConfirmButton: false,
+        timer: 1700
+      });
+    </script>
+  </span>
 
 
   <footer class="text-center text-lg-start bg-dark text-muted p-0 w-100">
-
-    <div class="container mt-4 flex-grow-1">
-
-      <div class="container p-5">
-
-      </div>
+    <div class="text-center text-white">
+      &copy; 2023 Destiny. Todos os direitos reservados.</p>
     </div>
-
-    <footer class="text-center text-lg-start bg-dark text-muted p-0 w-100">
-
-      <div class="text-center text-white">
-        &copy; 2023 Destiny. Todos os direitos reservados.</p>
-      </div>
-    </footer>
-    <!-- Footer -->
-
-    <span th:if="${errorMessage}">
-      <script th:inline="javascript">
-        Swal.fire({
-          position: 'top-end',
-          icon: 'error',
-          title: /*[[${errorMessage}]]*/"",
-          showConfirmButton: false,
-          timer: 1700
-        });
-      </script>
-    </span>
+  </footer>
 
 
-    <script src="../jquery/jquery.min.js"></script>
-    <script src="../jquery/jquery.mask.min.js"></script>
-    <script src="../js/bootstrap.bundle.min.js"></script>
-    <script src="../js/admin/main.js"></script>
-    <script src="../js/popper.min.js"></script>
+
+  <script src="../jquery/jquery.min.js"></script>
+  <script src="../jquery/jquery.mask.min.js"></script>
+  <script src="../js/bootstrap.bundle.min.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <!-- MDB -->
 
 </body>
 

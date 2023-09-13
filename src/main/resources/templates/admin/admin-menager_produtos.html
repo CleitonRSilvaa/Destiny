@@ -25,12 +25,10 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-          <!-- Link para Home. Todos os usuários terão acesso -->
           <li class="nav-item">
             <a class="nav-link" aria-current="page" href="/">home</a>
           </li>
 
-          <!-- Links exclusivos para ROLE_ADMIN -->
           <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="/usuario/lista">Listar Usuários</a>
@@ -41,28 +39,13 @@
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="/produto/listar">Listar Produtos</a>
             </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Relatorios
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Usuários Conectados</a></li>
-                <li><a class="dropdown-item" href="/produto/addProduto">Add Produto</a></li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-              </ul>
-            </li>
+          </th:block>
+          <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ESTOQUISTA'}">
+
             <li class="nav-item">
-              <a class="nav-link disabled">Disabled</a>
+              <a class="nav-link" aria-current="page" href="/produto/listar">Listar Produtos</a>
             </li>
           </th:block>
-
-          <!-- Link para Listar Produtos. Todos os usuários, incluindo ROLE_ADMIN, terão acesso -->
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#">Listar Produtos</a>
-          </li>
 
         </ul>
       </div>
@@ -84,7 +67,9 @@
 
       <div class="row d-flex justify-content-between ">
         <div class="col-md-auto">
-          <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalCadastroProd"><i class="bi bi-plus-circle"> Novo Produto</i></button>
+          <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalCadastroProd"><i class="bi bi-plus-circle"> Novo Produto</i></button>
+          </th:block>
         </div>
         <div class="col-md-auto">
           <div class="input-group mb-3">
@@ -135,8 +120,11 @@
                 <a type='button' class='btn border border-warning meuBotao me-3' onclick="openEditModal(this)" th:href="@{'/produto/detalhes?id=' + ${produto.id}}">
                   <i class="bi bi-pencil-square px-1"></i>Editar
                 </a>
-                <button th:if="${#strings.equalsIgnoreCase(produto.statusProduto, 'ATIVO')}" type="button" class="btn btn-danger btn-sm me-3" onclick="updateStatusConta(this)">INATIVAR</button>
-                <button th:unless="${#strings.equalsIgnoreCase(produto.statusProduto, 'ATIVO')}" type="button" class="btn btn-success btn-sm me-3" onclick="updateStatusConta(this)">ATIVAR</button>
+                <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
+                  <button th:if="${#strings.equalsIgnoreCase(produto.statusProduto, 'ATIVO')}" type="button" class="btn btn-danger btn-sm me-3" onclick="updateStatusProduto(this)">INATIVAR</button>
+                  <button th:unless="${#strings.equalsIgnoreCase(produto.statusProduto, 'ATIVO')}" type="button" class="btn btn-success btn-sm me-3" onclick="updateStatusProduto(this)">ATIVAR</button>
+                </th:block>
+
                 <a type='button' class='btn border border-info meuBotaoView' onclick="openEditModal(this) " th:href="@{'/produto/preview?id=' + ${produto.id}}">
                   Visualizar
                 </a>
@@ -170,71 +158,74 @@
         </div>
       </div>
     </div>
-
   </div>
 
-  <!-- ModalCriacao-->
-  <div class="modal fade" id="modalCadastroProd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalCadastroProdLabel" aria-hidden="true">
-    <div class="modal-dialog modal-fullscreen">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-4" id="exampleModalFullscreenLabel">Novo produto</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form action="/produto/add" method="post" enctype="multipart/form-data">
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="nome" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="nome" name="nome" maxlength="199" required>
+  <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
+    <!-- ModalCriacao-->
+    <div class="modal fade" id="modalCadastroProd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalCadastroProdLabel" aria-hidden="true">
+      <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-4" id="exampleModalFullscreenLabel">Novo produto</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="/produto/add" method="post" enctype="multipart/form-data">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="nome" class="form-label">Nome</label>
+                  <input type="text" class="form-control" id="nome" name="nome" maxlength="199" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="valor" class="form-label">Valor</label>
+                  <input type="number" class="form-control" id="valor" name="valor" step="0.01" min="1" required>
+                </div>
               </div>
-              <div class="col-md-6 mb-3">
-                <label for="valor" class="form-label">Valor</label>
-                <input type="number" class="form-control" id="valor" name="valor" step="0.01" min="1" required>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="quantidade" class="form-label">Quantidade</label>
+                  <input type="number" class="form-control" id="quantidade" name="quantidade" min="1" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="avaliacao" class="form-label">Avaliação</label>
+                  <select class="form-select" id="avaliacao" name="avaliacao" required>
+                    <option value="" selected disabled>Selecione uma opção</option>
+                    <option value="1">1.0</option>
+                    <option value="1">1.5</option>
+                    <option value="2">2.0</option>
+                    <option value="2">2.5</option>
+                    <option value="3">3.0</option>
+                    <option value="3">3.5</option>
+                    <option value="4">4.0</option>
+                    <option value="4">4.5</option>
+                    <option value="5">5.0</option>
+                  </select>
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="quantidade" class="form-label">Quantidade</label>
-                <input type="number" class="form-control" id="quantidade" name="quantidade" min="1" required>
+              <div class="mb-3">
+                <label for="descricao" class="form-label">Descrição</label>
+                <textarea class="form-control" id="descricao" name="descricao" rows="3" maxlength="1999"></textarea>
               </div>
-              <div class="col-md-6 mb-3">
-                <label for="avaliacao" class="form-label">Avaliação</label>
-                <select class="form-select" id="avaliacao" name="avaliacao" required>
-                  <option value="" selected disabled>Selecione uma opção</option>
-                  <option value="1">1.0</option>
-                  <option value="1">1.5</option>
-                  <option value="2">2.0</option>
-                  <option value="2">2.5</option>
-                  <option value="3">3.0</option>
-                  <option value="3">3.5</option>
-                  <option value="4">4.0</option>
-                  <option value="4">4.5</option>
-                  <option value="5">5.0</option>
-                </select>
+              <div class="mb-3">
+                <label for="imagem" class="form-label">Imagens</label>
+                <input type="file" class="form-control" id="imagem" name="imagem" multiple required>
               </div>
-            </div>
-            <div class="mb-3">
-              <label for="descricao" class="form-label">Descrição</label>
-              <textarea class="form-control" id="descricao" name="descricao" rows="3" maxlength="1999"></textarea>
-            </div>
-            <div class="mb-3">
-              <label for="imagem" class="form-label">Imagens</label>
-              <input type="file" class="form-control" id="imagem" name="imagem" multiple required>
-            </div>
-            <div id="preview" class="row p-2 justify-content-center">
-            </div>
-            <div class="col-md-12 justify-content-center">
-              <button type="submit" class="btn btn-primary">Cadastrar</button>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+              <div id="preview" class="row p-2 justify-content-center">
+              </div>
+              <div class="col-md-12 justify-content-center">
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </th:block>
+
+
   <script th:if="${mensagem}" th:inline="javascript">
     Swal.fire({
       position: 'top-end',
@@ -379,7 +370,7 @@
         n = { id: a, status: o };
       console.log(n)
       Swal.fire({
-        title: `${"ATIVO" === o ? "Ativar" : "Inativar produto"} ?`,
+        title: `${"ATIVO" === o ? "Ativar produto" : "Inativar produto"} ?`,
         showCancelButton: !0,
         confirmButtonText: "Sim",
       }).then((e) => {
