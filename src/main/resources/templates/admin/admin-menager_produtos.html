@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="https://thymeleaf.org">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tela Exemplo</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/sweetalert2.min.css">
+  <link href="../css/style.css" rel="stylesheet">
+  <script src="../js/sweetalert2.min.js"></script>
+
+</head>
+
+<body class="d-flex flex-column">
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand px-2" href="/">Destiny</a>
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/">home</a>
+          </li>
+
+          <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/usuario/lista">Listar Usuários</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="#">Listar Clientes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/produto/listar">Listar Produtos</a>
+            </li>
+          </th:block>
+          <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ESTOQUISTA'}">
+
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/produto/listar">Listar Produtos</a>
+            </li>
+          </th:block>
+
+        </ul>
+      </div>
+
+      <div sec:authorize="isAuthenticated()">
+        <spam class='text-white px-2' th:text="${#authentication.name}"></spam>
+        <input type="hidden" id="usernameBeingEdited" th:value="${#authentication.name}">
+
+      </div>
+
+      <a class="btn btn-outline-danger" href="/logout"><i class="bi bi-box-arrow-right px-1"></i>Sair</a>
+    </div>
+  </nav>
+
+  <!-- Conteúdo principal (pode adicionar o conteúdo da sua página aqui) -->
+  <div class="container mt-4 flex-grow-1">
+
+    <div class="container p-5">
+
+      <div class="row d-flex justify-content-between ">
+        <div class="col-md-auto">
+          <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalCadastroProd"><i class="bi bi-plus-circle"> Novo Produto</i></button>
+          </th:block>
+        </div>
+        <div class="col-md-auto">
+          <div class="input-group mb-3">
+            <form class="input-group mb-3" action="#" th:action="@{/produto/listar}" method="get">
+              <input type="text" class="form-control " id="nomeProduto" th:name="nomeProduto" th:value="${nomeProduto}" placeholder="Ex: Hotel" autocomplete="off">
+              <button class="btn btn-outline-primary" type="submit">Buscar<i class="bi bi-search px-1"></i></button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+      <h5></h5>
+      <table class="table table-striped table-hover caption-top">
+        <caption>Lista de Produtos</caption>
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nome</th>
+            <th class="text-center" scope="col">Avaliação</th>
+            <th class="text-center" scope="col">Valor</th>
+            <th class="text-center" scope="col">Quantidade</th>
+            <th class="text-center" scope="col">Status</th>
+            <th class="text-center" scope="col">Opções</th>
+            <!-- outras colunas -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:if="${#lists.isEmpty(produtoPage.content)}" class="table">
+            <td colspan="7" class="text-center">
+              <h4>Nenhum produto cadastrado.</h4>
+            </td>
+          </tr>
+          <tr th:each="produto : ${produtoPage.content}" th:attr="data-id=${produto.id}, data-nome=${produto.nome}, data-status=${produto.statusProduto} ">
+            <td th:text="${produto.id}"></td>
+            <td th:text="${produto.nome}"></td>
+            <td class="text-center" th:text="${produto.avaliacao}"></td>
+            <td class="text-center" th:text="${produto.valor}"></td>
+            <td class="text-center" th:text="${produto.quantidade}"></td>
+            <td>
+              <div class="text-center" role="group">
+                <span th:if="${#strings.equalsIgnoreCase(produto.statusProduto, 'ATIVO')}" class="text-success">ativo</span>
+                <span th:unless="${#strings.equalsIgnoreCase(produto.statusProduto, 'ATIVO')}" class="text-danger">inativo</span>
+              </div>
+            </td>
+            <td class='text-center'>
+              <div class='d-flex justify-content-center'>
+                <a type='button' class='btn border border-warning meuBotao me-3' onclick="openEditModal(this)" th:href="@{'/produto/detalhes?id=' + ${produto.id}}">
+                  <i class="bi bi-pencil-square px-1"></i>Editar
+                </a>
+                <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
+                  <button th:if="${#strings.equalsIgnoreCase(produto.statusProduto, 'ATIVO')}" type="button" class="btn btn-danger btn-sm me-3" onclick="updateStatusProduto(this)">INATIVAR</button>
+                  <button th:unless="${#strings.equalsIgnoreCase(produto.statusProduto, 'ATIVO')}" type="button" class="btn btn-success btn-sm me-3" onclick="updateStatusProduto(this)">ATIVAR</button>
+                </th:block>
+
+                <a type='button' class='btn border border-info meuBotaoView' onclick="openEditModal(this) " th:href="@{'/produto/preview?id=' + ${produto.id}}">
+                  Visualizar
+                </a>
+              </div>
+            </td>
+
+          </tr>
+        </tbody>
+        <tfoot>
+
+        </tfoot>
+      </table>
+      <div class="position-relative">
+        <div class="position-absolute top-0 start-50 translate-middle-x">
+          <nav>
+            <ul class="pagination">
+              <li class="page-item" th:classappend="${produtoPage.first} ? 'disabled' : ''">
+                <a class="page-link" th:href="@{/produto/listar(page=1, size=${produtoPage.size})}">Primeira</a>
+              </li>
+              <li class="page-item" th:classappend="${produtoPage.first} ? 'disabled' : ''">
+                <a class="page-link" th:href="@{/produto/listar(page=${produtoPage.number}, size=${produtoPage.size})}">Anterior</a>
+              </li>
+              <li class="page-item" th:classappend="${produtoPage.last} ? 'disabled' : ''">
+                <a class="page-link" th:href="@{/produto/listar(page=${produtoPage.number + 2}, size=${produtoPage.size})}">Próxima</a>
+              </li>
+              <li class="page-item" th:classappend="${produtoPage.last} ? 'disabled' : ''">
+                <a class="page-link" th:href="@{/produto/listar(page=${produtoPage.totalPages}, size=${produtoPage.size})}">Última</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
+    <!-- ModalCriacao-->
+    <div class="modal fade" id="modalCadastroProd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalCadastroProdLabel" aria-hidden="true">
+      <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-4" id="exampleModalFullscreenLabel">Novo produto</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="/produto/add" method="post" enctype="multipart/form-data">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="nome" class="form-label">Nome</label>
+                  <input type="text" class="form-control" id="nome" name="nome" maxlength="199" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="valor" class="form-label">Valor</label>
+                  <input type="number" class="form-control" id="valor" name="valor" step="0.01" min="1" required>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="quantidade" class="form-label">Quantidade</label>
+                  <input type="number" class="form-control" id="quantidade" name="quantidade" min="1" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="avaliacao" class="form-label">Avaliação</label>
+                  <select class="form-select" id="avaliacao" name="avaliacao" required>
+                    <option value="" selected disabled>Selecione uma opção</option>
+                    <option value="1">1.0</option>
+                    <option value="1">1.5</option>
+                    <option value="2">2.0</option>
+                    <option value="2">2.5</option>
+                    <option value="3">3.0</option>
+                    <option value="3">3.5</option>
+                    <option value="4">4.0</option>
+                    <option value="4">4.5</option>
+                    <option value="5">5.0</option>
+                  </select>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="descricao" class="form-label">Descrição</label>
+                <textarea class="form-control" id="descricao" name="descricao" rows="3" maxlength="1999"></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="imagem" class="form-label">Imagens</label>
+                <input type="file" class="form-control" id="imagem" name="imagem" multiple required>
+              </div>
+              <div id="preview" class="row p-2 justify-content-center">
+              </div>
+              <div class="col-md-12 justify-content-center">
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </th:block>
+
+
+  <script th:if="${mensagem}" th:inline="javascript">
+    Swal.fire({
+      position: 'top-end',
+      icon: /*[[${tipo}]]*/,
+      title: /*[[${mensagem}]]*/,
+      showConfirmButton: false,
+      timer: 1500
+    });
+  </script>
+  <script>
+
+
+    function updateRadioInputs() {
+      var preview = document.getElementById('preview');
+      var radios = preview.querySelectorAll('.form-check-input');
+      var labels = preview.querySelectorAll('.form-check-label');
+      for (var i = 0; i < radios.length; i++) {
+        radios[i].id = 'exampleRadios' + i;
+        radios[i].value = i;
+        labels[i].htmlFor = 'exampleRadios' + i;
+      }
+    }
+
+    function removeImage(card, file) {
+      var input = document.getElementById('imagem');
+      var preview = document.getElementById('preview');
+
+      preview.removeChild(card);
+
+      // Cria um novo objeto de FormData
+      var dataTransfer = new DataTransfer();
+      for (var i = 0; i < input.files.length; i++) {
+        if (input.files[i] !== file) {
+          dataTransfer.items.add(input.files[i]);
+        }
+      }
+
+      // Atualiza o input com os arquivos restantes
+      input.files = dataTransfer.files;
+    }
+
+    function handleFile(file, i) {
+      console.log(file.name);
+      if (!file.type.match('image/jpeg') && !file.type.match('image/png')) {
+        alert('Só são permitidos arquivos de imagem (jpg, jpeg, png).');
+        this.value = '';
+        return;
+      }
+
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+        var img = document.createElement('img');
+        img.src = e.target.result;
+        img.alt = 'Imagem-produto';
+        img.className = 'card-img-top';
+
+        var cardBody = document.createElement('div');
+        cardBody.className = 'card-body d-flex flex-column';
+
+        var formCheck = document.createElement('div');
+        formCheck.className = 'form-check mt-auto';
+
+        var radioInput = document.createElement('input');
+        radioInput.className = 'form-check-input';
+        radioInput.type = 'radio';
+        radioInput.name = 'imgPrincipal';
+        radioInput.id = 'exampleRadios' + i;
+        radioInput.value = i;
+        var radioLabel = document.createElement('label');
+        radioLabel.className = 'form-check-label';
+        radioLabel.htmlFor = 'exampleRadios' + i;
+        radioLabel.textContent = 'Imagem principal';
+
+        formCheck.appendChild(radioInput);
+        formCheck.appendChild(radioLabel);
+        cardBody.appendChild(formCheck);
+
+        var closeButton = document.createElement('button');
+        closeButton.type = 'button';
+        closeButton.className = 'btn-close';
+        closeButton.setAttribute('aria-label', 'Close');
+
+        var card = document.createElement('div');
+        card.className = 'card p-2 m-1';
+        card.style.width = '18rem';
+        card.appendChild(closeButton);
+        card.appendChild(img);
+        card.appendChild(cardBody);
+
+        closeButton.addEventListener('click', function () {
+          removeImage(card, file);
+          updateRadioInputs()
+        });
+
+        preview.appendChild(card);
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    document.body.addEventListener('change', function (event) {
+      if (event.target.id === 'imagem') {
+        var preview = document.getElementById('preview');
+        preview.innerHTML = '';
+
+        if (event.target.files.length > 4) {
+          alert('Você só pode selecionar no máximo 4 imagens.');
+          event.target.value = '';
+          return;
+        }
+
+        for (var i = 0; i < event.target.files.length; i++) {
+          handleFile(event.target.files[i], i);
+        }
+      }
+    });
+
+
+    document.getElementById('modalCadastroProd').addEventListener('submit', function (e) {
+      var radios = document.getElementsByName('imgPrincipal');
+      var formValid = false;
+
+      var i = 0;
+      while (!formValid && i < radios.length) {
+        if (radios[i].checked) formValid = true;
+        i++;
+      }
+
+      if (!formValid) {
+        alert("Por favor, selecione uma imagem principal.");
+        e.preventDefault();
+      }
+    });
+
+
+    function updateStatusProduto(e) {
+      let t = e.closest("tr"),
+        a = t.getAttribute("data-id"),
+        i = t.getAttribute("data-status"),
+        o = "ATIVO" === i ? "INATIVO" : "ATIVO",
+        n = { id: a, status: o };
+      console.log(n)
+      Swal.fire({
+        title: `${"ATIVO" === o ? "Ativar produto" : "Inativar produto"} ?`,
+        showCancelButton: !0,
+        confirmButtonText: "Sim",
+      }).then((e) => {
+        e.isConfirmed &&
+          makeRequest(
+            "POST",
+            "/produto/updateStatus",
+            n,
+            "Status atualizado com sucesso!"
+          );
+      });
+    }
+
+    function makeRequest(e, t, a, i) {
+      console.log(a),
+        $.ajax({
+          type: e,
+          url: `http://localhost:8080${t}`,
+          data: JSON.stringify(a),
+          contentType: "application/json; charset=utf-8",
+          success: function (e) {
+            [200, 201].includes(e.status) && "sucess" === e.message
+              ? (Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: i,
+                showConfirmButton: !1,
+                timer: 1900,
+              }),
+                setTimeout(() => location.reload(), 1900))
+              : Swal.fire({
+                icon: "error",
+                title: "Erro",
+                text: "Resposta inesperada do servidor. Por favor, tente novamente.",
+              });
+          },
+          error: function (e) {
+            let t = e.responseJSON,
+              a = t.message + "\n\n";
+            t.details && (a += t.details.map((e) => "- " + e).join("\n")),
+              Swal.fire({ icon: "error", title: "Erro", text: a });
+          },
+        });
+    }
+
+  </script>
+
+  <footer class="text-center text-lg-start bg-dark text-muted p-0 w-100">
+    <div class="text-center text-white">
+      &copy; 2023 Destiny. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+
+
+  <script src="../jquery/jquery.min.js"></script>
+  <script src="../jquery/jquery.mask.min.js"></script>
+  <script src="../js/bootstrap.bundle.min.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <!-- MDB -->
+
+</body>
+
+</html>

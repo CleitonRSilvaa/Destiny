@@ -38,3 +38,6 @@ build/
 .mvn
 /mvnw
 mvnw.cmd
+
+
+**/imagens/produtos/**

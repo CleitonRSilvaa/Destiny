@@ -70,5 +70,71 @@
       <a class="btn btn-outline-danger" href="/logout"><i class="bi bi-box-arrow-right px-1"></i>Sair</a>
     </div>
   </nav>
+  <div class="container mt-4 flex-grow-1">
+
+    <div class="container p-5">
+
+      <div class="row d-flex justify-content-between ">
+        <div class="col-md-auto">
+          <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Novo Usuario</button>
+        </div>
+        <div class="col-md-auto">
+          <div class="input-group mb-3">
+            <form class="input-group mb-3" action="">
+              <input type="text" class="form-control " id="nomeBusca" name="nomeBusca" placeholder="Ex: jose" autocomplete="off">
+              <button class="btn btn-outline-primary" type="submit">Buscar<i class="bi bi-search px-1"></i></button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+      <h5>Lista de Produtos</h5>
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Codigo</th>
+            <th scope="col">Nome Produto</th>
+            <th scope="col">Quantidade</th>
+            <th scope="col">Valor</th>
+            <th scope="col">Status</th>
+            <th scope="col">Visualização</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:if="${#lists.isEmpty(listaDeUsuarios)}" class="table">
+            <td colspan="7" class="text-center">
+              <h4>Nenhum Produto criado.</h4>
+            </td>
+          </tr>
+          <tr th:each="usuario, iterStat : ${listaDeUsuarios}" th:attr="data-id=${usuario.id},data-nome=${usuario.nome},data-email=${usuario.email},data-cpf=${usuario.cpf}, data-tipoConta= ${usuario.tipoConta}, data-status=${usuario.statusConta} ">
+            <th scope="row" th:text="${iterStat.count}"></th>
+            <td th:text="${usuario.nome}"></td>
+            <td th:text="${usuario.email}"></td>
+            <td class="cpftable" th:text="${usuario.cpf}"></td>
+            <td th:text="${usuario.tipoConta}">ADMIN</td>
+
+            <td>
+              <div class="text-center" role="group">
+                <span th:if="${#strings.equalsIgnoreCase(usuario.statusConta, 'ATIVA')}" class="text-success">ativa</span>
+                <span th:unless="${#strings.equalsIgnoreCase(usuario.statusConta, 'ATIVA')}" class="text-danger">inativa</span>
+              </div>
+            </td>
+            <td class='text-center'>
+              <div class='d-flex justify-content-center'>
+                <button type='button'  class='btn border border-warning meuBotao me-3' onclick="openEditModal(this)">
+                  <i class="bi bi-pencil-square px-1"></i>Editar
+                </button>
+                <button th:if="${#strings.equalsIgnoreCase(usuario.statusConta, 'ATIVA')}" type="button" class="btn btn-danger btn-sm" onclick="updateStatusConta(this)">INATIVAR</button>
+                <button th:unless="${#strings.equalsIgnoreCase(usuario.statusConta, 'ATIVA')}" type="button" class="btn btn-success btn-sm" onclick="updateStatusConta(this)">ATIVAR</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  
 </body>
 </html>

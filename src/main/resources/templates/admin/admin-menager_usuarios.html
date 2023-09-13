@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="https://thymeleaf.org">
 
-
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,12 +23,10 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-          <!-- Link para Home. Todos os usuários terão acesso -->
           <li class="nav-item">
             <a class="nav-link" aria-current="page" href="/">home</a>
           </li>
 
-          <!-- Links exclusivos para ROLE_ADMIN -->
           <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="/usuario/lista">Listar Usuários</a>
@@ -37,28 +34,16 @@
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="#">Listar Clientes</a>
             </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Relatorios
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Usuários Conectados</a></li>
-                <li><a class="dropdown-item" href="#">Esquipamentos</a></li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-              </ul>
-            </li>
             <li class="nav-item">
-              <a class="nav-link disabled">Disabled</a>
+              <a class="nav-link" aria-current="page" href="/produto/listar">Listar Produtos</a>
             </li>
           </th:block>
+          <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ESTOQUISTA'}">
 
-          <!-- Link para Listar Produtos. Todos os usuários, incluindo ROLE_ADMIN, terão acesso -->
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#">Listar Produtos</a>
-          </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/produto/listar">Listar Produtos</a>
+            </li>
+          </th:block>
 
         </ul>
       </div>
