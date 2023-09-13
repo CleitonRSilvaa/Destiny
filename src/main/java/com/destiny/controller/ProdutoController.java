@@ -133,12 +133,15 @@ public class ProdutoController {
             @RequestParam("imgPrincipal") String imgPrincipal, RedirectAttributes redirect) {
 
         try {
+            System.out.println(produto);
             Optional<Produto> produtoOptional = produtoRepository.findById(produto.getId());
 
             if (!produtoOptional.isPresent()) {
                 redirect.addFlashAttribute("tipo", "error");
                 redirect.addFlashAttribute("mensagem", "Produto não encontrado!");
                 return "redirect:/produto/listar";
+            }else {
+                produtoRepository.save(produto);
             }
             int indiceImgPrincipal = -1;
 
