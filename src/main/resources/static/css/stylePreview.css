@@ -1,7 +1,21 @@
 .carousel-indicators {
-    bottom: -110px;
-    left: -220px;
+    bottom: -150px;
+    left: -190px;
 }
 .carousel-indicators [data-bs-target] {
-width: 120px;
+width: 110px;
+}
+
+.carousel-button-container {
+    display: inline-block;
+    margin-right: 10px; /* Espaço entre os botões (ajuste conforme necessário) */
+}
+.carousel-item img {
+    width: 500px; /* Tamanho desejado em pixels */
+    height: 580px; /* Tamanho desejado em pixels */
+    object-fit: cover; /* Mantém a proporção da imagem e preenche o espaço definido */
+    object-fit: contain;
+}
+.carousel-dark .carousel-indicators [data-bs-target] {
+     background-color: transparent;
 }
