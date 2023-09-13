@@ -1,11 +1,8 @@
 package com.destiny.controller;
 
-import com.destiny.controller.ProdutoController.StatusUpdateRequestProduto;
-import com.destiny.controller.UsuarioController.StatusUpdateRequest;
 import com.destiny.model.Imagem;
 import com.destiny.model.MensagemResponse;
 import com.destiny.model.Produto;
-import com.destiny.model.StatusConta;
 import com.destiny.model.StatusProduto;
 import com.destiny.model.ValidationException;
 import com.destiny.repository.ImagemRepository;
@@ -18,11 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -30,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -138,10 +132,14 @@ public class ProdutoController {
             @RequestParam("imagenPrinclAt") String imagensParaAtualizar,
             @RequestParam("imgPrincipal") String imgPrincipal, RedirectAttributes redirect) {
 
-        System.out.println("imgPrincipal: " + imgPrincipal);
-        System.out.println("imagensParaAtualizar: " + imagensParaAtualizar);
-
         try {
+            Optional<Produto> produtoOptional = produtoRepository.findById(produto.getId());
+
+            if (!produtoOptional.isPresent()) {
+                redirect.addFlashAttribute("tipo", "error");
+                redirect.addFlashAttribute("mensagem", "Produto não encontrado!");
+                return "redirect:/produto/listar";
+            }
             int indiceImgPrincipal = -1;
 
             Boolean fotoPrinipalInImagens = false;
@@ -241,75 +239,79 @@ public class ProdutoController {
     }
 
     @GetMapping("/preview")
-public String trazerPorId(@RequestParam(name = "id", required = false) Long id, Model model) {
-    if (id != null) {
-        Optional<Produto> produto = service.findById(id);
-       // List<Imagem> imagens = imagemRepository.findImageById(id);
-        model.addAttribute("produto", produto.orElse(null)); 
+    public String trazerPorId(@RequestParam(name = "id", required = false) Long id, Model model,
+            RedirectAttributes redirect) {
 
-    } else {
-        
-    }
-    return "admin/preview-produto";
-}
+        Optional<Produto> produtoOptional = produtoRepository.findById(id);
 
-
-@ResponseBody
-@PostMapping("/updateStatus")
-@ResponseStatus(HttpStatus.OK)
-public ResponseEntity<MensagemResponse> updateStatus(
-        @RequestBody StatusUpdateRequestProduto statusUpdateRequestProduto) {
-    MensagemResponse mensagemResponse = new MensagemResponse();
-    List<String> detalhes = new ArrayList<>();
-    long longId = 0;
-
-    try {
-        longId = Long.valueOf(statusUpdateRequestProduto.getId());
-    } catch (NumberFormatException e) {
-        detalhes.add("id not INT");
-    }
-    if (!detalhes.isEmpty()) {
-        throw new ValidationException("parametro invalido", detalhes);
+        if (produtoOptional.isPresent()) {
+            Produto produto = produtoOptional.get();
+            System.out.println(produto);
+            model.addAttribute("produto", produto);
+            return "admin/preview-produto";
+        } else {
+            redirect.addFlashAttribute("tipo", "error");
+            redirect.addFlashAttribute("mensagem", "Produto não encontrado!");
+            return "redirect:/produto/listar";
+        }
     }
 
-    if (!produtoRepository.existsById(longId)) {
-        mensagemResponse.setStatus(400);
-        mensagemResponse.setMessage("erro");
-        detalhes.add("Id não existe");
+    @ResponseBody
+    @PostMapping("/updateStatus")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<MensagemResponse> updateStatus(
+            @RequestBody StatusUpdateRequestProduto statusUpdateRequestProduto) {
+        MensagemResponse mensagemResponse = new MensagemResponse();
+        List<String> detalhes = new ArrayList<>();
+        long longId = 0;
+
+        try {
+            longId = Long.valueOf(statusUpdateRequestProduto.getId());
+        } catch (NumberFormatException e) {
+            detalhes.add("id not INT");
+        }
+        if (!detalhes.isEmpty()) {
+            throw new ValidationException("parametro invalido", detalhes);
+        }
+
+        if (!produtoRepository.existsById(longId)) {
+            mensagemResponse.setStatus(400);
+            mensagemResponse.setMessage("erro");
+            detalhes.add("Id não existe");
+            mensagemResponse.setDetails(detalhes);
+            return new ResponseEntity<>(mensagemResponse, HttpStatus.BAD_REQUEST);
+        }
+
+        produtoRepository.updateStatusProduto(statusUpdateRequestProduto.getStatus(), longId);
+        mensagemResponse.setStatus(200);
+        mensagemResponse.setMessage("sucess");
         mensagemResponse.setDetails(detalhes);
-        return new ResponseEntity<>(mensagemResponse, HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
     }
 
-    produtoRepository.updateStatusProduto(statusUpdateRequestProduto.getStatus(), longId);
-    mensagemResponse.setStatus(200);
-    mensagemResponse.setMessage("sucess");
-    mensagemResponse.setDetails(detalhes);
-
-    return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
-}
-
-private String salvaImagemNoServidor(MultipartFile imagem) throws IOException {
-    String nomeOriginal = StringUtils.cleanPath(imagem.getOriginalFilename()).replace(" ", "_");
-    String nomeArquivo = UUID.randomUUID() + "-" + nomeOriginal;
-    Path caminho = Paths.get("src/main/resources/static/imagens/produtos/" + nomeArquivo);
-    Files.copy(imagem.getInputStream(), caminho, StandardCopyOption.REPLACE_EXISTING);
-    return nomeArquivo;
-}
-
-private void removeImagemDoServidor(String nomeArquivo) {
-    Path caminho = Paths.get("src/main/resources/static/" + nomeArquivo);
-    try {
-        Files.delete(caminho);
-    } catch (IOException e) {
-        e.printStackTrace();
+    private String salvaImagemNoServidor(MultipartFile imagem) throws IOException {
+        String nomeOriginal = StringUtils.cleanPath(imagem.getOriginalFilename()).replace(" ", "_");
+        String nomeArquivo = UUID.randomUUID() + "-" + nomeOriginal;
+        Path caminho = Paths.get("src/main/resources/static/imagens/produtos/" + nomeArquivo);
+        Files.copy(imagem.getInputStream(), caminho, StandardCopyOption.REPLACE_EXISTING);
+        return nomeArquivo;
     }
-}
+
+    private void removeImagemDoServidor(String nomeArquivo) {
+        Path caminho = Paths.get("src/main/resources/static/" + nomeArquivo);
+        try {
+            Files.delete(caminho);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @GetMapping("/detalhes")
     public String buscarProdutoPorId(@RequestParam(name = "id", required = false) Long id, Model model) {
         if (id != null) {
-            Optional<Produto> produto = service.findById(id);
-            model.addAttribute("produto", produto.orElse(null));
+            Optional<Produto> produto = produtoRepository.findById(id);
+            model.addAttribute("produto", produto.get());
         } else {
         }
         return "admin/alteration_produtos";
@@ -348,4 +350,4 @@ private void removeImagemDoServidor(String nomeArquivo) {
             this.id = id;
         }
     }
-            }
+}
