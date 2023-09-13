@@ -1,0 +1,20 @@
+@charset "UTF-8";
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css");
+
+#thumbnailContainer img {
+  height: 100px;
+  opacity: 0.5;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+#thumbnailContainer img.active {
+  opacity: 1;
+  border: 2px solid #007bff;
+}
+
+#carouselMain .carousel-item img {
+  max-height: 500px;
+  max-width: 100%;
+  object-fit: cover;
+}
