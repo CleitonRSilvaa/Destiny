@@ -20,11 +20,11 @@
         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="nome" class="form-label">Nome</label>
-            <input type="text" class="form-control" id="nome" name="nome" th:value="${produto.nome}" required>
+            <input type="text" class="form-control" id="nome" name="nome" maxlength="199" min="5" th:value="${produto.nome}" required>
           </div>
           <div class="col-md-6 mb-3">
             <label for="valor" class="form-label">Valor</label>
-            <input type="number" class="form-control" id="valor" name="valor" th:value="${produto.valor}" min="1" required>
+            <input type="number" class="form-control" id="valor" name="valor" step="0.01" th:value="${produto.valor}" min="1" required>
           </div>
         </div>
         <div class="row">
@@ -57,7 +57,7 @@
         </div>
         <div class="mb-3">
           <label for="descricao" class="form-label">Descrição</label>
-          <textarea class="form-control" id="descricao" name="descricao" rows="3" th:text="${produto.descricao}" required></textarea>
+          <textarea class="form-control" id="descricao" name="descricao" rows="3" maxlength="1999" th:text="${produto.descricao}" required></textarea>
         </div>
         <div class="mb-3">
           <label for="imagem" class="form-label">Imagens</label>
