@@ -118,7 +118,7 @@ function handleFile(file, i) {
 }
 
 document.body.addEventListener("change", function (event) {
-  if (event.target.id === "imagem") {
+  if (event.target.id === "imagemInput") {
     var preview = document.getElementById("preview");
     preview.innerHTML = "";
 

@@ -127,10 +127,11 @@ public class ProdutoController {
     }
 
     @PostMapping("/editarProduto")
-    public String editarProduto(@ModelAttribute Produto produto, @RequestParam("imagem") MultipartFile[] imagens,
+    public String editarProduto(@ModelAttribute Produto produto,
+            @RequestParam(required = false) MultipartFile[] imagemInput,
             @RequestParam("imagensParaRemover") String imagensParaRemover,
             @RequestParam("imagenPrinclAt") String imagensParaAtualizar,
-            @RequestParam("imgPrincipal") String imgPrincipal, RedirectAttributes redirect) {
+            @RequestParam(required = false) String imgPrincipal, RedirectAttributes redirect) {
 
         try {
             System.out.println(produto);
@@ -140,95 +141,103 @@ public class ProdutoController {
                 redirect.addFlashAttribute("tipo", "error");
                 redirect.addFlashAttribute("mensagem", "Produto não encontrado!");
                 return "redirect:/produto/listar";
-            }else {
+            } else {
                 produtoRepository.save(produto);
             }
             int indiceImgPrincipal = -1;
 
             Boolean fotoPrinipalInImagens = false;
-            if ((!imgPrincipal.isEmpty() || !imgPrincipal.isBlank())
-                    && (imagensParaAtualizar.isEmpty() || imagensParaAtualizar.isBlank())) {
-                fotoPrinipalInImagens = true;
-                try {
-                    indiceImgPrincipal = Integer.parseInt(imgPrincipal);
-                } catch (NumberFormatException e) {
-                    // TODO: handle exception
-                }
-
-            }
-
-            for (String id : imagensParaRemover.split(",")) {
-                if (!id.isBlank() || !id.isEmpty()) {
-                    System.out.println("id para remover :" + id);
-                    var longId = Long.parseLong(id);
-                    var imagemDell = imagemRepository.findById(longId);
-                    if (imagemDell.isPresent()) {
-                        System.out.println(imagemDell.get());
-                        var img = imagemDell.get();
-                        imagemRepository.deleteById(img.getId());
-                        removeImagemDoServidor(img.getCaminho());
-
-                    }
-                }
-            }
-
-            if (!fotoPrinipalInImagens) {
-                var imgList = imagemRepository.findAllByProduto(produto);
-                var IdImgUpdate = Long.parseLong(imagensParaAtualizar);
-                System.out.println("IdImgUpdate: " + IdImgUpdate);
-                for (Imagem img : imgList) {
-                    if (img.getId() == IdImgUpdate) {
-                        img.setPrincipal(true);
-                        imagemRepository.save(img);
-                    } else {
-                        img.setPrincipal(false);
-                        imagemRepository.save(img);
-                    }
-                }
-            } else {
-                var imgList = imagemRepository.findAllByProduto(produto);
-                for (Imagem img : imgList) {
-                    if (img.getPrincipal()) {
-                        img.setPrincipal(false);
-                        imagemRepository.save(img);
-                    }
-                }
-            }
-
-            int p = 0;
-            for (MultipartFile imagem : imagens) {
-                if (imagem != null && !imagem.isEmpty()) {
+            if (imgPrincipal != null) {
+                if ((!imgPrincipal.isEmpty() || !imgPrincipal.isBlank())
+                        && (imagensParaAtualizar.isEmpty() || imagensParaAtualizar.isBlank())) {
+                    fotoPrinipalInImagens = true;
                     try {
-                        String imgFileName = salvaImagemNoServidor(imagem);
-                        Imagem novaImagem = new Imagem();
+                        indiceImgPrincipal = Integer.parseInt(imgPrincipal);
+                    } catch (NumberFormatException e) {
+                        // TODO: handle exception
+                    }
 
-                        if (indiceImgPrincipal == p && fotoPrinipalInImagens) {
-                            novaImagem.setPrincipal(true);
-                        } else {
-                            novaImagem.setPrincipal(false);
+                }
+            }
+
+            if (imgPrincipal != null) {
+                for (String id : imagensParaRemover.split(",")) {
+                    if (!id.isBlank() || !id.isEmpty()) {
+                        System.out.println("id para remover :" + id);
+                        var longId = Long.parseLong(id);
+                        var imagemDell = imagemRepository.findById(longId);
+                        if (imagemDell.isPresent()) {
+                            System.out.println(imagemDell.get());
+                            var img = imagemDell.get();
+                            imagemRepository.deleteById(img.getId());
+                            removeImagemDoServidor(img.getCaminho());
+
                         }
-                        p++;
-                        novaImagem.setCaminho("imagens/produtos/" + imgFileName);
-                        novaImagem.setProduto(produto);
-                        imagemRepository.save(novaImagem);
-                    } catch (Exception e) {
-                        String nomeImg = imagem.getOriginalFilename();
-                        System.out.println("Falha ao armazenar a imagem " + nomeImg + e);
-                        String nomeImagem2 = "default.jpg";
-                        String caminho2 = "imagens/produtos/" + nomeImagem2;
-                        Imagem novaImagem = new Imagem();
-                        novaImagem.setCaminho(caminho2);
-                        novaImagem.setProduto(produto);
-                        novaImagem.setPrincipal(true);
-                        imagemRepository.save(novaImagem);
+                    }
+                }
+            }
+
+            if (imgPrincipal != null) {
+                if (!fotoPrinipalInImagens) {
+                    var imgList = imagemRepository.findAllByProduto(produto);
+                    var IdImgUpdate = Long.parseLong(imagensParaAtualizar);
+                    System.out.println("IdImgUpdate: " + IdImgUpdate);
+                    for (Imagem img : imgList) {
+                        if (img.getId() == IdImgUpdate) {
+                            img.setPrincipal(true);
+                            imagemRepository.save(img);
+                        } else {
+                            img.setPrincipal(false);
+                            imagemRepository.save(img);
+                        }
+                    }
+                } else {
+                    var imgList = imagemRepository.findAllByProduto(produto);
+                    for (Imagem img : imgList) {
+                        if (img.getPrincipal()) {
+                            img.setPrincipal(false);
+                            imagemRepository.save(img);
+                        }
+                    }
+                }
+            }
+
+            if (imagemInput != null) {
+                MultipartFile[] imagens = (MultipartFile[]) imagemInput;
+                int p = 0;
+                for (MultipartFile img : imagens) {
+                    if (img != null && !img.isEmpty()) {
+                        try {
+                            String imgFileName = salvaImagemNoServidor(img);
+                            Imagem novaImagem = new Imagem();
+
+                            if (indiceImgPrincipal == p && fotoPrinipalInImagens) {
+                                novaImagem.setPrincipal(true);
+                            } else {
+                                novaImagem.setPrincipal(false);
+                            }
+                            p++;
+                            novaImagem.setCaminho("imagens/produtos/" + imgFileName);
+                            novaImagem.setProduto(produto);
+                            imagemRepository.save(novaImagem);
+                        } catch (Exception e) {
+                            String nomeImg = img.getOriginalFilename();
+                            System.out.println("Falha ao armazenar a imagem " + nomeImg + e);
+                            String nomeImagem2 = "default.jpg";
+                            String caminho2 = "imagens/produtos/" + nomeImagem2;
+                            Imagem novaImagem = new Imagem();
+                            novaImagem.setCaminho(caminho2);
+                            novaImagem.setProduto(produto);
+                            novaImagem.setPrincipal(true);
+                            imagemRepository.save(novaImagem);
+                            break;
+                        }
+
+                    } else {
                         break;
                     }
-
-                } else {
-                    break;
                 }
             }
-
             redirect.addFlashAttribute("tipo", "success");
             redirect.addFlashAttribute("mensagem", "Produto atualizado com sucesso!");
             return "redirect:/produto/listar";
