@@ -9,11 +9,12 @@ body {
 
 #thumbnailContainer img {
   height: 100px;
-  max-width: 23% !important;
+  width: 100px !important;
   opacity: 0.5;
   cursor: pointer;
   margin: 0 5px;
   object-fit: cover;
+  overflow: hidden;
 }
 #thumbnailContainer img.active {
   opacity: 1;
@@ -24,7 +25,7 @@ body {
   max-width: 100%;
   max-height: 500px;
   min-height: 100%;
-  object-fit: cover;
+  overflow: hidden;
 }
 .carousel-inner {
   height: 400px !important;

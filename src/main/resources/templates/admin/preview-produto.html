@@ -17,7 +17,7 @@
     <div class="container p-3">
       <div class="row">
         <div class="col-md-6">
-          <div id="carouselMain" class="carousel slide border border-end-0 shadow-sm p-3  bg-body rounded" data-bs-ride="carousel">
+          <div id="carouselMain" class="carousel slide border border-end-0 shadow-sm p-3  bg-body rounded">
             <div class="carousel-inner">
               <th:block th:each="imagem, iterStat : ${produto.imagens}">
                 <div th:class="${imagem.principal} ? 'carousel-item active' : 'carousel-item'">
