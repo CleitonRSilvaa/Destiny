@@ -38,15 +38,21 @@
           </div>
 
         </div>
-        <div class="col-md-6 text-center mx-auto my-auto shadow p-3 mb-5 bg-body-tertiary rounded">
-          <h5 class="card-title fw-bold ">Almoço nos ares</h5>
+        <div class="col-md-6 text-center  shadow p-3 mb-5 bg-body-tertiary rounded">
+          <h5 class="card-title fw-bold " th:text="${produto.nome}" >Almoço nos ares</h5>
           <p>
           </p>
-          <p class="card-text">Preço: R$100,00</p>
-          <p class="card-text">Em Estoque: 6 unidades</p>
-            <p class="card-text">Descrição do Produto: Almoce com sua familia, seu namorado(a), sozinho, seja com quem for, almoce apreciando a paisagem maravilhosa de SP.</p>
+          <p class="card-text"  th:text="${'Preço: R$'+produto.valor}"></p>
 
-            <button class="btn btn-primary" id="comprarBtn">Comprar</button>
+          <div class="col-md-12 mb-3">
+            <label for="quantidade" class="form-label">Quantidade</label>
+            <input type="number" class="form-control" id="quantidade" name="quantidade"  min="1" required>
+          </div>
+          <p class="card-text" th:text="${'Avaliação: '+ produto.avaliacao}" ></p>
+
+          <p class="card-text" th:text="${'Descrição do Produto: '+ produto.descricao}" ></p>
+
+            <button class="btn btn-primary" id="comprarBtn" disabled >Comprar</button>
 
           </div>
         </div>
@@ -57,14 +63,6 @@
   <script src="../js/bootstrap.bundle.min.js"></script>
   <script src="../js/produto/script.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script>
-    $(document).ready(function(){
-        $(".star").click(function(){
-            var rating = $(this).data("star");
-            $("#ratingValue").text(rating);
-        });
-    });
-  </script>
 
   <script>
     $(document).ready(function () {
