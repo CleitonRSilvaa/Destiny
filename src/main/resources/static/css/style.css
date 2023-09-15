@@ -14,3 +14,6 @@ body {
   flex-direction: column;
   min-height: 100vh;
 }
+#btnvoltar{
+  margin-top: 10px;
+}

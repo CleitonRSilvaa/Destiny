@@ -13,6 +13,54 @@
 </head>
 
 <body>
+<div class="d-flex flex-column">
+
+  
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand px-2" href="/">Destiny</a>
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/">home</a>
+          </li>
+
+          <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/usuario/lista">Listar Usuários</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="#">Listar Clientes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/produto/listar">Listar Produtos</a>
+            </li>
+          </th:block>
+          <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ESTOQUISTA'}">
+
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/produto/listar">Listar Produtos</a>
+            </li>
+          </th:block>
+
+        </ul>
+      </div>
+
+      <div sec:authorize="isAuthenticated()">
+        <spam class='text-white px-2' th:text="${#authentication.name}"></spam>
+        <input type="hidden" id="usernameBeingEdited" th:value="${#authentication.name}">
+
+      </div>
+
+      <a class="btn btn-outline-danger" href="/logout"><i class="bi bi-box-arrow-right px-1"></i>Sair</a>
+    </div>
+  </nav>
+
+
   <div class="container mt-2 flex-grow-1">
     <div class="container p-3">
       <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
@@ -90,6 +138,8 @@
           <div class="col-md-12">
             <div class="row p-2 justify-content-center">
               <button type="submit" class="btn btn-primary ">Alterar</button>
+              <div class="row p-2 justify-content-center"></div>
+              <a id="btnvoltar" type="button" href="/produto/listar" class="btn btn-warning ">Voltar</a>
             </div>
           </div>
         </form>
@@ -125,7 +175,7 @@
           </div>
           <div class="mb-3">
             <label for="descricao" class="form-label">Descrição</label>
-            <textarea class="form-control" id="descricao" name="descricao" rows="3" maxlength="1999" th:text="${produto.descricao}" required readonly></textarea>
+            <textarea class="form-control" id="descricao" name="descricao" rows="3" maxlength="1998" th:text="${produto.descricao}" required readonly></textarea>
           </div>
 
           <input type="hidden" id="imagensParaRemover" name="imagensParaRemover">
@@ -162,7 +212,7 @@
       </th:block>
     </div>
   </div>
-
+</div>
 
   <script src="../js/produto/main.js"></script>
 
