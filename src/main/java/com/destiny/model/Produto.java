@@ -15,10 +15,12 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(length = 200)
     private String nome;
 
     private float avaliacao;
 
+    @Column(length = 2000)
     private String descricao;
 
     private BigDecimal valor;
