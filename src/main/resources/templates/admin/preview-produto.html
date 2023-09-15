@@ -33,7 +33,7 @@
               <span class="carousel-control-next-icon" aria-hidden="true"></span>
               <span class="visually-hidden">Next</span>
             </button>
-            <div id="thumbnailContainer" class="d-flex justify-content-center mt-3 border border-warning">
+            <div id="thumbnailContainer" class="d-flex justify-content-center mt-3">
               <th:block th:each="imagem, iterStat : ${produto.imagens}">
                 <img th:src="${'/'+imagem.caminho}" alt="Slide" th:data-bs-slide-to="${iterStat.index}" th:class="${imagem.principal} ? 'active' : ''">
               </th:block>
