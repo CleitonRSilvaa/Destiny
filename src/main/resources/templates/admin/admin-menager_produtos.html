@@ -87,7 +87,7 @@
         <caption>Lista de Produtos</caption>
         <thead>
           <tr>
-            <th scope="col">ID</th>
+            <th scope="col">Codigo</th>
             <th scope="col">Nome</th>
             <th class="text-center" scope="col">Avaliação</th>
             <th class="text-center" scope="col">Valor</th>
@@ -121,11 +121,14 @@
                   <i class="bi bi-pencil-square px-1"></i>Editar
                 </a>
                 <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
-                  <button th:if="${#strings.equalsIgnoreCase(produto.statusProduto, 'ATIVO')}" type="button" class="btn btn-danger btn-sm me-3" onclick="updateStatusProduto(this)">INATIVAR</button>
-                  <button th:unless="${#strings.equalsIgnoreCase(produto.statusProduto, 'ATIVO')}" type="button" class="btn btn-success btn-sm me-3" onclick="updateStatusProduto(this)">ATIVAR</button>
+                  <button th:if="${#strings.equalsIgnoreCase(produto.statusProduto, 'ATIVO')}" type="button" class="btn btn-danger btn-sm me-3" onclick="updateStatusProduto(this)"><i class="bi bi-caret-down"></i>
+                    INATIVAR</button>
+                  <button th:unless="${#strings.equalsIgnoreCase(produto.statusProduto, 'ATIVO')}" type="button" class="btn btn-success btn-sm me-3" onclick="updateStatusProduto(this)">
+                    <i class="bi bi-caret-up"></i>ATIVAR</button>
                 </th:block>
 
                 <a type='button' class='btn border border-info meuBotaoView' onclick="openEditModal(this) " th:href="@{'/produto/preview?id=' + ${produto.id}}">
+                  <i class="bi bi-eye"></i>
                   Visualizar
                 </a>
               </div>
@@ -161,16 +164,16 @@
   </div>
 
   <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
-    <!-- ModalCriacao-->
-    <div class="modal fade" id="modalCadastroProd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalCadastroProdLabel" aria-hidden="true">
-      <div class="modal-dialog modal-fullscreen">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-4" id="exampleModalFullscreenLabel">Novo produto</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form action="/produto/add" method="post" enctype="multipart/form-data">
+    <form action="/produto/add" method="post" enctype="multipart/form-data">
+      <div class="modal fade" id="modalCadastroProd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalCadastroProdLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-4" id="exampleModalFullscreenLabel">Novo produto</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
               <div class="row">
                 <div class="col-md-6 mb-3">
                   <label for="nome" class="form-label">Nome</label>
@@ -207,22 +210,24 @@
                 <textarea class="form-control" id="descricao" name="descricao" rows="3" maxlength="1998"></textarea>
               </div>
               <div class="mb-3">
-                <label for="imagem" class="form-label">Imagens</label>
+                <label for="imagem" class="form-label">Imagens:(Recomendamos imagens com dimenções de ate 1500X100)</label>
                 <input type="file" class="form-control" id="imagem" name="imagem" multiple required>
               </div>
               <div id="preview" class="row p-2 justify-content-center">
               </div>
               <div class="col-md-12 justify-content-center">
-                <button type="submit" class="btn btn-primary">Cadastrar</button>
+
               </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+
+            </div>
+            <div class="modal-footer d-flex">
+              <div class="bd-highlight"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button></div>
+              <div class="ms-auto col-md-6"> <button type="submit" class="btn btn-success ">Cadastrar</button></div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </form>
   </th:block>
 
 

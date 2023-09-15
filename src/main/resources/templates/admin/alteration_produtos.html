@@ -13,206 +13,204 @@
 </head>
 
 <body>
-<div class="d-flex flex-column">
-
-  
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand px-2" href="/">Destiny</a>
-    <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="/">home</a>
-          </li>
-
-          <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="/usuario/lista">Listar Usuários</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="#">Listar Clientes</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="/produto/listar">Listar Produtos</a>
-            </li>
-          </th:block>
-          <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ESTOQUISTA'}">
+  <div class="d-flex flex-column">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand px-2" href="/">Destiny</a>
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="/produto/listar">Listar Produtos</a>
+              <a class="nav-link" aria-current="page" href="/">home</a>
             </li>
-          </th:block>
 
-        </ul>
+            <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="/usuario/lista">Listar Usuários</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="#">Listar Clientes</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="/produto/listar">Listar Produtos</a>
+              </li>
+            </th:block>
+            <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ESTOQUISTA'}">
+
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="/produto/listar">Listar Produtos</a>
+              </li>
+            </th:block>
+
+          </ul>
+        </div>
+
+        <div sec:authorize="isAuthenticated()">
+          <spam class='text-white px-2' th:text="${#authentication.name}"></spam>
+          <input type="hidden" id="usernameBeingEdited" th:value="${#authentication.name}">
+
+        </div>
+
+        <a class="btn btn-outline-danger" href="/logout"><i class="bi bi-box-arrow-right px-1"></i>Sair</a>
       </div>
-
-      <div sec:authorize="isAuthenticated()">
-        <spam class='text-white px-2' th:text="${#authentication.name}"></spam>
-        <input type="hidden" id="usernameBeingEdited" th:value="${#authentication.name}">
-
-      </div>
-
-      <a class="btn btn-outline-danger" href="/logout"><i class="bi bi-box-arrow-right px-1"></i>Sair</a>
-    </div>
-  </nav>
+    </nav>
 
 
-  <div class="container mt-2 flex-grow-1">
-    <div class="container p-3">
-      <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
-        <form id="FormsEditarProduto" action="/produto/editarProduto" method="post" enctype="multipart/form-data">
-          <input type="hidden" id="id" name="id" th:value="${produto.id}">
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="nome" class="form-label">Nome</label>
-              <input type="text" class="form-control" id="nome" name="nome" maxlength="199" min="5" th:value="${produto.nome}" required>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="valor" class="form-label">Valor</label>
-              <input type="number" class="form-control" id="valor" name="valor" step="0.01" th:value="${produto.valor}" min="1" required>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4 mb-3">
-              <label for="quantidade" class="form-label">Quantidade</label>
-              <input type="number" class="form-control" id="quantidade" name="quantidade" th:value=${produto.quantidade} min="1" required>
-            </div>
-            <div class="col-md-4 mb-3">
-              <label for="avaliacao" class="form-label">Avaliação</label>
-              <select class="form-select" id="avaliacao" name="avaliacao" required>
-                <option th:text=${produto.avaliacao}> </option>
-                <option value="1">1.0</option>
-                <option value="1">1.5</option>
-                <option value="2">2.0</option>
-                <option value="2">2.5</option>
-                <option value="3">3.0</option>
-                <option value="3">3.5</option>
-                <option value="4">4.0</option>
-                <option value="4">4.5</option>
-                <option value="5">5.0</option>
-              </select>
-            </div>
-            <div class="col-md-4 mb-3">
-              <label for="statusProduto" class="form-label">Status</label>
-              <select class="form-select" id="statusProduto" name="statusProduto" required>
-                <option value="ATIVO" th:selected="${#strings.equalsIgnoreCase(produto.statusProduto, 'ATIVO')}">ATIVO</option>
-                <option value="INATIVO" th:selected="${#strings.equalsIgnoreCase(produto.statusProduto, 'INATIVO')}">INATIVO</option>
-              </select>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="descricao" class="form-label">Descrição</label>
-            <textarea class="form-control" id="descricao" name="descricao" rows="3" maxlength="1998" th:text="${produto.descricao}" required></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="imagemInput" class="form-label">Imagens</label>
-            <input type="file" class="form-control" id="imagemInput" name="imagemInput" multiple>
-          </div>
-          <input type="hidden" id="imagensParaRemover" name="imagensParaRemover">
-          <th:block th:each="imagem, iterStat : ${produto.imagens}">
-            <input th:if="${imagem.principal}" type="hidden" id="imagenPrinclAt" name="imagenPrinclAt" th:value="${imagem.id}">
-          </th:block>
-
-
-          <div id="preview2" class="row p-2 justify-content-center">
-            <span class="text-center">Imagens Cadastradas</span>
-            <div th:each="imagem, iterStat : ${produto.imagens}" class="card p-2 m-1" style="width: 15rem;">
-              <button type="button" class="btn btn-danger btn-remove m-2" aria-label="Remover" th:data-id="${imagem.id}">Remover</button>
-              <img th:src="${'/'+imagem.caminho}" alt="Imagem-produto" class="card-img-top">
-              <div class="card-body d-flex flex-column">
-                <div class="form-check mt-auto">
-                  <input class="form-check-input" type="radio" name="imgPrincipal" th:id="'imgPrincipalRadio' + ${iterStat.index}" th:value="${imagem.id}" th:checked="${imagem.principal} ? 'checked' : null">
-                  <label class="form-check-label" th:for="'imgPrincipalRadio' + ${iterStat.index}">Imagem principal</label>
-                </div>
+    <div class="container mt-2 flex-grow-1">
+      <div class="container p-3">
+        <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
+          <form id="FormsEditarProduto" action="/produto/editarProduto" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="id" name="id" th:value="${produto.id}">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="nome" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="nome" name="nome" maxlength="199" min="5" th:value="${produto.nome}" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="valor" class="form-label">Valor</label>
+                <input type="number" class="form-control" id="valor" name="valor" step="0.01" th:value="${produto.valor}" min="1" required>
               </div>
             </div>
-          </div>
-          <div class="col-md-12">
-            <div id="preview" class="row p-2 justify-content-center">
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label for="quantidade" class="form-label">Quantidade</label>
+                <input type="number" class="form-control" id="quantidade" name="quantidade" th:value=${produto.quantidade} min="1" required>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="avaliacao" class="form-label">Avaliação</label>
+                <select class="form-select" id="avaliacao" name="avaliacao" required>
+                  <option th:text=${produto.avaliacao}> </option>
+                  <option value="1">1.0</option>
+                  <option value="1">1.5</option>
+                  <option value="2">2.0</option>
+                  <option value="2">2.5</option>
+                  <option value="3">3.0</option>
+                  <option value="3">3.5</option>
+                  <option value="4">4.0</option>
+                  <option value="4">4.5</option>
+                  <option value="5">5.0</option>
+                </select>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="statusProduto" class="form-label">Status</label>
+                <select class="form-select" id="statusProduto" name="statusProduto" required>
+                  <option value="ATIVO" th:selected="${#strings.equalsIgnoreCase(produto.statusProduto, 'ATIVO')}">ATIVO</option>
+                  <option value="INATIVO" th:selected="${#strings.equalsIgnoreCase(produto.statusProduto, 'INATIVO')}">INATIVO</option>
+                </select>
+              </div>
             </div>
-          </div>
-          <div class="col-md-12">
-            <div class="row p-2 justify-content-center">
-              <button type="submit" class="btn btn-primary ">Alterar</button>
-              <div class="row p-2 justify-content-center"></div>
-              <a id="btnvoltar" type="button" href="/produto/listar" class="btn btn-warning ">Voltar</a>
+            <div class="mb-3">
+              <label for="descricao" class="form-label">Descrição</label>
+              <textarea class="form-control" id="descricao" name="descricao" rows="3" maxlength="1998" th:text="${produto.descricao}" required></textarea>
             </div>
-          </div>
-        </form>
-      </th:block>
+            <div class="mb-3">
+              <label for="imagemInput" class="form-label">Imagens</label>
+              <input type="file" class="form-control" id="imagemInput" name="imagemInput" multiple>
+            </div>
+            <input type="hidden" id="imagensParaRemover" name="imagensParaRemover">
+            <th:block th:each="imagem, iterStat : ${produto.imagens}">
+              <input th:if="${imagem.principal}" type="hidden" id="imagenPrinclAt" name="imagenPrinclAt" th:value="${imagem.id}">
+            </th:block>
 
 
-      <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ESTOQUISTA'}">
-        <form id="FormsEditarProduto" action="/produto/editarProduto" method="post" enctype="multipart/form-data">
-          <input type="hidden" id="id" name="id" th:value="${produto.id}">
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="nome" class="form-label">Nome</label>
-              <input type="text" readonly class="form-control" id="nome" name="nome" maxlength="199" min="5" th:value="${produto.nome}" required>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="valor" class="form-label">Valor</label>
-              <input type="number" readonly class="form-control" id="valor" name="valor" step="0.01" th:value="${produto.valor}" min="1" required>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4 mb-3">
-              <label for="quantidade" class="form-label">Quantidade</label>
-              <input type="number" class="form-control" id="quantidade" name="quantidade" th:value=${produto.quantidade} min="1" required>
-            </div>
-            <div class="col-md-4 mb-3">
-              <label for="avaliacao" class="form-label">Avaliação</label>
-              <input type="number" readonly class="form-control" id="avaliacao" name="avaliacao" th:value="${produto.avaliacao}" required>
-            </div>
-            <div class="col-md-4 mb-3">
-              <label for="statusProduto" class="form-label">Status</label>
-              <input type="text" readonly class="form-control" id="statusProduto" name="statusProduto" th:value="${produto.statusProduto}" required>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="descricao" class="form-label">Descrição</label>
-            <textarea class="form-control" id="descricao" name="descricao" rows="3" maxlength="1998" th:text="${produto.descricao}" required readonly></textarea>
-          </div>
-
-          <input type="hidden" id="imagensParaRemover" name="imagensParaRemover">
-          <th:block th:each="imagem, iterStat : ${produto.imagens}">
-            <input th:if="${imagem.principal}" type="hidden" id="imagenPrinclAt" name="imagenPrinclAt" th:value="${imagem.id}">
-          </th:block>
-
-
-          <div id="preview2" class="row p-2 justify-content-center">
-            <span class="text-center">Imagens Cadastradas</span>
-            <div th:each="imagem, iterStat : ${produto.imagens}" class="card p-2 m-1" style="width: 15rem;">
-              <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
+            <div id="preview2" class="row p-2 justify-content-center">
+              <span class="text-center">Imagens Cadastradas</span>
+              <div th:each="imagem, iterStat : ${produto.imagens}" class="card p-2 m-1" style="width: 15rem;">
                 <button type="button" class="btn btn-danger btn-remove m-2" aria-label="Remover" th:data-id="${imagem.id}">Remover</button>
-              </th:block>
-              <img th:src="${'/'+imagem.caminho}" alt="Imagem-produto" class="card-img-top">
-              <div class="card-body d-flex flex-column">
-                <div class="form-check mt-auto">
-                  <input class="form-check-input" type="radio" name="imgPrincipal" th:id="'imgPrincipalRadio' + ${iterStat.index}" th:value="${imagem.id}" th:checked="${imagem.principal} ? 'checked' : null" disabled>
-                  <label class="form-check-label" th:for="'imgPrincipalRadio' + ${iterStat.index}">Imagem principal</label>
+                <img th:src="${'/'+imagem.caminho}" alt="Imagem-produto" class="card-img-top">
+                <div class="card-body d-flex flex-column">
+                  <div class="form-check mt-auto">
+                    <input class="form-check-input" type="radio" name="imgPrincipal" th:id="'imgPrincipalRadio' + ${iterStat.index}" th:value="${imagem.id}" th:checked="${imagem.principal} ? 'checked' : null">
+                    <label class="form-check-label" th:for="'imgPrincipalRadio' + ${iterStat.index}">Imagem principal</label>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="col-md-12">
-            <div id="preview" class="row p-2 justify-content-center">
+            <div class="col-md-12">
+              <div id="preview" class="row p-2 justify-content-center">
+              </div>
             </div>
-          </div>
-          <div class="col-md-12">
-            <div class="row p-2 justify-content-center">
-              <button type="submit" class="btn btn-primary ">Alterar</button>
+            <div class="col-md-12">
+              <div class="row p-2 justify-content-center">
+                <a type="button" href="/produto/listar" class="btn btn-primary col-md-4 p-1 m-1">Voltar</a>
+                <button type="submit" class="btn btn-warning col-md-4 p-1 m-1">Salvar alteracão</button>
+              </div>
             </div>
-          </div>
-        </form>
-      </th:block>
+          </form>
+        </th:block>
+
+
+        <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ESTOQUISTA'}">
+          <form id="FormsEditarProduto" action="/produto/editarProduto" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="id" name="id" th:value="${produto.id}">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="nome" class="form-label">Nome</label>
+                <input type="text" readonly class="form-control" id="nome" name="nome" maxlength="199" min="5" th:value="${produto.nome}" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="valor" class="form-label">Valor</label>
+                <input type="number" readonly class="form-control" id="valor" name="valor" step="0.01" th:value="${produto.valor}" min="1" required>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label for="quantidade" class="form-label">Quantidade</label>
+                <input type="number" class="form-control" id="quantidade" name="quantidade" th:value=${produto.quantidade} min="1" required>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="avaliacao" class="form-label">Avaliação</label>
+                <input type="number" readonly class="form-control" id="avaliacao" name="avaliacao" th:value="${produto.avaliacao}" required>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="statusProduto" class="form-label">Status</label>
+                <input type="text" readonly class="form-control" id="statusProduto" name="statusProduto" th:value="${produto.statusProduto}" required>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="descricao" class="form-label">Descrição</label>
+              <textarea class="form-control" id="descricao" name="descricao" rows="3" maxlength="1998" th:text="${produto.descricao}" required readonly></textarea>
+            </div>
+
+            <input type="hidden" id="imagensParaRemover" name="imagensParaRemover">
+            <th:block th:each="imagem, iterStat : ${produto.imagens}">
+              <input th:if="${imagem.principal}" type="hidden" id="imagenPrinclAt" name="imagenPrinclAt" th:value="${imagem.id}">
+            </th:block>
+
+
+            <div id="preview2" class="row p-2 justify-content-center">
+              <span class="text-center">Imagens Cadastradas</span>
+              <div th:each="imagem, iterStat : ${produto.imagens}" class="card p-2 m-1" style="width: 15rem;">
+                <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
+                  <button type="button" class="btn btn-danger btn-remove m-2" aria-label="Remover" th:data-id="${imagem.id}">Remover</button>
+                </th:block>
+                <img th:src="${'/'+imagem.caminho}" alt="Imagem-produto" class="card-img-top">
+                <div class="card-body d-flex flex-column">
+                  <div class="form-check mt-auto">
+                    <input class="form-check-input" type="radio" name="imgPrincipal" th:id="'imgPrincipalRadio' + ${iterStat.index}" th:value="${imagem.id}" th:checked="${imagem.principal} ? 'checked' : null" disabled>
+                    <label class="form-check-label" th:for="'imgPrincipalRadio' + ${iterStat.index}">Imagem principal</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div id="preview" class="row p-2 justify-content-center">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="row p-2 justify-content-center">
+                <a type="button" href="/produto/listar" class="btn btn-primary col-md-4 p-1 m-1">Voltar</a>
+                <button type="submit" class="btn btn-warning col-md-4 p-1 m-1">Salvar alteracão</button>
+              </div>
+            </div>
+          </form>
+        </th:block>
+      </div>
     </div>
   </div>
-</div>
 
   <script src="../js/produto/main.js"></script>
 

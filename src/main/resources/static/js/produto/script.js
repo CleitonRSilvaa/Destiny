@@ -15,3 +15,9 @@ carousel.addEventListener("slid.bs.carousel", (event) => {
   thumbnails.forEach((thumb) => thumb.classList.remove("active"));
   thumbnails[event.to].classList.add("active");
 });
+
+$(document).ready(function () {
+  $("#comprarBtn").click(function () {
+    alert("Produto adicionado ao carrinho!");
+  });
+});

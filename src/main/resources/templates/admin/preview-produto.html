@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="https://thymeleaf.org">
 
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Carousel with Thumbnails</title>
   <link href="../css/bootstrap.min.css" rel="stylesheet">
   <link href="../css/produto/style.css" rel="stylesheet">
+
 </head>
 
 <body>
+
   <div class="container mt-2 flex-grow-1">
     <div class="container p-3">
       <div class="row">
         <div class="col-md-6">
-          <div id="carouselMain" class="carousel slide" data-bs-ride="carousel">
+          <div id="carouselMain" class="carousel slide border border-end-0 shadow-sm p-3  bg-body rounded" data-bs-ride="carousel">
             <div class="carousel-inner">
               <th:block th:each="imagem, iterStat : ${produto.imagens}">
                 <div th:class="${imagem.principal} ? 'carousel-item active' : 'carousel-item'">
@@ -28,49 +31,50 @@
             </button>
             <button class="carousel-control-next" type="button" data-bs-target="#carouselMain" data-bs-slide="next">
               <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden ">Next</span>
+              <span class="visually-hidden">Next</span>
             </button>
+            <div id="thumbnailContainer" class="d-flex justify-content-center mt-3 border border-warning">
+              <th:block th:each="imagem, iterStat : ${produto.imagens}">
+                <img th:src="${'/'+imagem.caminho}" alt="Slide" th:data-bs-slide-to="${iterStat.index}" th:class="${imagem.principal} ? 'active' : ''">
+              </th:block>
+            </div>
           </div>
-          <div id="thumbnailContainer" class="d-flex justify-content-center mt-3">
-            <th:block th:each="imagem, iterStat : ${produto.imagens}">
-              <img th:src="${'/'+imagem.caminho}" alt="Slide" th:data-bs-slide-to="${iterStat.index}" th:class="${imagem.principal} ? 'active' : ''">
-            </th:block>
-          </div>
+
 
         </div>
-        <div class="col-md-6 text-center  shadow p-3 mb-5 bg-body-tertiary rounded">
-          <h5 class="card-title fw-bold " th:text="${produto.nome}" >Almoço nos ares</h5>
-          <p>
-          </p>
-          <p class="card-text"  th:text="${'Preço: R$'+produto.valor}"></p>
-
-          <div class="col-md-12 mb-3">
+        <div class="col-md-6 p-4 shadow-lg border rounded bg-light">
+          <h2 class="fw-bold mb-3" th:text="${produto.nome}"></h2>
+          <p class="fs-4 text-primary mb-3" th:text="${'R$' + produto.valor}"></p>
+          <p class="mb-3" th:text="${'Avaliação: ' + produto.avaliacao}"></p>
+          <p class="mb-3" th:text="${'Descrição: ' + produto.descricao}"></p>
+          <div class="mb-3">
             <label for="quantidade" class="form-label">Quantidade</label>
-            <input type="number" class="form-control" id="quantidade" name="quantidade"  min="1" required>
+            <input type="number" class="form-control" id="quantidade" name="quantidade" min="1" required>
           </div>
-          <p class="card-text" th:text="${'Avaliação: '+ produto.avaliacao}" ></p>
-
-          <p class="card-text" th:text="${'Descrição do Produto: '+ produto.descricao}" ></p>
-
-            <button class="btn btn-primary" id="comprarBtn" disabled >Comprar</button>
-
-          </div>
+          <button class="btn btn-success btn-lg w-100" id="comprarBtn" disabled>Comprar</button>
         </div>
+
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="row p-2 justify-content-center">
+        <a type="button" href="/produto/listar" class="btn btn-primary col-md-4 p-1 m-1">Voltar</a>
       </div>
     </div>
   </div>
+  </div>
+
+  <footer class="text-center text-lg-start bg-dark text-muted p-0 w-100">
+    <div class="text-center text-white">
+      &copy; 2023 Destiny. Todos os direitos reservados.</p>
+    </div>
+  </footer>
 
   <script src="../js/bootstrap.bundle.min.js"></script>
   <script src="../js/produto/script.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 
-  <script>
-    $(document).ready(function () {
-        $("#comprarBtn").click(function () {
-            alert("Produto adicionado ao carrinho!");
-        });
-    });
-  </script>
+
 </body>
 
 </html>
