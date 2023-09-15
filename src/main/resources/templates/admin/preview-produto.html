@@ -38,8 +38,17 @@
           </div>
 
         </div>
-        <div class="col-md-6">
-          oiiiiiiiiiiiiiiiiiiiiiiiii
+        <div class="col-md-6 text-center mx-auto my-auto shadow p-3 mb-5 bg-body-tertiary rounded">
+          <h5 class="card-title fw-bold ">Almoço nos ares</h5>
+          <p>
+          </p>
+          <p class="card-text">Preço: R$100,00</p>
+          <p class="card-text">Em Estoque: 6 unidades</p>
+            <p class="card-text">Descrição do Produto: Almoce com sua familia, seu namorado(a), sozinho, seja com quem for, almoce apreciando a paisagem maravilhosa de SP.</p>
+
+            <button class="btn btn-primary" id="comprarBtn">Comprar</button>
+
+          </div>
         </div>
       </div>
     </div>
@@ -47,8 +56,22 @@
 
   <script src="../js/bootstrap.bundle.min.js"></script>
   <script src="../js/produto/script.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script>
+    $(document).ready(function(){
+        $(".star").click(function(){
+            var rating = $(this).data("star");
+            $("#ratingValue").text(rating);
+        });
+    });
+  </script>
 
+  <script>
+    $(document).ready(function () {
+        $("#comprarBtn").click(function () {
+            alert("Produto adicionado ao carrinho!");
+        });
+    });
   </script>
 </body>
 
