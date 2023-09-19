@@ -54,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler()) // Adicione esta linha
                 .and()
                 .authorizeRequests()
-                .antMatchers("/h2-console/**", "/imagens/**", "/css/**", "/js/**", "/jquery/**").permitAll()
+                .antMatchers("/h2-console/**", "/imagens/**", "/css/**", "/js/**", "/jquery/**", "/").permitAll()
                 .antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN") // Adicionado o prefixo 'ROLE_'
                 .antMatchers("/usuario/**").hasAnyAuthority("ROLE_ADMIN")
                 .antMatchers("/estoque/**").hasAnyAuthority("ROLE_ESTOQUISTA", "ROLE_ADMIN")

@@ -1,8 +1,10 @@
 package com.destiny.controller;
 
 import com.destiny.model.MensagemResponse;
+import com.destiny.repository.ProdutoRepository;
 import com.destiny.repository.UsuarioRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,17 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("")
 public class AcessoController {
+    @Autowired
+    private ProdutoRepository produtoRepository;
+
+    @GetMapping("/")
+    @ResponseStatus(HttpStatus.OK)
+    public String landingPage(Model model) {
+
+        var listaProdutos = produtoRepository.findAll();
+        model.addAttribute("produtoPage", listaProdutos);
+        return "landingPage";
+    }
 
     @GetMapping("/admin/dashboard")
     @ResponseStatus(HttpStatus.OK)
