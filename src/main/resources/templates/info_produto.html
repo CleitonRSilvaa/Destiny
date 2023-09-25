@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="https://thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carousel with Thumbnails</title>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/produto/style.css" rel="stylesheet">
+  <link rel="icon" href="../img/LogoDestiny.png">
+  <style>
+    .logo img{
+      width: 100px;
+    }
+  </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="logo" href="#" title="Ir para a página inicial">
+          <img src="/img/LogoDestiny.png" alt="Logo da Destiny">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link " href="#">Produtos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Experiences</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Sobre nós</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Contact</a>
+            </li>
+            <li class="nav-item">
+    
+            </li>
+    
+          </ul>
+        </div>
+        <div class="d-flex align-items-center">
+          <a class="nav-link" href="#">
+            <span class="badge badge-pill bg-danger text-white">1</span>
+            <span><i class="fas fa-shopping-cart text-white"></i></span>
+          </a>
+          <div class="dropdown">
+            <a class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#" id="navbarDropdownMenuAvatar"
+              role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+              <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" style="width: 40; height: 40;" 
+                alt="Black and White Portrait of a Man" />
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+              <li>
+                <a class="dropdown-item" href="#">Meu Perfil</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">Meu Carrinho</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">Logout</a>
+              </li>
+            </ul>
+
+        <div class="text-end">
+          <button type="button" class="btn btn-outline-light me-2">Login</button>
+          <button type="button" class="btn btn-warning">Sign-up</button>
+        </div>
+          </div>
+        </div>
+        </div>
+    
+        </div>
+    
+      </nav>
+
+  <div class="container mt-2 flex-grow-1">
+    <div class="container p-3">
+      <div class="row">
+        <div class="col-md-6">
+          <div id="carouselMain" class="carousel slide border border-end-0 shadow-sm p-3  bg-body rounded">
+            <div class="carousel-inner">
+              <th:block th:each="imagem, iterStat : ${produto.imagens}">
+                <div th:class="${imagem.principal} ? 'carousel-item active' : 'carousel-item'">
+                  <img th:src="${'/'+imagem.caminho}" class="d-block w-100" alt="...">
+                </div>
+              </th:block>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselMain" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselMain" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+            <div id="thumbnailContainer" class="d-flex justify-content-center mt-3">
+              <th:block th:each="imagem, iterStat : ${produto.imagens}">
+                <img th:src="${'/'+imagem.caminho}" alt="Slide" th:data-bs-slide-to="${iterStat.index}" th:class="${imagem.principal} ? 'active' : ''">
+              </th:block>
+            </div>
+          </div>
+
+
+        </div>
+        <div class="col-md-6 p-4 shadow-lg border rounded bg-light">
+          <h2 class="fw-bold mb-3" th:text="${produto.nome}"></h2>
+          <p class="fs-4 text-primary mb-3" th:text="${'R$' + produto.valor}"></p>
+          <p class="mb-3" th:text="${'Avaliação: ' + produto.avaliacao}"></p>
+          <p class="mb-3" th:text="${'Descrição: ' + produto.descricao}"></p>
+          <div class="mb-3">
+            <label for="quantidade" class="form-label">Quantidade</label>
+            <input type="number" class="form-control" id="quantidade" name="quantidade" min="1" required>
+          </div>
+          <button class="btn btn-success btn-lg w-100" id="comprarBtn" disabled>Comprar</button>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="row p-2 justify-content-center">
+        <a type="button" href="/" class="btn btn-primary col-md-4 p-1 m-1">Voltar</a>
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+  <footer class="text-center text-lg-start bg-dark text-muted p-0 w-100">
+    <div class="text-center text-white">
+      &copy; 2023 Destiny. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="../js/bootstrap.bundle.min.js"></script>
+  <script src="../js/produto/script.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+  
+  <script src="https://kit.fontawesome.com/9ef98eb577.js" crossorigin="anonymous"></script>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Inclua as bibliotecas JavaScript do Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/js/bootstrap.min.js"></script>
+
+  <!-- Popper.js (necessary for Bootstrap tooltips, popovers, etc.) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- Owl Carousel JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+  <!-- MDB -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.js"></script>
+
+
+</body>
+
+</html>

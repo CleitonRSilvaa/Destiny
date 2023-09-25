@@ -69,6 +69,7 @@ public class ProdutoController {
         return "admin/admin-menager_produtos";
     }
 
+
     @PostMapping("/add")
     @Transactional
     public String cadastrarProduto(@ModelAttribute Produto produto,
@@ -317,6 +318,16 @@ public class ProdutoController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+     @GetMapping("/informacao")
+    public String buscar(@RequestParam(name = "id", required = false) Long id, Model model) {
+        if (id != null) {
+            Optional<Produto> produto = produtoRepository.findById(id);
+            model.addAttribute("produto", produto.get());
+        } else {
+        }
+        return "info_produto";
     }
 
     @GetMapping("/detalhes")

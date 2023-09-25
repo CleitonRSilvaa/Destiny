@@ -1,6 +1,7 @@
 package com.destiny.controller;
 
 import com.destiny.model.MensagemResponse;
+import com.destiny.model.Produto;
 import com.destiny.repository.ProdutoRepository;
 import com.destiny.repository.UsuarioRepository;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
@@ -35,6 +37,9 @@ public class AcessoController {
         model.addAttribute("produtoPage", listaProdutos);
         return "landingPage";
     }
+
+    
+
 
     @GetMapping("/admin/dashboard")
     @ResponseStatus(HttpStatus.OK)
