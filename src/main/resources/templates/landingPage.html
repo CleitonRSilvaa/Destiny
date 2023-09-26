@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html lang="pt-BR" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 
 <head>
   <meta charset="UTF-8">
@@ -55,16 +56,13 @@
 <body>
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-
-    <a class="logo" href="#" title="Ir para a página inicial">
+    <a class="logo" href="/" title="Ir para a página inicial">
       <img src="https://github.com/CleitonRSilvaa/Destiny/blob/feat/LandingPageTeste/src/main/resources/static/img/LogoDestiny.png?raw=true" alt="Logo da Destiny">
     </a>
-
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item active">
@@ -80,33 +78,11 @@
           <a class="nav-link" href="#">Contact</a>
         </li>
         <li class="nav-item">
-
         </li>
-
       </ul>
     </div>
-    <div class="d-flex align-items-center">
-
-      <div class="dropdown">
-        <div class="dropdown text-end">
-          <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
-          </a>
-          <ul class="dropdown-menu text-small">
-            <li><a class="dropdown-item" href="#">New project...</a></li>
-            <li><a class="dropdown-item" href="#">Settings</a></li>
-            <li><a class="dropdown-item" href="#">Profile</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Sign out</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
     <div class="text-end">
-      <button type="button" class="btnlogin btn btn-outline-light me-2">Login</button>
-      <button type="button" class="btnlogin btn-warning">Sign-up</button>
-    </div>
-
+      <a type="button" class="btnlogin btn btn-outline-light me-2" href="/login">Login</a>
     </div>
 
   </nav>
@@ -122,12 +98,15 @@
   </section>
 
   <!-- Product Listing -->
-  <section class="product-listing mt-5 mb-5">
+  <section class="product-listing mt-5 mb-5" >
       <div class="row">
         <th:block th:each="produto : ${produtoPage}">
           <div class="col-md-2">
-            <div class="card">
-              <img class="card-img-top" src="https://via.placeholder.com/400x300" alt="Experience 1">
+            <div class="card h-100 " >
+              <th:block th:each="imagem, iterStat : ${produto.imagens}">
+                <img th:if="${imagem.principal}" th:src="${'/'+imagem.caminho}"  class="card-img-top"  alt="...">
+              </th:block>
+              
               <div class="card-body">
                 <div class="star-rating" th:attr="data-rating=${produto.avaliacao}">
                   <span th:each=" star : ${#numbers.sequence(1,5)}" th:switch="${star}">
@@ -140,8 +119,8 @@
 
                   <h4 class="card-title text-center" th:text="${produto.nome}"></h4>
                   <p class="card-text text-center" th:text="${'R$ '+ produto.valor}"></p>
-                  <div class="text-center">
-                  <a th:href="@{'/produto/informacao?id=' + ${produto.id}}" class=" btnCompra btn btn-primary center" style="max-width: 58 48;">Saiba Mais</a>
+                  <div class="text-center mt-auto">
+                  <a th:href="@{'/produto/informacao?id=' + ${produto.id}}" class=" btnCompra btn btn-primary center mt-auto" style="max-width: 58 48;">Saiba Mais</a>
                   <a href="#" class=" btnCompra btn btn-light justify-content-center"><i class="fa-solid fa-cart-shopping"></i></a>
                 </div>
                 </div>
@@ -160,9 +139,9 @@
     </a>
 </div>
 
-  <footer class="footer mt-auto py-3 bg-light">
+  <footer class="footer mt-auto py-3 bg-dark ">
     <div class="container text-center">
-      <span class="text-muted">&copy; 2023 Exclusive Travels. All rights reserved.</span>
+      <span class="text-white">&copy; 2023 Exclusive Travels. All rights reserved.</span>
     </div>
   </footer>
 
