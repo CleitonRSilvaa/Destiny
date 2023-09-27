@@ -48,29 +48,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .headers().frameOptions().disable()
-                .and()
-                .exceptionHandling().accessDeniedHandler(accessDeniedHandler()) // Adicione esta linha
-                .and()
-                .authorizeRequests()
-                .antMatchers("/h2-console/**", "/imagens/**", "/css/**", "/js/**", "/jquery/**", "/").permitAll()
-                .antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN") // Adicionado o prefixo 'ROLE_'
-                .antMatchers("/usuario/**").hasAnyAuthority("ROLE_ADMIN")
-                .antMatchers("/estoque/**").hasAnyAuthority("ROLE_ESTOQUISTA", "ROLE_ADMIN")
-                .anyRequest().authenticated()
-                .and()
-                .formLogin().loginPage("/login")
-                .failureHandler(customAuthenticationFailureHandler)
-                .successHandler(customAuthenticationSuccessHandler)
-                .permitAll()
-                .and()
-                .logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-                .permitAll();
+                .csrf(csrf -> csrf.disable())
+                .headers(headers -> headers.frameOptions().disable())
+                .exceptionHandling(handling -> handling.accessDeniedHandler(accessDeniedHandler()))
+                .authorizeRequests(requests -> requests
+                        .antMatchers("/h2-console/**", "/imagens/**", "/css/**", "/js/**", "/jquery/**", "/")
+                        .permitAll()
+                        .antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN") // Adicionado o prefixo 'ROLE_'
+                        .antMatchers("/usuario/**").hasAnyAuthority("ROLE_ADMIN")
+                        .antMatchers("/estoque/**").hasAnyAuthority("ROLE_ESTOQUISTA", "ROLE_ADMIN")
+                        .anyRequest().authenticated())
+                .formLogin(login -> login.loginPage("/login")
+                        .failureHandler(customAuthenticationFailureHandler)
+                        .successHandler(customAuthenticationSuccessHandler)
+                        .permitAll())
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .permitAll());
 
     }
 
