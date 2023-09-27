@@ -64,10 +64,10 @@
   </section>
 
   <!-- Product Listing -->
-  <section class="product-listing mt-5 mb-5">
-    <div class="row">
+  <section class="product-listing mt-5 mb-5 justify-content-center">
+    <div class="row justify-content-center">
       <th:block th:each="produto : ${produtoPage}">
-        <div class="col-md-3 mx-3">
+        <div class="col-md-3 m-3">
           <div class="card h-100 ">
             <th:block th:each="imagem, iterStat : ${produto.imagens}">
               <img th:if="${imagem.principal}" th:src="${'/'+imagem.caminho}" class="card-img-top card-img-custom" alt="...">
@@ -107,7 +107,7 @@
 
   <footer class="footer mt-auto py-3 bg-dark ">
     <div class="container text-center">
-      <span class="text-white">&copy; 2023 Exclusive Travels. All rights reserved.</span>
+      <span class="text-white">&copy; 2023 Destiny. Todos os direitos reservados</span>
     </div>
   </footer>
 
