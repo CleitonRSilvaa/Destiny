@@ -1,9 +1,30 @@
-/* Estilos para o corpo da página */
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #f0f0f0; /* Cor de fundo da página */
-  /* Adicione outros estilos de fundo e fonte conforme necessário */
+nav {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+footer {
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#carousel .item img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.star-rating {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.star-rating i {
+  color: gold;
+  margin-right: 5px;
+}
+
+.layer {
+  fill: #ffffff !important;
 }
 
 /* Estilos para o círculo do carrinho de compras */
@@ -25,11 +46,18 @@ body {
   width: 100px; /* Largura fixa em pixels */
   height: 40px; /* Altura fixa em pixels */
 }
-.btnCompra{
+.btnCompra {
   width: 106px;
   height: 38px;
 }
-.btnVoltar{
+.btnVoltar {
   width: 434px;
   height: 34px;
+}
+
+.card-img-custom {
+  width: 200px;
+  height: 250px;
+  object-fit: cover;
+  min-width: 100%;
 }

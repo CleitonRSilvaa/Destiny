@@ -5,66 +5,51 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carousel with Thumbnails</title>
+  <title th:text="${produto.nome} + '-Destiny'"></title>
   <link href="../css/bootstrap.min.css" rel="stylesheet">
   <link href="../css/produto/style.css" rel="stylesheet">
   <link href="../css/stylesLanding.css" rel="stylesheet">
   <link rel="icon" href="../img/LogoDestiny.png">
- <style>
-    
-    body {
-      font-family: 'Arial', sans-serif;
-      color: #555;
-      background-color: #f8f9fa;
-    }
-
-    nav {
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .logo img {
-      width: 100px;
-    }
- </style>
-
-    
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="logo" href="/" title="Ir para a página inicial">
-          <img src="/img/LogoDestiny.png" alt="Logo da Destiny">
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item active">
-              <a class="nav-link " href="#">Produtos</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Experiences</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Sobre nós</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Contact</a>
-            </li>
-            <li class="nav-item">
-    
-            </li>
-    
-          </ul>
-        </div>
-        <div class="text-end  d-flex align-items-center">
-          <a type="button" class="btnlogin btn btn-outline-light me-2" href="/login">
-            Login
-          </a>
-        </div>
-      </nav>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand p-2" href="/">
+      <img src="../img/LogoDestiny.svg" width="80" height="100%" class="d-inline-block align-top" alt="Logo">
+    </a>
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link " href="#">Produtos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Experiences</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Sobre nós</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>
+          <li class="nav-item">
+          </li>
+        </ul>
+      </div>
+
+      <!-- <div sec:authorize="isAuthenticated()">
+        <spam class='text-white px-2' th:text="${#authentication.name}"></spam>
+      </div> -->
+
+      <div class="text-end">
+        <a type="button" class="btnlogin btn btn-outline-light me-2" href="/login">Login</a>
+      </div>
+    </div>
+  </nav>
 
   <div class="container mt-2 flex-grow-1">
     <div class="container p-3">
@@ -124,27 +109,11 @@
     </div>
   </footer>
 
+  <script src="../jquery/jquery.min.js"></script>
+  <script src="../jquery/jquery.mask.min.js"></script>
   <script src="../js/bootstrap.bundle.min.js"></script>
+  <script src="../js/popper.min.js"></script>
   <script src="../js/produto/script.js"></script>
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-
-  
-  <script src="https://kit.fontawesome.com/9ef98eb577.js" crossorigin="anonymous"></script>
-
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <!-- Popper.js (necessary for Bootstrap tooltips, popovers, etc.) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-
-  <!-- Bootstrap JS -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-  <!-- Owl Carousel JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-
-  <!-- MDB -->
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.js"></script>
 
 
 </body>
