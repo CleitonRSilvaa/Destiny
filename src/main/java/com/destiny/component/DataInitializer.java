@@ -7,6 +7,10 @@ import com.destiny.repository.UsuarioRepository;
 
 import ch.qos.logback.classic.Logger;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.hibernate.validator.internal.util.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -14,6 +18,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
+
+    private static final Path directoryPath = Paths.get("./imagens/produtos/");
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -31,6 +37,14 @@ public class DataInitializer implements CommandLineRunner {
             admin.setStatusConta(StatusConta.ATIVA);
             usuarioRepository.save(admin);
         }
+        try {
+            if (!Files.exists(directoryPath)) {
+                Files.createDirectories(directoryPath);
+            }
+        } catch (Exception e) {
+
+        }
+
     }
 
     private Logger LoggerFactory(Class<DataInitializer> class1) {

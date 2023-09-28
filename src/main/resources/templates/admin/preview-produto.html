@@ -20,7 +20,7 @@
             <div class="carousel-inner">
               <th:block th:each="imagem, iterStat : ${produto.imagens}">
                 <div th:class="${imagem.principal} ? 'carousel-item active' : 'carousel-item'">
-                  <img th:src="${'/'+imagem.caminho}" class="d-block w-100" alt="...">
+                  <img th:src="@{'/' + ${imagem.caminho}}" class="d-block w-100" alt="...">
                 </div>
               </th:block>
             </div>

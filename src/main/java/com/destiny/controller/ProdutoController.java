@@ -1,120 +1,59 @@
 package com.destiny.controller;
 
-import com.destiny.model.Imagem;
 import com.destiny.model.MensagemResponse;
 import com.destiny.model.Produto;
 import com.destiny.model.StatusProduto;
-import com.destiny.model.ValidationException;
-import com.destiny.repository.ImagemRepository;
-import com.destiny.repository.ProdutoRepository;
 import com.destiny.service.ProductDetailService;
-
-import lombok.val;
-
+import com.destiny.service.ProdutoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Controller()
 @RequestMapping("/produto")
 public class ProdutoController {
 
     @Autowired
-    private ProdutoRepository produtoRepository;
-    @Autowired
-    private ImagemRepository imagemRepository;
-    @Autowired
     private ProductDetailService service;
+
+    @Autowired
+    private ProdutoService produtoService;
+
+    private static final Logger logger = LoggerFactory.getLogger(ProdutoController.class);
 
     @GetMapping("/listar")
     public String telaProduto(Model model,
             @RequestParam("page") Optional<Integer> page,
             @RequestParam("size") Optional<Integer> size,
             @RequestParam("nomeProduto") Optional<String> nome) {
-        int currentPage = page.orElse(1) - 1;
-        int pageSize = size.orElse(10);
 
-        PageRequest pageRequest = PageRequest.of(currentPage, pageSize, Sort.by("id").descending());
-        Page<Produto> produtoPage;
-
-        if (nome.isPresent()) {
-            produtoPage = produtoRepository.findByNomeContaining(nome.get(), pageRequest);
-        } else {
-            produtoPage = produtoRepository.findAll(pageRequest);
-        }
-
+        Page<Produto> produtoPage = produtoService.buscarProdutos(page, size, nome);
         model.addAttribute("produtoPage", produtoPage);
-
         return "admin/admin-menager_produtos";
     }
 
-
     @PostMapping("/add")
-    @Transactional
     public String cadastrarProduto(@ModelAttribute Produto produto,
             @RequestParam("imagem") MultipartFile[] imagens,
             @RequestParam("imgPrincipal") int imgPrincipal,
             RedirectAttributes redirect) {
 
         try {
-
-            produto.setStatusProduto(StatusProduto.ATIVO);
-            produtoRepository.save(produto);
-            int p = 0;
-            for (MultipartFile imagem : imagens) {
-                if (imagem != null && !imagem.isEmpty()) {
-                    try {
-                        String imgFileName = salvaImagemNoServidor(imagem);
-                        Imagem novaImagem = new Imagem();
-                        if (imgPrincipal == p) {
-                            novaImagem.setPrincipal(true);
-                        }
-                        p++;
-                        novaImagem.setCaminho("imagens/produtos/" + imgFileName);
-                        novaImagem.setProduto(produto);
-                        imagemRepository.save(novaImagem);
-                    } catch (Exception e) {
-                        String nomeImg = imagem.getOriginalFilename();
-                        System.out.println("Falha ao armazenar a imagem " + nomeImg + e);
-                        String nomeImagem2 = "default.jpg";
-                        String caminho2 = "imagens/produtos/" + nomeImagem2;
-                        Imagem novaImagem = new Imagem();
-                        novaImagem.setCaminho(caminho2);
-                        novaImagem.setProduto(produto);
-                        novaImagem.setPrincipal(true);
-                        imagemRepository.save(novaImagem);
-                        break;
-                    }
-
-                } else {
-                    break;
-                }
-            }
+            produtoService.cadastrarProduto(produto, imagens, imgPrincipal);
             redirect.addFlashAttribute("tipo", "success");
             redirect.addFlashAttribute("mensagem", "Produto cadastrado com sucesso!");
             return "redirect:/produto/listar";
         } catch (Exception e) {
+            logger.error("Erro ao cadastrar produto", e);
             redirect.addFlashAttribute("tipo", "error");
             redirect.addFlashAttribute("mensagem", "Erro ao cadastrar produto!");
             return "redirect:/produto/listar";
@@ -134,120 +73,13 @@ public class ProdutoController {
             @RequestParam("imagenPrinclAt") String imagensParaAtualizar,
             @RequestParam(required = false) String imgPrincipal, RedirectAttributes redirect) {
 
-        try {
-            System.out.println(produto);
-            Optional<Produto> produtoOptional = produtoRepository.findById(produto.getId());
-
-            if (!produtoOptional.isPresent()) {
-                redirect.addFlashAttribute("tipo", "error");
-                redirect.addFlashAttribute("mensagem", "Produto não encontrado!");
-                return "redirect:/produto/listar";
-            } else {
-                produtoRepository.save(produto);
-            }
-            int indiceImgPrincipal = -1;
-
-            Boolean fotoPrinipalInImagens = false;
-            if (imgPrincipal != null) {
-                if ((!imgPrincipal.isEmpty() || !imgPrincipal.isBlank())
-                        && (imagensParaAtualizar.isEmpty() || imagensParaAtualizar.isBlank())) {
-                    fotoPrinipalInImagens = true;
-                    try {
-                        indiceImgPrincipal = Integer.parseInt(imgPrincipal);
-                    } catch (NumberFormatException e) {
-                        // TODO: handle exception
-                    }
-
-                }
-            }
-
-            if (imgPrincipal != null) {
-                for (String id : imagensParaRemover.split(",")) {
-                    if (!id.isBlank() || !id.isEmpty()) {
-                        System.out.println("id para remover :" + id);
-                        var longId = Long.parseLong(id);
-                        var imagemDell = imagemRepository.findById(longId);
-                        if (imagemDell.isPresent()) {
-                            System.out.println(imagemDell.get());
-                            var img = imagemDell.get();
-                            imagemRepository.deleteById(img.getId());
-                            removeImagemDoServidor(img.getCaminho());
-
-                        }
-                    }
-                }
-            }
-
-            if (imgPrincipal != null) {
-                if (!fotoPrinipalInImagens) {
-                    var imgList = imagemRepository.findAllByProduto(produto);
-                    var IdImgUpdate = Long.parseLong(imagensParaAtualizar);
-                    System.out.println("IdImgUpdate: " + IdImgUpdate);
-                    for (Imagem img : imgList) {
-                        if (img.getId() == IdImgUpdate) {
-                            img.setPrincipal(true);
-                            imagemRepository.save(img);
-                        } else {
-                            img.setPrincipal(false);
-                            imagemRepository.save(img);
-                        }
-                    }
-                } else {
-                    var imgList = imagemRepository.findAllByProduto(produto);
-                    for (Imagem img : imgList) {
-                        if (img.getPrincipal()) {
-                            img.setPrincipal(false);
-                            imagemRepository.save(img);
-                        }
-                    }
-                }
-            }
-
-            if (imagemInput != null) {
-                MultipartFile[] imagens = (MultipartFile[]) imagemInput;
-                int p = 0;
-                for (MultipartFile img : imagens) {
-                    if (img != null && !img.isEmpty()) {
-                        try {
-                            String imgFileName = salvaImagemNoServidor(img);
-                            Imagem novaImagem = new Imagem();
-
-                            if (indiceImgPrincipal == p && fotoPrinipalInImagens) {
-                                novaImagem.setPrincipal(true);
-                            } else {
-                                novaImagem.setPrincipal(false);
-                            }
-                            p++;
-                            novaImagem.setCaminho("imagens/produtos/" + imgFileName);
-                            novaImagem.setProduto(produto);
-                            imagemRepository.save(novaImagem);
-                        } catch (Exception e) {
-                            String nomeImg = img.getOriginalFilename();
-                            System.out.println("Falha ao armazenar a imagem " + nomeImg + e);
-                            String nomeImagem2 = "default.jpg";
-                            String caminho2 = "imagens/produtos/" + nomeImagem2;
-                            Imagem novaImagem = new Imagem();
-                            novaImagem.setCaminho(caminho2);
-                            novaImagem.setProduto(produto);
-                            novaImagem.setPrincipal(true);
-                            imagemRepository.save(novaImagem);
-                            break;
-                        }
-
-                    } else {
-                        break;
-                    }
-                }
-            }
-            redirect.addFlashAttribute("tipo", "success");
-            redirect.addFlashAttribute("mensagem", "Produto atualizado com sucesso!");
-            return "redirect:/produto/listar";
-        } catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
-            redirect.addFlashAttribute("tipo", "error");
-            redirect.addFlashAttribute("mensagem", "Erro ao atualizar produto!");
-            return "redirect:/produto/listar";
-        }
+        return produtoService.editarProduto(
+                produto,
+                imagemInput,
+                imagensParaRemover,
+                imagensParaAtualizar,
+                imgPrincipal,
+                redirect);
 
     }
 
@@ -255,11 +87,10 @@ public class ProdutoController {
     public String trazerPorId(@RequestParam(name = "id", required = false) Long id, Model model,
             RedirectAttributes redirect) {
 
-        Optional<Produto> produtoOptional = produtoRepository.findById(id);
+        Optional<Produto> produtoOptional = produtoService.buscarProdutoPorId(id);
 
         if (produtoOptional.isPresent()) {
             Produto produto = produtoOptional.get();
-            System.out.println(produto);
             model.addAttribute("produto", produto);
             return "admin/preview-produto";
         } else {
@@ -274,77 +105,39 @@ public class ProdutoController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MensagemResponse> updateStatus(
             @RequestBody StatusUpdateRequestProduto statusUpdateRequestProduto) {
-        MensagemResponse mensagemResponse = new MensagemResponse();
-        List<String> detalhes = new ArrayList<>();
-        long longId = 0;
-
-        try {
-            longId = Long.valueOf(statusUpdateRequestProduto.getId());
-        } catch (NumberFormatException e) {
-            detalhes.add("id not INT");
-        }
-        if (!detalhes.isEmpty()) {
-            throw new ValidationException("parametro invalido", detalhes);
-        }
-
-        if (!produtoRepository.existsById(longId)) {
-            mensagemResponse.setStatus(400);
-            mensagemResponse.setMessage("erro");
-            detalhes.add("Id não existe");
-            mensagemResponse.setDetails(detalhes);
-            return new ResponseEntity<>(mensagemResponse, HttpStatus.BAD_REQUEST);
-        }
-
-        produtoRepository.updateStatusProduto(statusUpdateRequestProduto.getStatus(), longId);
-        mensagemResponse.setStatus(200);
-        mensagemResponse.setMessage("sucess");
-        mensagemResponse.setDetails(detalhes);
-
-        return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
+        return produtoService.updateStatus(statusUpdateRequestProduto);
     }
 
-    private String salvaImagemNoServidor(MultipartFile imagem) throws IOException {
-        String nomeOriginal = StringUtils.cleanPath(imagem.getOriginalFilename()).replace(" ", "_");
-        String nomeArquivo = UUID.randomUUID() + "-" + nomeOriginal;
-        Path caminho = Paths.get("src/main/resources/static/imagens/produtos/" + nomeArquivo);
-        Files.copy(imagem.getInputStream(), caminho, StandardCopyOption.REPLACE_EXISTING);
-        return nomeArquivo;
-    }
+    @GetMapping("/informacao")
+    public String buscar(@RequestParam(name = "id", required = false) Long id, Model model,
+            RedirectAttributes redirect) {
+        Optional<Produto> produtoOptional = produtoService.buscarProdutoPorId(id);
 
-    private void removeImagemDoServidor(String nomeArquivo) {
-        Path caminho = Paths.get("src/main/resources/static/" + nomeArquivo);
-        try {
-            Files.delete(caminho);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-     @GetMapping("/informacao")
-    public String buscar(@RequestParam(name = "id", required = false) Long id, Model model) {
-        if (id != null) {
-            Optional<Produto> produto = produtoRepository.findById(id);
-            model.addAttribute("produto", produto.get());
+        if (produtoOptional.isPresent()) {
+            Produto produto = produtoOptional.get();
+            model.addAttribute("produto", produto);
         } else {
+            redirect.addFlashAttribute("tipo", "error");
+            redirect.addFlashAttribute("mensagem", "Produto não encontrado!");
         }
         return "info_produto";
     }
 
     @GetMapping("/detalhes")
-    public String buscarProdutoPorId(@RequestParam(name = "id", required = false) Long id, Model model) {
-        if (id != null) {
-            Optional<Produto> produto = produtoRepository.findById(id);
-            model.addAttribute("produto", produto.get());
-        } else {
-        }
-        return "admin/alteration_produtos";
-    }
+    public String buscarProdutoPorId(@RequestParam(name = "id", required = false) Long id, Model model,
+            RedirectAttributes redirect) {
 
-    private String dataHoraStrg() {
-        LocalDateTime agora = LocalDateTime.now();
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm:ss");
-        String dataHoraFormatada = agora.format(formato).concat("-".trim().toLowerCase()).replace(':', '-');
-        return dataHoraFormatada;
+        Optional<Produto> produtoOptional = produtoService.buscarProdutoPorId(id);
+
+        if (produtoOptional.isPresent()) {
+            Produto produto = produtoOptional.get();
+            model.addAttribute("produto", produto);
+            return "admin/alteration_produtos";
+        } else {
+            redirect.addFlashAttribute("tipo", "error");
+            redirect.addFlashAttribute("mensagem", "Produto não encontrado!");
+            return "redirect:/produto/listar";
+        }
     }
 
     public String getAlertString(String tipo, String texto) {
