@@ -166,7 +166,7 @@
   </div>
 
   <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
-    <form action="/produto/add" method="post" enctype="multipart/form-data">
+    <form action="/produto/add" method="post" enctype="multipart/form-data" id="FormsCadastroProd">
       <div class="modal fade" id="modalCadastroProd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalCadastroProdLabel" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
           <div class="modal-content">
@@ -351,22 +351,24 @@
       }
     });
 
+    document
+      .getElementById("FormsCadastroProd")
+      .addEventListener("submit", function (e) {
+        var radios = document.getElementsByName("imgPrincipal");
+        var formValid = false;
 
-    document.getElementById('modalCadastroProd').addEventListener('submit', function (e) {
-      var radios = document.getElementsByName('imgPrincipal');
-      var formValid = false;
+        var i = 0;
+        while (!formValid && i < radios.length) {
+          if (radios[i].checked) formValid = true;
+          i++;
+        }
 
-      var i = 0;
-      while (!formValid && i < radios.length) {
-        if (radios[i].checked) formValid = true;
-        i++;
-      }
+        if (!formValid) {
+          alert("Por favor, selecione uma imagem principal.");
+          e.preventDefault();
+        }
+      });
 
-      if (!formValid) {
-        alert("Por favor, selecione uma imagem principal.");
-        e.preventDefault();
-      }
-    });
 
 
     function updateStatusProduto(e) {
