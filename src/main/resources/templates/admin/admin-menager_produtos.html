@@ -339,12 +339,6 @@
         var preview = document.getElementById('preview');
         preview.innerHTML = '';
 
-        if (event.target.files.length > 4) {
-          alert('Você só pode selecionar no máximo 4 imagens.');
-          event.target.value = '';
-          return;
-        }
-
         for (var i = 0; i < event.target.files.length; i++) {
           handleFile(event.target.files[i], i);
         }
