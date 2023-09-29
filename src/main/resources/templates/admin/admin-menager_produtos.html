@@ -11,13 +11,15 @@
   <link rel="stylesheet" href="../css/sweetalert2.min.css">
   <link href="../css/style.css" rel="stylesheet">
   <script src="../js/sweetalert2.min.js"></script>
-
+  <link rel="icon" href="../img/LogoDestiny.svg">
 </head>
 
 <body class="d-flex flex-column">
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand px-2" href="/">Destiny</a>
+    <a class="navbar-brand p-2" href="/admin/dashboard">
+      <img src="../img/LogoDestiny.svg" width="80" height="100%" class="d-inline-block align-top" alt="Logo">
+    </a>
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -164,7 +166,7 @@
   </div>
 
   <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
-    <form action="/produto/add" method="post" enctype="multipart/form-data">
+    <form action="/produto/add" method="post" enctype="multipart/form-data" id="FormsCadastroProd">
       <div class="modal fade" id="modalCadastroProd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalCadastroProdLabel" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
           <div class="modal-content">
@@ -343,22 +345,24 @@
       }
     });
 
+    document
+      .getElementById("FormsCadastroProd")
+      .addEventListener("submit", function (e) {
+        var radios = document.getElementsByName("imgPrincipal");
+        var formValid = false;
 
-    document.getElementById('modalCadastroProd').addEventListener('submit', function (e) {
-      var radios = document.getElementsByName('imgPrincipal');
-      var formValid = false;
+        var i = 0;
+        while (!formValid && i < radios.length) {
+          if (radios[i].checked) formValid = true;
+          i++;
+        }
 
-      var i = 0;
-      while (!formValid && i < radios.length) {
-        if (radios[i].checked) formValid = true;
-        i++;
-      }
+        if (!formValid) {
+          alert("Por favor, selecione uma imagem principal.");
+          e.preventDefault();
+        }
+      });
 
-      if (!formValid) {
-        alert("Por favor, selecione uma imagem principal.");
-        e.preventDefault();
-      }
-    });
 
 
     function updateStatusProduto(e) {
