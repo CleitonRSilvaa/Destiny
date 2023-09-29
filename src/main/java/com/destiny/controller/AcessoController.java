@@ -2,6 +2,7 @@ package com.destiny.controller;
 
 import com.destiny.model.MensagemResponse;
 import com.destiny.model.Produto;
+import com.destiny.model.StatusProduto;
 import com.destiny.repository.ProdutoRepository;
 import com.destiny.repository.UsuarioRepository;
 
@@ -33,13 +34,10 @@ public class AcessoController {
     @ResponseStatus(HttpStatus.OK)
     public String landingPage(Model model) {
 
-        var listaProdutos = produtoRepository.findAll();
+        var listaProdutos = produtoRepository.findAllByStatusProduto(StatusProduto.ATIVO);
         model.addAttribute("produtoPage", listaProdutos);
         return "landingPage";
     }
-
-    
-
 
     @GetMapping("/admin/dashboard")
     @ResponseStatus(HttpStatus.OK)
