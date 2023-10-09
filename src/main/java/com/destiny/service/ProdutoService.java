@@ -50,6 +50,10 @@ public class ProdutoService {
   @Autowired
   private ImagemRepository imagemRepository;
 
+  @Autowired
+  private AzureBlobAdapter azureBlobAdapter;
+
+
   @Transactional
   public Produto cadastrarProduto(Produto produto, MultipartFile[] imagens, int imgPrincipal) {
     try {
@@ -60,13 +64,14 @@ public class ProdutoService {
       for (MultipartFile imagem : imagens) {
         if (imagem != null && !imagem.isEmpty()) {
           try {
-            String imgFileName = salvaImagemNoServidor(imagem);
+            String imgFileName = azureBlobAdapter.upload(imagem, "destinypodruto");
             Imagem novaImagem = new Imagem();
             if (imgPrincipal == p) {
               novaImagem.setPrincipal(true);
             }
             p++;
-            novaImagem.setCaminho("imagens/produtos/" + imgFileName);
+            //novaImagem.setCaminho("imagens/produtos/" + imgFileName);
+            novaImagem.setCaminho(imgFileName);
             novaImagem.setProduto(produto);
             imagemRepository.save(novaImagem);
           } catch (Exception e) {
@@ -212,7 +217,7 @@ public class ProdutoService {
           if (imagemDell.isPresent()) {
             var img = imagemDell.get();
             imagemRepository.deleteById(img.getId());
-            removeImagemDoServidor(img.getCaminho());
+            //removeImagemDoServidor(img.getCaminho());
           }
         }
       }
@@ -248,7 +253,7 @@ public class ProdutoService {
       for (MultipartFile img : imagens) {
         if (img != null && !img.isEmpty()) {
           try {
-            String imgFileName = salvaImagemNoServidor(img);
+            String imgFileName = azureBlobAdapter.upload(img, "destinypodruto");
             Imagem novaImagem = new Imagem();
 
             if (indiceImgPrincipal == p && fotoPrinipalInImagens) {
@@ -257,7 +262,8 @@ public class ProdutoService {
               novaImagem.setPrincipal(false);
             }
             p++;
-            novaImagem.setCaminho("imagens/produtos/" + imgFileName);
+           // novaImagem.setCaminho("imagens/produtos/" + imgFileName);
+            novaImagem.setCaminho(imgFileName);
             novaImagem.setProduto(produto);
             imagemRepository.save(novaImagem);
           } catch (Exception e) {
@@ -280,23 +286,20 @@ public class ProdutoService {
     }
   }
 
-  private String salvaImagemNoServidor(MultipartFile imagem) throws IOException {
-    String nomeOriginal = StringUtils.cleanPath(imagem.getOriginalFilename()).replace(" ", "_");
-    String imgFileName = UUID.randomUUID() + "-" + nomeOriginal;
-    Path directoryPath = Paths.get("./imagens/produtos/");
-    // Files.createDirectories(directoryPath);
-    Path filePath = directoryPath.resolve(imgFileName);
-    imagem.transferTo(filePath);
-    return imgFileName;
-  }
+//  private String salvaImagemNoServidor(MultipartFile imagem) throws IOException {
+//
+//      String url =
+//      logger.info("url :"+ url);
+//    return imgFileName;
+//  }
 
-  private void removeImagemDoServidor(String nomeArquivo) {
-    Path caminho = Paths.get(directoryPathString + nomeArquivo);
-    try {
-      Files.delete(caminho);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
+//  private void removeImagemDoServidor(String nomeArquivo) {
+//    Path caminho = Paths.get(directoryPathString + nomeArquivo);
+//    try {
+//      Files.delete(caminho);
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//    }
+//  }
 
 }

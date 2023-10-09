@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DataInitializer implements CommandLineRunner {
 
-    private static final Path directoryPath = Paths.get("./imagens/produtos/");
+    //private static final Path directoryPath = Paths.get("./imagens/produtos/");
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -37,13 +37,13 @@ public class DataInitializer implements CommandLineRunner {
             admin.setStatusConta(StatusConta.ATIVA);
             usuarioRepository.save(admin);
         }
-        try {
-            if (!Files.exists(directoryPath)) {
-                Files.createDirectories(directoryPath);
-            }
-        } catch (Exception e) {
-
-        }
+//        try {
+//            if (!Files.exists(directoryPath)) {
+//                Files.createDirectories(directoryPath);
+//            }
+//        } catch (Exception e) {
+//
+//        }
 
     }
 

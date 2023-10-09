@@ -123,7 +123,7 @@
               <span class="text-center">Imagens Cadastradas</span>
               <div th:each="imagem, iterStat : ${produto.imagens}" class="card p-2 m-1" style="width: 15rem;">
                 <button type="button" class="btn btn-danger btn-remove m-2" aria-label="Remover" th:data-id="${imagem.id}">Remover</button>
-                <img th:src="${'/'+imagem.caminho}" alt="Imagem-produto" class="card-img-top">
+                <img th:src="${imagem.caminho}" alt="Imagem-produto" class="card-img-top">
                 <div class="card-body d-flex flex-column">
                   <div class="form-check mt-auto">
                     <input class="form-check-input" type="radio" name="imgPrincipal" th:id="'imgPrincipalRadio' + ${iterStat.index}" th:value="${imagem.id}" th:checked="${imagem.principal} ? 'checked' : null">
@@ -190,7 +190,7 @@
                 <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
                   <button type="button" class="btn btn-danger btn-remove m-2" aria-label="Remover" th:data-id="${imagem.id}">Remover</button>
                 </th:block>
-                <img th:src="${'/'+imagem.caminho}" alt="Imagem-produto" class="card-img-top">
+                <img th:src="${imagem.caminho}" alt="Imagem-produto" class="card-img-top">
                 <div class="card-body d-flex flex-column">
                   <div class="form-check mt-auto">
                     <input class="form-check-input" type="radio" name="imgPrincipal" th:id="'imgPrincipalRadio' + ${iterStat.index}" th:value="${imagem.id}" th:checked="${imagem.principal} ? 'checked' : null" disabled>
