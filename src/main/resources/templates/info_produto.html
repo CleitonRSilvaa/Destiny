@@ -59,7 +59,7 @@
             <div class="carousel-inner">
               <th:block th:each="imagem, iterStat : ${produto.imagens}">
                 <div th:class="${imagem.principal} ? 'carousel-item active' : 'carousel-item'">
-                  <img th:src="${'/'+imagem.caminho}" class="d-block w-100" alt="...">
+                  <img th:src="${imagem.caminho}" class="d-block w-100" alt="...">
                 </div>
               </th:block>
             </div>
@@ -73,7 +73,7 @@
             </button>
             <div id="thumbnailContainer" class="d-flex justify-content-center mt-3">
               <th:block th:each="imagem, iterStat : ${produto.imagens}">
-                <img th:src="${'/'+imagem.caminho}" alt="Slide" th:data-bs-slide-to="${iterStat.index}" th:class="${imagem.principal} ? 'active' : ''">
+                <img th:src="${imagem.caminho}" alt="Slide" th:data-bs-slide-to="${iterStat.index}" th:class="${imagem.principal} ? 'active' : ''">
               </th:block>
             </div>
           </div>
