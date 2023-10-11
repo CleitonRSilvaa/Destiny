@@ -1,6 +1,5 @@
 package com.destiny.controller;
 
-
 import com.destiny.model.Cliente;
 import com.destiny.model.MensagemResponse;
 import com.destiny.model.ValidationException;
@@ -8,6 +7,7 @@ import com.destiny.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -15,24 +15,28 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@RestController
-@RequestMapping("cliente")
+@Controller
+@RequestMapping("/cliente")
 public class ClienteController {
 
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @GetMapping("/registra-me")
+    public String telaRegistarCliente() {
+
+        return "cliente/registroCliente.html";
+    }
+
     @GetMapping("clienteList")
-    public List<Map<String, Object>> list(){
+    public List<Map<String, Object>> list() {
         return clienteRepository.findAllCustom();
     }
 
-
     @GetMapping("/listDetalhada")
-    public List<Cliente> listAllDetalhes(){
+    public List<Cliente> listAllDetalhes() {
         return clienteRepository.findAll();
     }
-
 
     @PostMapping("add")
     @ResponseStatus(HttpStatus.CREATED)
@@ -56,7 +60,6 @@ public class ClienteController {
             errors.add("senha é obrigatório.");
         }
 
-
         if (clienteRepository.findByEmail(cliente.getEmail()) != null) {
             errors.add("email já está cadastrado.");
         }
@@ -78,8 +81,6 @@ public class ClienteController {
         return new ResponseEntity<>(mensagemResponse, HttpStatus.CREATED);
     }
 
-
-
     @PutMapping("update")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MensagemResponse> updateCliente(@RequestBody Cliente cliente) {
@@ -87,15 +88,14 @@ public class ClienteController {
         List<String> detalhes = new ArrayList<>();
         List<String> errors = new ArrayList<>();
 
-
-        if (!clienteRepository.existsById(cliente.getId())){
+        if (!clienteRepository.existsById(cliente.getId())) {
 
             mensagemResponse.setStatus(400);
 
             mensagemResponse.setMessage("erro");
-            if (cliente.getId()==0){
+            if (cliente.getId() == 0) {
                 detalhes.add("parementro id nao definido");
-            }else {
+            } else {
                 detalhes.add("id invalido");
             }
 
@@ -105,9 +105,7 @@ public class ClienteController {
 
         }
 
-
         clienteRepository.existsById(cliente.getId());
-
 
         if (cliente.getNome() == null) {
             errors.add("nome é obrigatório.");
@@ -122,7 +120,7 @@ public class ClienteController {
             errors.add("senha é obrigatório.");
         }
 
-        if (cliente.getStatusConta() == null){
+        if (cliente.getStatusConta() == null) {
             errors.add("statusConta é obrigatório.");
         }
 
@@ -137,7 +135,6 @@ public class ClienteController {
         if (!errors.isEmpty()) {
             throw new ValidationException("parametros invalidos", errors);
         }
-
 
         clienteRepository.save(cliente);
 
@@ -164,8 +161,7 @@ public class ClienteController {
             throw new ValidationException("parametro invalido", detalhes);
         }
 
-
-        if(!clienteRepository.existsById(longId)){
+        if (!clienteRepository.existsById(longId)) {
             mensagemResponse.setStatus(400);
             mensagemResponse.setMessage("erro");
             detalhes.add("Id não existe");
@@ -183,7 +179,7 @@ public class ClienteController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Optional<Cliente> buscarCliente(@PathVariable String id){
+    public Optional<Cliente> buscarCliente(@PathVariable String id) {
         List<String> errors = new ArrayList<>();
         long longId = 0;
 
@@ -200,6 +196,5 @@ public class ClienteController {
         return clienteRepository.findById(longId);
 
     }
-
 
 }
