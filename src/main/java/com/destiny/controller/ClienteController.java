@@ -38,6 +38,12 @@ public class ClienteController {
         return clienteRepository.findAll();
     }
 
+        @GetMapping("/alterar")
+    public String telaAlterar() {
+
+        return "cliente/AlterarCliente.html";
+    }
+
     @PostMapping("add")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<MensagemResponse> insertCliente(@RequestBody Cliente cliente) {
