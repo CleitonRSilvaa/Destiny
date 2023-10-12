@@ -89,3 +89,7 @@
   color: red;
   font-size: 15px;
 }
+
+.has-ok {
+  border-color: #86ffb5;
+}
