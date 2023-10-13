@@ -56,24 +56,25 @@
   background-repeat: no-repeat;
 }
 
-.w-32 {
+button,
+.divImg {
   background: linear-gradient(to bottom, #4b1c71, #cba075);
   border: none;
 }
 
-.w-32:hover {
+button:hover {
   background: linear-gradient(to bottom, #cba075, #4b1c71);
   /* Inverte o gradiente ao passar o mouse */
 }
 
-.w-full {
+input {
   border: 2px solid #e0b0ff;
 }
 
-.w-full:focus {
+input:focus {
   border-color: #734a91;
   /* Defina a cor da borda desejada quando o campo está em foco */
-  box-shadow: none;
+  box-shadow: color(#734a91);
   /* Remove a sombra ao redor do campo */
 }
 
@@ -92,4 +93,8 @@
 
 .has-ok {
   border-color: #86ffb5;
+}
+
+.black-svg {
+  filter: invert(1);
 }

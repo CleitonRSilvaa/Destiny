@@ -7,8 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registra-me Destiny</title>
     <link rel="stylesheet" href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css">
+    <link rel="stylesheet" href="../css/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
     <link href="../css/styleRegistroCliente.css" rel="stylesheet">
+    <script src="../js/sweetalert2.min.js"></script>
 
 </head>
 
@@ -16,8 +18,43 @@
 <!-- partial:index.partial.html -->
 
 <body class="antialiased sans-serif bg-gray-200">
+
+    <nav class="bg-white border-gray-200 dark:bg-gray-900">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <a href="/" class="flex items-center">
+                <img src="../img/LogoDestiny.svg" class="h-8 mr-3 black-svg" alt="Destiny Logo" />
+                <!-- <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span> -->
+            </a>
+            <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
+                <span class="sr-only">Open main menu</span>
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
+                </svg>
+            </button>
+            <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+                <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                    <li>
+                        <a href="#" class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500" aria-current="page">Home</a>
+                    </li>
+                    <li>
+                        <a href="#" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">About</a>
+                    </li>
+                    <li>
+                        <a href="#" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Services</a>
+                    </li>
+                    <li>
+                        <a href="#" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Pricing</a>
+                    </li>
+                    <li>
+                        <a href="#" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <div x-data="app()" x-cloak>
-        <form action="" method="post">
+        <form action="" method="post" autocomplete="off">
             <div class="max-w-3xl mx-auto px-4 py-10">
 
                 <div x-show.transition="step === 'complete'">
@@ -34,6 +71,8 @@
                             </div>
 
                             <button @click="step = 1" class="w-40 block mx-auto focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-gray-600 bg-white hover:bg-gray-100 font-medium border" style="border: 2px solid #e0b0ff;">Back to home</button>
+
+                            <button type="button" @click="step = 1" class="w-32 focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-white bg-white hover:bg-gray-100 font-medium border">Voltar</button>
                         </div>
                     </div>
                 </div>
@@ -41,7 +80,7 @@
                 <div x-show.transition="step != 'complete'">
                     <!-- Top Navigation -->
                     <div class="border-b-2 py-4">
-                        <div class="uppercase tracking-wide text-xs font-bold text-gray-500 mb-1 leading-tight" x-text="`Step: ${step} of 3`"></div>
+                        <div class="uppercase tracking-wide text-xs font-bold text-gray-500 mb-1 leading-tight" x-text="`Passo: ${step} de 4`"></div>
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                             <div class="flex-1">
                                 <div x-show="step === 1">
@@ -75,7 +114,7 @@
                     <div class="py-10">
                         <div x-show.transition.in="step === 1">
                             <div class="mb-5 text-center">
-                                <div class="mx-auto w-32 h-32 mb-2 border rounded-full relative bg-gray-100 mb-4 shadow-inset">
+                                <div class="divImg mx-auto w-32 h-32 mb-2 border rounded-full relative bg-gray-100 mb-4 shadow-inset">
                                     <img id="image" class="object-cover w-full h-32 rounded-full" :src="image" />
                                 </div>
 
@@ -94,6 +133,7 @@
 								var reader = new FileReader();
 								reader.onload = (e) => image = e.target.result;
 								reader.readAsDataURL(file);">
+
                             </div>
 
                             <div class="mb-5">
@@ -106,25 +146,23 @@
                                 <input type="email" id="email" name="email" class="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="exemplo@email.com" required>
                             </div>
 
-                            <div class=" flex gap-2">
-                                <div class="mb-5 w-1/3">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="mb-5">
                                     <label for="cpf" class="font-bold mb-1 text-gray-700 block">CPF</label>
                                     <input type="text" id="cpf" name="cpf" class="h-12 w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="000.000.000-00" required>
                                 </div>
-                                <div class="mb-5 w-1/3">
+                                <div class="mb-5">
                                     <label for="birthdate" class="font-bold mb-1 text-gray-700 block">Data de Nascimento</label>
                                     <input type="date" id="birthdate" name="dataNacimento" class="h-12 w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" required>
                                 </div>
-                                <div class="mb-5 w-1/3">
-                                    <label for="genero" class="font-bold mb-1 text-gray-700 block">Genêro</label>
-                                    <input id="genero" name="genero" list="genero-list" class="h-12 w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" required>
-                                    <datalist id="genero-list">
-                                        <option value="Masculino"></option>
-                                        <option value="Feminino"></option>
-                                        <option value="Outro"></option>
-                                    </datalist>
+                                <div class="mb-5">
+                                    <label for="genero" class="font-bold mb-1 text-gray-700 block">Gênero</label>
+                                    <select id="genero" name="genero" class="h-12 w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" required>
+                                        <option value="Masculino">Masculino</option>
+                                        <option value="Feminino">Feminino</option>
+                                        <option value="Outro">Outro</option>
+                                    </select>
                                 </div>
-
                             </div>
 
                         </div>
@@ -132,66 +170,176 @@
                             <div class="mb-5">
                                 <label class="font-bold mb-1 text-gray-700 block">Endereço de Entrega</label>
                                 <input type="text" id="deliveryCep" class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Digite o CEP">
-                                <input type="text" id="deliveryLogradouro" class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Logradouro">
-                                <input type="text" id="deliveryBairro" class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Bairro">
-                                <input type="text" id="deliveryLocalidade" class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Localidade">
-                                <input type="text" id="deliveryUf" class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="UF">
-                            </div>
-                            <div class="mb-5">
+
+                                <div id="deliveryAddressFieldsInfo" class="hidden">
+                                    <input type="text" id="deliveryLogradouro" class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Logradouro">
+                                    <div class="flex flex-wrap -mx-3">
+                                        <div class="w-full md:w-1/6 px-3 mb-2">
+                                            <input type="text" id="deliveryNumero" class="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Numero">
+                                        </div>
+                                        <div class="w-full md:w-5/6 px-3 mb-2">
+                                            <input type="text" id="deliveryComplemento" class="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Complemento">
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-wrap -mx-3">
+                                        <div class="w-full md:w-1/2 px-3 mb-2">
+                                            <input type="text" id="deliveryBairro" class="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Bairro">
+                                        </div>
+                                        <div class="w-full md:w-1/3 px-3 mb-2">
+                                            <input type="text" id="deliveryLocalidade" class="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Cidade">
+                                        </div>
+                                        <div class="w-full md:w-1/6 px-3 mb-2">
+                                            <input type="text" id="deliveryUf" class="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="UF">
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <label class="font-bold mb-1 text-gray-700 block">Endereço de Faturamento</label>
                                 <input type="checkbox" id="sameAddress" checked class="mb-2">
                                 <label for="sameAddress" class="text-gray-700">Mesmo que o endereço de entrega</label>
+                            </div>
+
+                            <div class="mb-5">
                                 <div id="billingAddressFields" class="hidden space-y-2">
                                     <input type="text" id="billingCep" class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Digite o CEP">
-                                    <input type="text" id="billingLogradouro" class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Logradouro">
-                                    <input type="text" id="billingBairro" class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Bairro">
-                                    <input type="text" id="billingLocalidade" class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Localidade">
-                                    <input type="text" id="billingUf" class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="UF">
+                                    <div id="billingAddressFieldsInfo" class="hidden">
+                                        <input type="text" id="billingLogradouro" class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Logradouro">
+                                        <div class="flex flex-wrap -mx-3">
+                                            <div class="w-full md:w-1/6 px-3 mb-2">
+                                                <input type="text" id="billingNumero" class="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Numero">
+                                            </div>
+                                            <div class="w-full md:w-5/6 px-3 mb-2">
+                                                <input type="text" id="billingComplemento" class="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Complemento">
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-wrap -mx-3">
+                                            <div class="w-full md:w-1/2 px-3 mb-2">
+                                                <input type="text" id="billingBairro" class="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Bairro">
+                                            </div>
+                                            <div class="w-full md:w-1/3 px-3 mb-2">
+                                                <input type="text" id="billingLocalidade" class="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Cidade">
+                                            </div>
+                                            <div class="w-full md:w-1/6 px-3 mb-2">
+                                                <input type="text" id="billingUf" class="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="UF">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div x-show.transition.in="step === 3">
                             <div class="mb-5">
-                                <label for="password" class="font-bold mb-1 text-gray-700 block">Senha de Acesso</label>
-                                <input type="password" x-model="password" @keyup="checkPasswordStrength()" id="password" class="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Digite sua senha">
+                                <label for="password" class="font-bold text-gray-700 block">Senha de Acesso</label>
+                                <div class="relative">
+                                    <input id="password" :type="togglePassword ? 'text' : 'password'" x-model="password" class="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Sua senha forte..." autocomplete="off">
+
+                                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" @click="togglePassword = !togglePassword">
+                                        <svg :class="{'hidden': !togglePassword, 'block': togglePassword }" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-current text-gray-500" viewBox="0 0 24 24">
+                                            <path d="M12 19c.946 0 1.81-.103 2.598-.281l-1.757-1.757C12.568 16.983 12.291 17 12 17c-5.351 0-7.424-3.846-7.926-5 .204-.47.674-1.381 1.508-2.297L4.184 8.305c-1.538 1.667-2.121 3.346-2.132 3.379-.069.205-.069.428 0 .633C2.073 12.383 4.367 19 12 19zM12 5c-1.837 0-3.346.396-4.604.981L3.707 2.293 2.293 3.707l18 18 1.414-1.414-3.319-3.319c2.614-1.951 3.547-4.615 3.561-4.657.069-.205.069-.428 0-.633C21.927 11.617 19.633 5 12 5zM16.972 15.558l-2.28-2.28C14.882 12.888 15 12.459 15 12c0-1.641-1.359-3-3-3-.459 0-.888.118-1.277.309L8.915 7.501C9.796 7.193 10.814 7 12 7c5.351 0 7.424 3.846 7.926 5C19.624 12.692 18.76 14.342 16.972 15.558z" />
+                                        </svg>
+
+                                        <svg :class="{'hidden': togglePassword, 'block': !togglePassword }" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-current text-gray-500" viewBox="0 0 24 24">
+                                            <path d="M12,9c-1.642,0-3,1.359-3,3c0,1.642,1.358,3,3,3c1.641,0,3-1.358,3-3C15,10.359,13.641,9,12,9z" />
+                                            <path d="M12,5c-7.633,0-9.927,6.617-9.948,6.684L1.946,12l0.105,0.316C2.073,12.383,4.367,19,12,19s9.927-6.617,9.948-6.684 L22.054,12l-0.105-0.316C21.927,11.617,19.633,5,12,5z M12,17c-5.351,0-7.424-3.846-7.926-5C4.578,10.842,6.652,7,12,7 c5.351,0,7.424,3.846,7.926,5C19.422,13.158,17.348,17,12,17z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-5">
+                                <label for="passwordConfirm" class="font-bold text-gray-700 block">Confirmar Senha</label>
+                                <div class="relative">
+                                    <input id="passwordConfirm" :type="togglePasswordConfirm ? 'text' : 'password'" x-model="passwordConfirm" class="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Sua senha forte..." autocomplete="off">
+
+                                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" @click="togglePasswordConfirm = !togglePasswordConfirm">
+                                        <svg :class="{'hidden': !togglePasswordConfirm, 'block': togglePasswordConfirm }" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-current text-gray-500" viewBox="0 0 24 24">
+                                            <path d="M12 19c.946 0 1.81-.103 2.598-.281l-1.757-1.757C12.568 16.983 12.291 17 12 17c-5.351 0-7.424-3.846-7.926-5 .204-.47.674-1.381 1.508-2.297L4.184 8.305c-1.538 1.667-2.121 3.346-2.132 3.379-.069.205-.069.428 0 .633C2.073 12.383 4.367 19 12 19zM12 5c-1.837 0-3.346.396-4.604.981L3.707 2.293 2.293 3.707l18 18 1.414-1.414-3.319-3.319c2.614-1.951 3.547-4.615 3.561-4.657.069-.205.069-.428 0-.633C21.927 11.617 19.633 5 12 5zM16.972 15.558l-2.28-2.28C14.882 12.888 15 12.459 15 12c0-1.641-1.359-3-3-3-.459 0-.888.118-1.277.309L8.915 7.501C9.796 7.193 10.814 7 12 7c5.351 0 7.424 3.846 7.926 5C19.624 12.692 18.76 14.342 16.972 15.558z" />
+                                        </svg>
+
+                                        <svg :class="{'hidden': togglePasswordConfirm, 'block': !togglePasswordConfirm }" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-current text-gray-500" viewBox="0 0 24 24">
+                                            <path d="M12,9c-1.642,0-3,1.359-3,3c0,1.642,1.358,3,3,3c1.641,0,3-1.358,3-3C15,10.359,13.641,9,12,9z" />
+                                            <path d="M12,5c-7.633,0-9.927,6.617-9.948,6.684L1.946,12l0.105,0.316C2.073,12.383,4.367,19,12,19s9.927-6.617,9.948-6.684 L22.054,12l-0.105-0.316C21.927,11.617,19.633,5,12,5z M12,17c-5.351,0-7.424-3.846-7.926-5C4.578,10.842,6.652,7,12,7 c5.351,0,7.424,3.846,7.926,5C19.422,13.158,17.348,17,12,17z" />
+                                        </svg>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="flex items-center mt-4 h-3">
-                                <!-- O indicador de força da senha aqui permanece o mesmo -->
-                            </div>
+
                         </div>
                         <div x-show.transition.in="step === 4">
+                            <div class="bg-white rounded-lg p-10 flex items-center shadow justify-between">
+                                <div>
+                                    <svg class="mb-4 h-20 w-20 text-green-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+
+                                    <h2 class="text-2xl mb-4 text-gray-800 text-center font-bold">Registration Success</h2>
+
+                                    <div class="text-gray-600 mb-8">
+                                        Thank you. We have sent you an email to demo@demo.test. Please click the link in the message to activate your account.
+                                    </div>
+
+                                    <button @click="step = 1" class="w-40 block mx-auto focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-gray-600 bg-white hover:bg-gray-100 font-medium border" style="border: 2px solid #e0b0ff;">Back to home</button>
+
+                                    <button type="button" @click="step = 1" class="w-32 focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-white bg-white hover:bg-gray-100 font-medium border">Voltar</button>
+                                </div>
+                            </div>
                             <p class="mb-5 text-gray-600">Por favor, confira todos os dados antes de submeter.</p>
-                            <button class="w-full focus:outline-none border border-transparent py-2 px-5 rounded-lg shadow-sm text-center text-white hover:bg-blue-600 font-medium" style="background: linear-gradient(to bottom, #cba075, #4b1c71);">Submeter</button>
+
                         </div>
                     </div>
-
                 </div>
-            </div>
+                <!-- Bottom Navigation -->
+                <div class="bg-white rounded-lg shadow m-4 dark:bg-gray-800" x-show="step != 'complete'">
+                    <div class="max-w-3xl mx-auto px-4 p-4">
+                        <div class="flex items-center justify-center">
+                            <div class="w-1/2">
+                                <button type="button" x-show="step > 1" @click="step--" class="w-32 focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-white bg-white hover:bg-gray-100 font-medium border">Voltar</button>
+                            </div>
 
-            <!-- Bottom Navigation -->
-            <div class="fixed bottom-0 left-0 right-0 py-5 bg-white shadow-md" x-show="step != 'complete'">
-                <div class="max-w-3xl mx-auto px-4">
-                    <div class="flex justify-between">
-                        <div class="w-1/2">
-                            <button type="button" x-show="step > 1" @click="step--" class="w-32 focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-white bg-white hover:bg-gray-100 font-medium border">Voltar</button>
-                        </div>
+                            <div class="w-1/2 text-right">
+                                <button type="button" x-show="step < 3" @click="goToNextStep()" class="w-32 focus:outline-none border border-transparent py-2 px-5 rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium">Avançar</button>
 
-                        <div class="w-1/2 text-right">
-                            <button type="button" x-show="step < 4" @click="goToNextStep()" class="w-32 focus:outline-none border border-transparent py-2 px-5 rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium">Avançar</button>
-
-                            <button type="button" @click="step = 'complete'" x-show="step === 4" class="w-32 focus:outline-none border border-transparent py-2 px-5 rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium">Concluir</button>
+                                <button type="button" @click="goToNextStep()" x-show="step === 3" class="w-32 focus:outline-none border border-transparent py-2 px-5 rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium">Concluir</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+
+
         </form> <!-- / Bottom Navigation https://placehold.co/300x300/e2e8f0/cccccc -->
     </div>
+
+
+    <footer class="bg-white rounded-lg shadow m-4 dark:bg-gray-800">
+        <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+            <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="https://flowbite.com/" class="hover:underline">Flowbite™</a>. All Rights Reserved.
+            </span>
+            <ul class="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
+                <li>
+                    <a href="#" class="mr-4 hover:underline md:mr-6 ">About</a>
+                </li>
+                <li>
+                    <a href="#" class="mr-4 hover:underline md:mr-6">Privacy Policy</a>
+                </li>
+                <li>
+                    <a href="#" class="mr-4 hover:underline md:mr-6">Licensing</a>
+                </li>
+                <li>
+                    <a href="#" class="hover:underline">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </footer>
 
 
     <script src="../js/popper.min.js"></script>
     <script src="../jquery/jquery.min.js"></script>
     <script src="../jquery/jquery.mask.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+
+
     <script src="../js/cliente/main.js"></script>
 </body>
 
