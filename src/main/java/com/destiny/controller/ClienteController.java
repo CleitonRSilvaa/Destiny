@@ -54,7 +54,7 @@ public class ClienteController {
 
         cliente.setStatusConta(StatusConta.ATIVA);
 
-        System.out.println(cliente.getEnderecos());
+        System.out.println(cliente);
 
         List<Endereco> enderecos = cliente.getEnderecos();
         cliente.setEnderecos(null);
@@ -65,7 +65,7 @@ public class ClienteController {
         if (cliente.getEmail() == null) {
             errors.add("email é obrigatório.");
         }
-        if (cliente.getCpf() == null) {
+        if (cliente.getCpf() == null || cliente.getCpf().isBlank()) {
             errors.add("cpf é obrigatório.");
         }
         if (cliente.getSenha() == null) {
@@ -74,6 +74,10 @@ public class ClienteController {
 
         if (cliente.getDataNacimento() == null) {
             errors.add("Data de nacimento é obrigatório.");
+        }
+
+        if (!errors.isEmpty()) {
+            throw new ValidationException("parametros invalidos", errors);
         }
 
         if (clienteRepository.findByEmail(cliente.getEmail()) != null) {
