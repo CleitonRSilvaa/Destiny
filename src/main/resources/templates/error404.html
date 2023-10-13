@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Erro 404</title>
+
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+  <link rel="icon" href="../img/LogoDestiny.svg">
+  <link rel="stylesheet" href="../css/stylesLanding.css">
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand p-2" href="/">
+      <img src="../img/LogoDestiny.svg" width="80" height="100%" class="d-inline-block align-top" alt="Logo">
+    </a>
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link " href="#">Produtos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Experiences</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Sobre nós</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>
+          <li class="nav-item">
+          </li>
+        </ul>
+      </div>
+
+      <!-- <div sec:authorize="isAuthenticated()">
+        <spam class='text-white px-2' th:text="${#authentication.name}"></spam>
+      </div> -->
+
+      <div class="text-end">
+        <a type="button" class="btnlogin btn btn-outline-light me-2" href="/login">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <h1>Desculpe! Não conseguimos encontrar esta página.</h1>
+  <p>Pesquise novamente ou <a href="/">volte para a página inicial</a>.</p>
+
+
+
+  <footer class="footer mt-auto py-3 bg-dark ">
+    <div class="container text-center">
+      <span class="text-white">&copy; 2023 Destiny. Todos os direitos reservados</span>
+    </div>
+  </footer>
+
+
+  <script src="../js/bootstrap.bundle.min.js"></script>
+
+
+
+
+
+</body>
+
+</html>
