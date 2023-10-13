@@ -34,6 +34,21 @@ public class Endereco {
   @JoinColumn(name = "cliente_id", nullable = false)
   private Cliente cliente;
 
+  @Override
+  public String toString() {
+    return "Endereco{" +
+        "id=" + id +
+        ", cep='" + cep + '\'' +
+        ", logradouro='" + logradouro + '\'' +
+        ", complemento='" + complemento + '\'' +
+        ", bairro='" + bairro + '\'' +
+        ", localidade='" + localidade + '\'' +
+        ", uf='" + uf + '\'' +
+        ", numero='" + numero + '\'' +
+        ", cliente=" + (cliente != null ? cliente.getId() : "null") +
+        '}';
+  }
+
   // // Construtores
   // public Endereco() {
   // }

@@ -140,7 +140,10 @@ function app() {
         input.insertAdjacentElement("afterend", p);
       }
     },
-
+    regexNumeroCpf: (dado) => {
+      dado = dado.replace(/[^\d]+/g, "");
+      return dado;
+    },
     validateStep1: function () {
       let name = document.getElementById("name");
       let email = document.getElementById("email");
@@ -150,13 +153,8 @@ function app() {
 
       let isValid = true;
 
-      regexNumeroCpf = (dado) => {
-        dado = dado.replace(/[^\d]+/g, "");
-        return dado;
-      };
-
       validarCPF = (cpf) => {
-        cpf = regexNumeroCpf(cpf);
+        cpf = this.regexNumeroCpf(cpf);
 
         if (cpf.length !== 11 || /^(.)\1+$/.test(cpf)) {
           return false;
@@ -413,8 +411,6 @@ function app() {
       const password = document.getElementById("password");
       const confirmPassword = document.getElementById("passwordConfirm");
 
-      console.log("OPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-
       let isValid = true;
 
       if (!password.value.trim()) {
@@ -431,6 +427,78 @@ function app() {
 
       return isValid;
     },
+
+    submitClienteForm: function () {
+      let name = document.getElementById("name");
+      let email = document.getElementById("email");
+      let cpf = document.getElementById("cpf");
+      let birthdate = document.getElementById("birthdate");
+      let genero = document.getElementById("genero");
+      let password = document.getElementById("password");
+
+      let deliveryCep = document.getElementById("deliveryCep");
+      let deliveryLogradouro = document.getElementById("deliveryLogradouro");
+      let deliveryNumero = document.getElementById("deliveryNumero");
+      let deliveryBairro = document.getElementById("deliveryBairro");
+      let deliveryLocalidade = document.getElementById("deliveryLocalidade");
+      let deliveryUf = document.getElementById("deliveryUf");
+      let deliveryComplemento = document.getElementById("deliveryComplemento");
+      let checkboxMesmoEndereco = document.getElementById("sameAddress");
+
+      let billingCep = document.getElementById("billingCep");
+      let billingLogradouro = document.getElementById("billingLogradouro");
+      let billingNumero = document.getElementById("billingNumero");
+      let billingBairro = document.getElementById("billingBairro");
+      let billingLocalidade = document.getElementById("billingLocalidade");
+      let billingComplemento = document.getElementById(" billingComplemento");
+      let billingUf = document.getElementById("billingUf");
+
+      const cliente = {
+        nome: name.value,
+        email: email.value,
+        cpf: this.regexNumeroCpf(cpf.value),
+        dataNacimento: birthdate.value,
+        genero: genero.value,
+        // Adicione o campo de telefone se tiver no formulário
+        senha: password.value,
+        enderecos: [],
+      };
+
+      // Adicionando o endereço de entrega
+      cliente.enderecos.push({
+        cep: deliveryCep.value,
+        logradouro: deliveryLogradouro.value,
+        complemento: deliveryComplemento.value,
+        bairro: deliveryBairro.value,
+        localidade: deliveryLocalidade.value,
+        uf: deliveryUf.value,
+        numero: deliveryNumero.value,
+      });
+
+      // Verificando se o checkbox "Mesmo Endereço" não está marcado
+      if (!checkboxMesmoEndereco.checked) {
+        // Adicionando o endereço de cobrança
+        cliente.enderecos.push({
+          cep: billingCep.value,
+          logradouro: billingLogradouro.value,
+          complemento: billingComplemento.value,
+          bairro: billingBairro.value,
+          localidade: billingLocalidade.value,
+          uf: billingUf.value,
+          numero: billingNumero.value,
+        });
+      }
+
+      // Fazendo a requisição para adicionar o cliente
+      makeRequest(
+        "POST",
+        "/cliente/add",
+        cliente,
+        "Cadastro realizado com sucesso"
+      );
+
+      return isValid;
+    },
   };
 }
 
@@ -438,7 +506,7 @@ function makeRequest(e, t, a, i) {
   console.log(a),
     $.ajax({
       type: e,
-      url: `https://destinyproject.azurewebsites.net${t}`,
+      url: `http://localhost:8080${t}`,
       data: JSON.stringify(a),
       contentType: "application/json; charset=utf-8",
       success: function (e) {

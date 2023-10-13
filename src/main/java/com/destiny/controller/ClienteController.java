@@ -1,10 +1,13 @@
 package com.destiny.controller;
 
 import com.destiny.model.Cliente;
+import com.destiny.model.Endereco;
 import com.destiny.model.MensagemResponse;
 import com.destiny.model.StatusConta;
 import com.destiny.model.ValidationException;
 import com.destiny.repository.ClienteRepository;
+import com.destiny.repository.EnderecoRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +19,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping("/cliente")
 public class ClienteController {
 
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private EnderecoRepository enderecoRepository;
 
     @GetMapping("/registra-me")
     public String telaRegistarCliente() {
@@ -48,41 +54,52 @@ public class ClienteController {
 
         cliente.setStatusConta(StatusConta.ATIVA);
 
+        System.out.println(cliente.getEnderecos());
 
+        List<Endereco> enderecos = cliente.getEnderecos();
+        cliente.setEnderecos(null);
 
+        if (cliente.getNome() == null) {
+            errors.add("nome é obrigatório.");
+        }
+        if (cliente.getEmail() == null) {
+            errors.add("email é obrigatório.");
+        }
+        if (cliente.getCpf() == null) {
+            errors.add("cpf é obrigatório.");
+        }
+        if (cliente.getSenha() == null) {
+            errors.add("senha é obrigatório.");
+        }
 
-        cliente.getEnderecos()
+        if (cliente.getDataNacimento() == null) {
+            errors.add("Data de nacimento é obrigatório.");
+        }
 
-        // if (cliente.getNome() == null) {
-        //     errors.add("nome é obrigatório.");
-        // }
-        // if (cliente.getEmail() == null) {
-        //     errors.add("email é obrigatório.");
-        // }
-        // if (cliente.getCpf() == null) {
-        //     errors.add("cpf é obrigatório.");
-        // }
-        // if (cliente.getSenha() == null) {
-        //     errors.add("senha é obrigatório.");
-        // }
+        if (clienteRepository.findByEmail(cliente.getEmail()) != null) {
+            errors.add("email já está cadastrado.");
+        }
 
-        // if (clienteRepository.findByEmail(cliente.getEmail()) != null) {
-        //     errors.add("email já está cadastrado.");
-        // }
+        if (clienteRepository.findByCpf(cliente.getCpf()) != null) {
+            errors.add("cpf já está cadastrado.");
+        }
 
-        // if (clienteRepository.findByCpf(cliente.getCpf()) != null) {
-        //     errors.add("cpf já está cadastrado.");
-        // }
+        if (!errors.isEmpty()) {
+            throw new ValidationException("parametros invalidos", errors);
+        }
 
-        // if (!errors.isEmpty()) {
-        //     throw new ValidationException("parametros invalidos", errors);
-        // }
+        clienteRepository.save(cliente);
 
-        // clienteRepository.save(cliente);
+        for (Endereco endereco : enderecos) {
 
-        // mensagemResponse.setStatus(201);
-        // mensagemResponse.setMessage("sucess");
-        // mensagemResponse.setDetails(detalhes);
+            endereco.setCliente(cliente);
+            enderecoRepository.save(endereco);
+
+        }
+
+        mensagemResponse.setStatus(201);
+        mensagemResponse.setMessage("sucess");
+        mensagemResponse.setDetails(detalhes);
 
         return new ResponseEntity<>(mensagemResponse, HttpStatus.CREATED);
     }

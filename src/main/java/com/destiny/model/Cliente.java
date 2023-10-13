@@ -28,6 +28,11 @@ public class Cliente {
     @Column(nullable = false, unique = true)
     private String cpf;
 
+    @Column(nullable = false)
+    private Date dataNacimento;
+
+    private String genero;
+
     @Column(length = 12)
     private String telefone;
 
