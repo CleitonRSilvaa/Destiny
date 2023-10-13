@@ -5,8 +5,10 @@ import javax.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -33,13 +35,20 @@ public class Cliente {
     private String senha;
 
     @Column(nullable = false)
-    private Byte statusConta;
+    private StatusConta statusConta;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private Date dataCriacao;
 
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<Endereco> enderecos;
+
     public void setSenha(String senha) {
-        this.senha = EncriptSenha.md5(senha);
+        this.senha = new BCryptPasswordEncoder().encode(senha);
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome.toUpperCase();
     }
 }

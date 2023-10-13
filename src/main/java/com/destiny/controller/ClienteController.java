@@ -2,6 +2,7 @@ package com.destiny.controller;
 
 import com.destiny.model.Cliente;
 import com.destiny.model.MensagemResponse;
+import com.destiny.model.StatusConta;
 import com.destiny.model.ValidationException;
 import com.destiny.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping("/cliente")
 public class ClienteController {
 
@@ -45,38 +46,43 @@ public class ClienteController {
         MensagemResponse mensagemResponse = new MensagemResponse();
         List<String> detalhes = new ArrayList<>();
 
-        cliente.setStatusConta((byte) 1);
+        cliente.setStatusConta(StatusConta.ATIVA);
 
-        if (cliente.getNome() == null) {
-            errors.add("nome é obrigatório.");
-        }
-        if (cliente.getEmail() == null) {
-            errors.add("email é obrigatório.");
-        }
-        if (cliente.getCpf() == null) {
-            errors.add("cpf é obrigatório.");
-        }
-        if (cliente.getSenha() == null) {
-            errors.add("senha é obrigatório.");
-        }
 
-        if (clienteRepository.findByEmail(cliente.getEmail()) != null) {
-            errors.add("email já está cadastrado.");
-        }
 
-        if (clienteRepository.findByCpf(cliente.getCpf()) != null) {
-            errors.add("cpf já está cadastrado.");
-        }
 
-        if (!errors.isEmpty()) {
-            throw new ValidationException("parametros invalidos", errors);
-        }
+        cliente.getEnderecos()
 
-        clienteRepository.save(cliente);
+        // if (cliente.getNome() == null) {
+        //     errors.add("nome é obrigatório.");
+        // }
+        // if (cliente.getEmail() == null) {
+        //     errors.add("email é obrigatório.");
+        // }
+        // if (cliente.getCpf() == null) {
+        //     errors.add("cpf é obrigatório.");
+        // }
+        // if (cliente.getSenha() == null) {
+        //     errors.add("senha é obrigatório.");
+        // }
 
-        mensagemResponse.setStatus(201);
-        mensagemResponse.setMessage("sucess");
-        mensagemResponse.setDetails(detalhes);
+        // if (clienteRepository.findByEmail(cliente.getEmail()) != null) {
+        //     errors.add("email já está cadastrado.");
+        // }
+
+        // if (clienteRepository.findByCpf(cliente.getCpf()) != null) {
+        //     errors.add("cpf já está cadastrado.");
+        // }
+
+        // if (!errors.isEmpty()) {
+        //     throw new ValidationException("parametros invalidos", errors);
+        // }
+
+        // clienteRepository.save(cliente);
+
+        // mensagemResponse.setStatus(201);
+        // mensagemResponse.setMessage("sucess");
+        // mensagemResponse.setDetails(detalhes);
 
         return new ResponseEntity<>(mensagemResponse, HttpStatus.CREATED);
     }
