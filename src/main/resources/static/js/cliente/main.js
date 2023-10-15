@@ -429,6 +429,10 @@ function app() {
     },
 
     submitClienteForm: function () {
+      document.getElementById("loader").style.display = "block";
+      document.getElementById("btnCadastar").disabled = true;
+      document.getElementById("btnVolta").disabled = true;
+
       let name = document.getElementById("name");
       let email = document.getElementById("email");
       let cpf = document.getElementById("cpf");
@@ -473,6 +477,8 @@ function app() {
         localidade: deliveryLocalidade.value,
         uf: deliveryUf.value,
         numero: deliveryNumero.value,
+        principal: true,
+        tipo: 0,
       });
 
       // Verificando se o checkbox "Mesmo Endereço" não está marcado
@@ -486,6 +492,8 @@ function app() {
           localidade: billingLocalidade.value,
           uf: billingUf.value,
           numero: billingNumero.value,
+          principal: false,
+          tipo: 1,
         });
       }
 
@@ -496,109 +504,13 @@ function app() {
         cliente,
         "Cadastro realizado com sucesso"
       );
+      document.getElementById("loader").style.display = "none";
+      document.getElementById("btnCadastar").disabled = false;
+      document.getElementById("btnVolta").disabled = false;
     },
   };
 }
 
-// function submitClienteFormTEste() {
-//   let name = document.getElementById("name");
-//   let email = document.getElementById("email");
-//   let cpf = document.getElementById("cpf");
-//   let birthdate = document.getElementById("birthdate");
-//   let genero = document.getElementById("genero");
-//   let password = document.getElementById("password");
-
-//   let deliveryCep = document.getElementById("deliveryCep");
-//   let deliveryLogradouro = document.getElementById("deliveryLogradouro");
-//   let deliveryNumero = document.getElementById("deliveryNumero");
-//   let deliveryBairro = document.getElementById("deliveryBairro");
-//   let deliveryLocalidade = document.getElementById("deliveryLocalidade");
-//   let deliveryUf = document.getElementById("deliveryUf");
-//   let deliveryComplemento = document.getElementById("deliveryComplemento");
-//   let checkboxMesmoEndereco = document.getElementById("sameAddress");
-
-//   let billingCep = document.getElementById("billingCep");
-//   let billingLogradouro = document.getElementById("billingLogradouro");
-//   let billingNumero = document.getElementById("billingNumero");
-//   let billingBairro = document.getElementById("billingBairro");
-//   let billingLocalidade = document.getElementById("billingLocalidade");
-//   let billingComplemento = document.getElementById(" billingComplemento");
-//   let billingUf = document.getElementById("billingUf");
-
-//   const cliente = {
-//     nome: name.value,
-//     email: email.value,
-//     cpf: cpf.value,
-//     dataNacimento: birthdate.value,
-//     genero: genero.value,
-//     // Adicione o campo de telefone se tiver no formulário
-//     senha: password.value,
-//     enderecos: [],
-//   };
-
-//   // Adicionando o endereço de entrega
-//   cliente.enderecos.push({
-//     cep: deliveryCep.value,
-//     logradouro: deliveryLogradouro.value,
-//     complemento: deliveryComplemento.value,
-//     bairro: deliveryBairro.value,
-//     localidade: deliveryLocalidade.value,
-//     uf: deliveryUf.value,
-//     numero: deliveryNumero.value,
-//   });
-
-//   // Verificando se o checkbox "Mesmo Endereço" não está marcado
-//   if (!checkboxMesmoEndereco.checked) {
-//     // Adicionando o endereço de cobrança
-//     cliente.enderecos.push({
-//       cep: billingCep.value,
-//       logradouro: billingLogradouro.value,
-//       complemento: billingComplemento.value,
-//       bairro: billingBairro.value,
-//       localidade: billingLocalidade.value,
-//       uf: billingUf.value,
-//       numero: billingNumero.value,
-//     });
-//   }
-
-//   makeRequestFull(
-//     "POST",
-//     "/cliente/add",
-//     cliente,
-//     "Cadastro realizado com sucesso"
-//   );
-// }
-// function makeRequestFull(e, t, a, i) {
-//   console.log(a),
-//     $.ajax({
-//       type: e,
-//       url: `http://localhost:8080${t}`,
-//       data: JSON.stringify(a),
-//       contentType: "application/json; charset=utf-8",
-//       success: function (e) {
-//         [200, 201].includes(e.status) && "sucess" === e.message
-//           ? (Swal.fire({
-//               position: "top-end",
-//               icon: "success",
-//               title: i,
-//               showConfirmButton: !1,
-//               timer: 1900,
-//             }),
-//             setTimeout(console.log("foiiii"), 1900))
-//           : Swal.fire({
-//               icon: "error",
-//               title: "Erro",
-//               text: "Resposta inesperada do servidor. Por favor, tente novamente.",
-//             });
-//       },
-//       error: function (e) {
-//         let t = e.responseJSON,
-//           a = t.message + "\n\n";
-//         t.details && (a += t.details.map((e) => "- " + e).join("\n")),
-//           Swal.fire({ icon: "error", title: "Erro", text: a });
-//       },
-//     });
-// }
 function makeRequest(e, t, a, i) {
   console.log(a),
     $.ajax({
@@ -608,15 +520,18 @@ function makeRequest(e, t, a, i) {
       contentType: "application/json; charset=utf-8",
       success: function (e) {
         [200, 201].includes(e.status) && "sucess" === e.message
-          ? (Swal.fire({
-              position: "top-end",
+          ? Swal.fire({
               icon: "success",
               title: i,
-              showConfirmButton: !1,
-              timer: 1900,
-              html: true,
-            }),
-            setTimeout(console.log("foiiii"), 1900))
+              showConfirmButton: true,
+              confirmButtonText: "OK",
+            }).then((result) => {
+              var inputs = document.querySelectorAll("input, textarea");
+              inputs.forEach(function (input) {
+                input.value = "";
+              });
+              window.location.href = "/";
+            })
           : Swal.fire({
               icon: "error",
               title: "Erro",
@@ -639,3 +554,10 @@ function makeRequest(e, t, a, i) {
       },
     });
 }
+
+window.onload = function () {
+  var inputs = document.querySelectorAll("input, textarea");
+  inputs.forEach(function (input) {
+    input.value = "";
+  });
+};

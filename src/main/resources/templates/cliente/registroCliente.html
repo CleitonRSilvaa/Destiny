@@ -17,7 +17,10 @@
 
 <!-- partial:index.partial.html -->
 
+
+
 <body class="antialiased sans-serif bg-gray-200">
+
 
     <nav class="bg-white border-gray-200 dark:bg-gray-900">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -53,7 +56,7 @@
         </div>
     </nav>
 
-    <div x-data="app()" x-cloak>
+    <div id="divMan" x-data="app()" x-cloak>
         <div autocomplete="off">
             <div class="max-w-3xl mx-auto px-4 py-10">
 
@@ -245,30 +248,36 @@
 
 
                         </div>
-                        <div x-show.transition.in="step === 4">
+                        <div x-show.transition.in="step === 4" class="relative">
+
+                            <div id="loader" style="display: none;">
+                                <div class="absolute bg-white bg-opacity-60 z-10 h-full w-full flex items-center justify-center">
+                                    <div class="flex items-center">
+                                        <span class="text-3xl mr-4">Cadastrando...</span>
+                                        <svg class="animate-spin h-8 w-8 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="bg-white rounded-lg p-10 flex items-center shadow justify-between">
                                 <div>
-                                    <svg class="mb-4 h-20 w-20 text-green-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                                    </svg>
 
-                                    <h2 class="text-2xl mb-4 text-gray-800 text-center font-bold">Registration Success</h2>
+                                    <h2 class="text-2xl mb-4 text-gray-800 text-center font-bold">Concluido cadastro</h2>
 
                                     <div class="text-gray-600 mb-8">
-                                        Thank you. We have sent you an email to demo@demo.test. Please click the link in the message to activate your account.
+                                        Verifique se todos os seus dados estão corretos. Se estiver tudo certo, clique no botão 'Cadastrar'. Se precisar fazer alguma correção, clique no botão 'Voltar'.
                                     </div>
 
-                                    <button @click="submitClienteForm()" class="w-40 block mx-auto focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-gray-600 bg-white hover:bg-gray-100 font-medium border" style="border: 2px solid #e0b0ff;">Back to home</button>
+                                    <button id="btnCadastar" @click="submitClienteForm()" class="w-40 block mx-auto focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-gray-600 bg-white hover:bg-gray-100 font-medium border" style="border: 2px solid #e0b0ff;">Cadastrar</button>
 
-                                    <button type="button" @click="step = 1" class="w-32 focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-white bg-white hover:bg-gray-100 font-medium border">Voltar</button>
-
-                                    <button onclick="submitClienteFormTEste()">
-                                        teste
-                                    </button>
+                                    <button id="btnVolta" type="button" @click="step--" class="w-32 focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-white bg-white hover:bg-gray-100 font-medium border">Voltar</button>
 
                                 </div>
                             </div>
-                            <p class="mb-5 text-gray-600">Por favor, confira todos os dados antes de submeter.</p>
 
                         </div>
                     </div>
@@ -292,6 +301,11 @@
             </div>
         </div> <!-- / Bottom Navigation https://placehold.co/300x300/e2e8f0/cccccc -->
     </div>
+
+
+
+
+
 
 
     <footer class="bg-white rounded-lg shadow m-4 dark:bg-gray-800">
