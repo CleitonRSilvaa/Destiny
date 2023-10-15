@@ -45,6 +45,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             return "/admin/dashboard";
         } else if (roles.contains("ROLE_ESTOQUISTA")) {
             return "/estoque/dashboard";
+        } else if (roles.contains("ROLE_CLIENTE")) { // Assumindo que clientes têm o papel "ROLE_CLIENTE"
+            return "/cliente/dashboard"; // ou qualquer outro URL específico para clientes
         } else {
             return "/home"; // para outros usuários ou default
         }
