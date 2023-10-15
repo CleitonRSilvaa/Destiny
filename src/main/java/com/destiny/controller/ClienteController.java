@@ -4,9 +4,11 @@ import com.destiny.model.Cliente;
 import com.destiny.model.Endereco;
 import com.destiny.model.MensagemResponse;
 import com.destiny.model.StatusConta;
+import com.destiny.model.TipoConta;
 import com.destiny.model.ValidationException;
 import com.destiny.repository.ClienteRepository;
 import com.destiny.repository.EnderecoRepository;
+import com.destiny.repository.UsuarioRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,15 +29,18 @@ public class ClienteController {
     private ClienteRepository clienteRepository;
 
     @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
     private EnderecoRepository enderecoRepository;
 
     @GetMapping("/registra-me")
     public String telaRegistarCliente() {
 
-        return "cliente/registroCliente.html";
+        return "cliente/registroCliente";
     }
 
-    @GetMapping("clienteList")
+    @GetMapping("/clienteList")
     public List<Map<String, Object>> list() {
         return clienteRepository.findAllCustom();
     }
@@ -45,7 +50,7 @@ public class ClienteController {
         return clienteRepository.findAll();
     }
 
-    @PostMapping("add")
+    @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<MensagemResponse> insertCliente(@RequestBody Cliente cliente) {
         List<String> errors = new ArrayList<>();
@@ -53,10 +58,14 @@ public class ClienteController {
         List<String> detalhes = new ArrayList<>();
 
         cliente.setStatusConta(StatusConta.ATIVA);
-
-        System.out.println(cliente);
+        cliente.setTipoConta(TipoConta.CLIENTE);
 
         List<Endereco> enderecos = cliente.getEnderecos();
+        Boolean enderecoEntregaFaturamento;
+
+        if (enderecos.size() == 1) {
+            enderecoEntregaFaturamento = true;
+        }
         cliente.setEnderecos(null);
 
         if (cliente.getNome() == null) {
@@ -76,11 +85,16 @@ public class ClienteController {
             errors.add("Data de nacimento é obrigatório.");
         }
 
+        if (enderecos.isEmpty()) {
+            errors.add("O endereço é obrigatório.");
+        }
+
         if (!errors.isEmpty()) {
             throw new ValidationException("parametros invalidos", errors);
         }
 
-        if (clienteRepository.findByEmail(cliente.getEmail()) != null) {
+        if (clienteRepository.findByEmail(cliente.getEmail()) != null
+                || usuarioRepository.findByEmail(cliente.getEmail()) != null) {
             errors.add("email já está cadastrado.");
         }
 
@@ -97,6 +111,19 @@ public class ClienteController {
         for (Endereco endereco : enderecos) {
 
             endereco.setCliente(cliente);
+
+            if (enderecos.size() == 1) {
+                Endereco endereco2 = new Endereco(endereco);
+                endereco2.setTipo(Endereco.tipoEndereco.FATURAMENTO);
+                endereco2.setPrincipal(false);
+                enderecoRepository.save(endereco2);
+
+                endereco.setTipo(Endereco.tipoEndereco.ENTREGA);
+                endereco.setPrincipal(true);
+                endereco.setCliente(cliente);
+                enderecoRepository.save(endereco);
+            }
+
             enderecoRepository.save(endereco);
 
         }
@@ -108,7 +135,7 @@ public class ClienteController {
         return new ResponseEntity<>(mensagemResponse, HttpStatus.CREATED);
     }
 
-    @PutMapping("update")
+    @PutMapping("/update")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MensagemResponse> updateCliente(@RequestBody Cliente cliente) {
         MensagemResponse mensagemResponse = new MensagemResponse();
@@ -172,7 +199,7 @@ public class ClienteController {
         return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MensagemResponse> deleteCliente(@PathVariable String id) {
         MensagemResponse mensagemResponse = new MensagemResponse();

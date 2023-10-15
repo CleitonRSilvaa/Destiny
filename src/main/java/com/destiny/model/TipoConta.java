@@ -1,5 +1,5 @@
 package com.destiny.model;
 
 public enum TipoConta {
-    ADMIN, ESTOQUISTA;
+    ADMIN, ESTOQUISTA, CLIENTE;
 }

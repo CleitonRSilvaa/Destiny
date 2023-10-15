@@ -42,6 +42,10 @@ public class Cliente {
     @Column(nullable = false)
     private StatusConta statusConta;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoConta tipoConta;
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private Date dataCriacao;
@@ -56,4 +60,5 @@ public class Cliente {
     public void setNome(String nome) {
         this.nome = nome.toUpperCase();
     }
+
 }

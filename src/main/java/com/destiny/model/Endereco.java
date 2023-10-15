@@ -2,10 +2,16 @@ package com.destiny.model;
 
 import javax.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 public class Endereco {
+
+  public enum tipoEndereco {
+    ENTREGA,
+    FATURAMENTO;
+  }
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,9 +36,32 @@ public class Endereco {
   @Column(nullable = false)
   private String numero;
 
+  @Column(nullable = false)
+  private tipoEndereco tipo;
+
+  private Boolean principal;
+
   @ManyToOne
   @JoinColumn(name = "cliente_id", nullable = false)
   private Cliente cliente;
+
+  public Endereco() {
+
+  }
+
+  public Endereco(Endereco outroEndereco) {
+    this.id = outroEndereco.id; // Você pode ou não querer copiar o ID, dependendo do caso de uso
+    this.cep = outroEndereco.cep;
+    this.logradouro = outroEndereco.logradouro;
+    this.complemento = outroEndereco.complemento;
+    this.bairro = outroEndereco.bairro;
+    this.localidade = outroEndereco.localidade;
+    this.uf = outroEndereco.uf;
+    this.numero = outroEndereco.numero;
+    this.tipo = outroEndereco.tipo;
+    this.principal = outroEndereco.principal;
+    this.cliente = outroEndereco.cliente;
+  }
 
   @Override
   public String toString() {
