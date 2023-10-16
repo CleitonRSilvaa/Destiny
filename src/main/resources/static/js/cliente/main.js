@@ -530,7 +530,7 @@ function makeRequest(e, t, a, i) {
               inputs.forEach(function (input) {
                 input.value = "";
               });
-              window.location.href = "/";
+              window.location.href = "/login";
             })
           : Swal.fire({
               icon: "error",
