@@ -15,9 +15,29 @@
   <link rel="shortcut icon" href="../img/LogoDestiny2.svg" type="image/x-icon">
   <script src="../js/sweetalert2.min.js"></script>
 
+
+
 </head>
 
 <body class="antialiased sans-serif bg-gray-200">
+
+  <style>
+    /* .dropdown:hover .dropdown-menu {
+      display: block;
+    } */
+
+    .dropdown-content {
+      position: absolute;
+      right: 0;
+      z-index: 1;
+      display: none;
+    }
+
+    /* button:hover+.dropdown-content,
+    .dropdown-content:hover {
+      display: block;
+    } */
+  </style>
   <nav class="bg-gray-800">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
       <div class="relative flex h-16 items-center justify-between">
@@ -145,9 +165,8 @@
       <button data-modal-target="staticModal" data-modal-toggle="staticModal" class="mt-1 px-2 py-2 bg-green-500 text-white rounded-md hover:bg-green-600" type="button">Adicionar Endereço</button>
       <div id="addressList">
         <!-- Cards de Endereço (como exemplo) -->
-        <div class="mb-4 bg-gray-200 p-4 rounded-md relative">
+        <div class="mb-4 bg-gray-200 p-4 rounded-md relative" data-endereco-id="1">
           <label class="inline-flex items-center">
-            <input type="radio" name="defaultAddress" class="form-radio" checked>
             <span class="ml-4 block">
               CEP: <span class="font-semibold">12345-678</span><br>
               Logradouro: <span class="font-semibold">Rua Exemplo</span><br>
@@ -157,58 +176,20 @@
               Localidade: <span class="font-semibold">Cidade Exemplo</span><br>
               UF: <span class="font-semibold">EX</span>
             </span>
-          </label>
-          <button class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full">Remover</button>
-        </div>
 
-        <div class="mb-4 bg-gray-200 p-4 rounded-md relative">
-          <label class="inline-flex items-center">
-            <input type="radio" name="defaultAddress" class="form-radio" checked>
-            <span class="ml-4 block">
-              CEP: <span class="font-semibold">12345-678</span><br>
-              Logradouro: <span class="font-semibold">Rua Exemplo</span><br>
-              Número: <span class="font-semibold">123</span><br>
-              Complemento: <span class="font-semibold">Apto 45</span><br>
-              Bairro: <span class="font-semibold">Centro</span><br>
-              Localidade: <span class="font-semibold">Cidade Exemplo</span><br>
-              UF: <span class="font-semibold">EX</span>
-            </span>
           </label>
-          <button class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full">Remover</button>
-        </div>
-        <div class="mb-4 bg-gray-200 p-4 rounded-md relative">
-          <label class="inline-flex items-center">
-            <input type="radio" name="defaultAddress" class="form-radio" checked>
-            <span class="ml-4 block">
-              CEP: <span class="font-semibold">12345-678</span><br>
-              Logradouro: <span class="font-semibold">Rua Exemplo</span><br>
-              Número: <span class="font-semibold">123</span><br>
-              Complemento: <span class="font-semibold">Apto 45</span><br>
-              Bairro: <span class="font-semibold">Centro</span><br>
-              Localidade: <span class="font-semibold">Cidade Exemplo</span><br>
-              UF: <span class="font-semibold">EX</span>
-            </span>
-          </label>
-          <button class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full">Remover</button>
-        </div>
-        <div class="mb-4 bg-gray-200 p-4 rounded-md relative">
-          <label class="inline-flex items-center">
-            <input type="radio" name="defaultAddress" class="form-radio" checked>
-            <span class="ml-4 block">
-              CEP: <span class="font-semibold">12345-678</span><br>
-              Logradouro: <span class="font-semibold">Rua Exemplo</span><br>
-              Número: <span class="font-semibold">123</span><br>
-              Complemento: <span class="font-semibold">Apto 45</span><br>
-              Bairro: <span class="font-semibold">Centro</span><br>
-              Localidade: <span class="font-semibold">Cidade Exemplo</span><br>
-              UF: <span class="font-semibold">EX</span>
-            </span>
-          </label>
-          <button class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full">Remover</button>
-        </div>
 
 
-        <!-- Repita esse card para cada endereço -->
+          <div class="absolute top-2 right-2">
+            <button class="bg-blue-500 text-white px-2 py-1 rounded-full" onclick="toggleDropdown(this)">⋮</button>
+
+            <div class="dropdown-content hidden mt-2 rounded-md shadow-lg bg-white">
+              <button onclick="removerEndereco(this)" class="block px-4 py-2 text-sm">Remover</button>
+              <button onclick="definirEnderecoPadrao(this)" class="block px-4 py-2 text-sm">Usar como endereço predefinido de envios</button>
+            </div>
+          </div>
+        </div>
+
       </div>
       <button data-modal-target="staticModal" data-modal-toggle="staticModal" class="mt-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600" type="button">Adicionar Endereço</button>
     </div>
@@ -325,6 +306,26 @@
   </footer>
 
   <script>
+    function toggleDropdown(element) {
+      const dropdownContent = element.nextElementSibling;
+      if (dropdownContent.style.display === "none" || !dropdownContent.style.display) {
+        dropdownContent.style.display = "block";
+      } else {
+        dropdownContent.style.display = "none";
+      }
+    }
+
+    // Adicionando um listener ao documento para fechar o dropdown ao clicar fora
+    document.addEventListener('click', function (event) {
+      const dropdowns = document.querySelectorAll('.dropdown-content');
+      dropdowns.forEach(dropdown => {
+        if (!dropdown.contains(event.target) && !dropdown.previousElementSibling.contains(event.target)) {
+          dropdown.style.display = "none";
+        }
+      });
+    });
+
+
 
     document.addEventListener('DOMContentLoaded', function () {
       // Função para mostrar o modal
@@ -363,6 +364,40 @@
 
     });
 
+    function removerEndereco(element) {
+      const enderecoId = element.closest('[data-endereco-id]').getAttribute('data-endereco-id');
+      fetch(`/api/remove-endereco/${enderecoId}`, {
+        method: 'DELETE',
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            console.log("Endereço removido com sucesso!");
+            // Remover elemento da página, se necessário.
+            element.closest('[data-endereco-id]').remove();
+          } else {
+            console.error("Erro ao remover o endereço!");
+          }
+        });
+    }
+
+    function definirEnderecoPadrao(element) {
+      const enderecoId = element.closest('[data-endereco-id]').getAttribute('data-endereco-id');
+      fetch(`/api/definir-padrao/${enderecoId}`, {
+        method: 'PUT',
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            console.log("Endereço definido como padrão com sucesso!");
+            // Atualizar interface do usuário, se necessário.
+          } else {
+            console.error("Erro ao definir o endereço como padrão!");
+          }
+        });
+    }
+
+
 
     function getAddressByCep() {
 
@@ -390,6 +425,8 @@
 
 
   </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+
   <script src="../js/cliente/main.js"></script>
 
 </body>
