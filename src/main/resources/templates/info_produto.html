@@ -5,57 +5,113 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <title th:text="${produto.nome} + '-Destiny'"></title>
   <link href="../css/bootstrap.min.css" rel="stylesheet">
   <link href="../css/produto/style.css" rel="stylesheet">
-  <link href="../css/stylesLanding.css" rel="stylesheet">
   <link rel="icon" href="../img/LogoDestiny.png">
 </head>
 
-<body>
+<body class="flex flex-col min-h-screen bg-gray-200">
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand p-2" href="/">
-      <img src="../img/LogoDestiny.svg" width="80" height="100%" class="d-inline-block align-top" alt="Logo">
-    </a>
-    <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav">
-          <li class="nav-item active">
-            <a class="nav-link " href="#">Produtos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Experiences</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Sobre nós</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
-          </li>
-          <li class="nav-item">
-          </li>
-        </ul>
+  <nav class="bg-gray-800">
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+      <div class="relative flex h-16 items-center justify-between">
+        <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+          <!-- Mobile menu button-->
+          <button type="button" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+            <span class="absolute -inset-0.5"></span>
+            <span class="sr-only">Open main menu</span>
+            <!--
+              Icon when menu is closed.
+  
+              Menu open: "hidden", Menu closed: "block"
+            -->
+            <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+            <!--
+              Icon when menu is open.
+  
+              Menu open: "block", Menu closed: "hidden"
+            -->
+            <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+          <div class="flex flex-shrink-0 items-center">
+            <img class="h-8 w-auto" src="../img/LogoDestiny.svg" alt="Your Company">
+          </div>
+          <div class="hidden sm:ml-6 sm:block">
+            <div class="flex space-x-4">
+              <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+              <a href="#" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Pacotes</a>
+              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Passeios</a>
+              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Destinos</a>
+              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Itinerários</a>
+            </div>
+          </div>
+        </div>
+        <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+          <button type="button" class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+            <span class="absolute -inset-1.5"></span>
+            <span class="sr-only">View notifications</span>
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+            </svg>
+          </button>
+
+          <!-- Profile dropdown -->
+          <div class="relative ml-3">
+            <div>
+              <button type="button" class="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                <span class="absolute -inset-1.5"></span>
+                <span class="sr-only">Open user menu</span>
+                <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+              </button>
+            </div>
+
+            <!--
+              Dropdown menu, show/hide based on menu state.
+  
+              Entering: "transition ease-out duration-100"
+                From: "transform opacity-0 scale-95"
+                To: "transform opacity-100 scale-100"
+              Leaving: "transition ease-in duration-75"
+                From: "transform opacity-100 scale-100"
+                To: "transform opacity-0 scale-95"
+            -->
+            <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+              <!-- Active: "bg-gray-100", Not Active: "" -->
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Meu Perfil</a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Meus pedidos</a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Configurações</a>
+              <a href="/logout" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-3">Sair</a>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
 
-      <!-- <div sec:authorize="isAuthenticated()">
-        <spam class='text-white px-2' th:text="${#authentication.name}"></spam>
-      </div> -->
-
-      <div class="text-end">
-        <a type="button" class="btnlogin btn btn-outline-light me-2" href="/login">Login</a>
+    <!-- Mobile menu, show/hide based on menu state. -->
+    <div class="sm:hidden" id="mobile-menu">
+      <div class="space-y-1 px-2 pb-3 pt-2">
+        <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+        <a href="#" class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" aria-current="page">Pacotes</a>
+        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Passeios</a>
+        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Destinos</a>
+        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Itinerários</a>
       </div>
     </div>
   </nav>
 
-  <div class="container mt-2 flex-grow-1">
-    <div class="container p-3">
-      <div class="row">
-        <div class="col-md-6">
-          <div id="carouselMain" class="carousel slide border border-end-0 shadow-sm p-3  bg-body rounded">
+  <div class="container mx-auto mt-8">
+    <div class="p-6">
+      <div class="flex flex-wrap -mx-4">
+        <div class="w-full md:w-1/2 px-4">
+          <div id="carouselMain" class="carousel border border-r-0 shadow-sm p-3 rounded bg-white">
             <div class="carousel-inner">
               <th:block th:each="imagem, iterStat : ${produto.imagens}">
                 <div th:class="${imagem.principal} ? 'carousel-item active' : 'carousel-item'">
@@ -71,43 +127,122 @@
               <span class="carousel-control-next-icon" aria-hidden="true"></span>
               <span class="visually-hidden">Next</span>
             </button>
-            <div id="thumbnailContainer" class="d-flex justify-content-center mt-3">
+            <div id="thumbnailContainer" class="flex justify-center mt-3">
               <th:block th:each="imagem, iterStat : ${produto.imagens}">
                 <img th:src="${imagem.caminho}" alt="Slide" th:data-bs-slide-to="${iterStat.index}" th:class="${imagem.principal} ? 'active' : ''">
               </th:block>
             </div>
           </div>
-
-
         </div>
-        <div class="col-md-6 p-4 shadow-lg border rounded bg-light">
-          <h2 class="fw-bold mb-3" th:text="${produto.nome}"></h2>
-          <p class="fs-4 text-primary mb-3" th:text="${'R$' + produto.valor}"></p>
-          <p class="mb-3" th:text="${'Avaliação: ' + produto.avaliacao}"></p>
-          <p class="mb-3" th:text="${'Descrição: ' + produto.descricao}"></p>
-          <div class="mb-3">
-            <label for="quantidade" class="form-label">Quantidade</label>
-            <input type="number" class="form-control" id="quantidade" name="quantidade" min="1" required>
+
+        <!-- Product Info Section -->
+        <div class="w-full md:w-1/2 p-8 shadow-lg border rounded bg-white px-4">
+          <h2 class="font-bold text-xl mb-4" th:text="${produto.nome}"></h2>
+          <p class="text-2xl text-blue-600 mb-4" th:text="${'R$' + produto.valor}"></p>
+          <p class="mb-4" th:text="${'Avaliação: ' + produto.avaliacao}"></p>
+          <p class="mb-4" th:text="${'Descrição: ' + produto.descricao}"></p>
+          <div class="mb-4">
+            <label for="quantidade" class="block text-sm font-medium text-gray-700 mb-2">Quantidade</label>
+            <input type="number" class="form-input block w-full p-2 rounded border-gray-300" id="quantidade" name="quantidade" min="1" required>
           </div>
-          <button class="btn btn-success btn-lg w-100" id="comprarBtn" disabled>Comprar</button>
+          <button class="bg-green-500 text-white py-3 w-full rounded-lg mt-4" id="comprarBtn" disabled>Comprar</button>
         </div>
-
       </div>
     </div>
-    <div class="col-md-12">
-      <div class="row p-2 justify-content-center">
-        <a type="button" href="/" class="btn btnVoltar btn-primary col-md-4 p-1 m-1">Voltar</a>
+
+    <!-- Back Button -->
+    <div class="w-full px-4">
+      <div class="flex justify-center p-4">
+        <a href="/" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-8 rounded mx-2">Voltar</a>
       </div>
     </div>
   </div>
-  </div>
 
 
-  <footer class="text-center text-lg-start bg-dark text-muted p-0 w-100">
-    <div class="text-center text-white">
-      &copy; 2023 Destiny. Todos os direitos reservados.</p>
+  <footer class="relative bg-gray-800 pt-8 pb-6">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-wrap text-left lg:text-left">
+            <div class="w-full lg:w-6/12 px-4">
+                <img class="h-8 w-auto" src="../img/LogoDestiny.svg" alt="Your Company">
+                <h1 class="text-2xl font-semibold text-white mt-6">Centrais de Atendimento</h1>
+                <h5 class="text-lg mt-0 mb-2 text-white">
+                    Suporte Pós Venda 11 4002 8922 <br>
+                    Segunda à Sexta: 09h às 21h <br>
+                    Sábado e Feriados Nacionais: 09h às 16h <br>
+                </h5>
+                <div class="mt-6 lg:mb-0 mb-6">
+                    <!-- Aqui deixei os botões como estavam pois parecem ter cores específicas -->
+                    
+                </div>
+            </div>
+            <div class="w-full lg:w-6/12 px-4">
+                <div class="flex flex-wrap items-top mb-6">
+                    <div class="w-full lg:w-4/12 px-4 ml-auto">
+                        <span class="block uppercase text-white text-sm font-semibold mb-2">Links Úteis</span>
+                        <ul class="list-unstyled">
+                            <li>
+                                <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Sobre Nós</a>
+                                <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://github.com/CleitonRSilvaa/Destiny">GitHub</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="w-full lg:w-4/12 px-4">
+                        <span class="block uppercase text-white text-sm font-semibold mb-2">Compra Segura</span>
+                        <ul class="list-unstyled">
+                            <li>
+                                <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Termos e Condições</a>
+                                <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Política de Privacidade</a>
+                                <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Black Friday</a>
+                                <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Oferta Destiny</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="w-full lg:w-4/12 px-4">
+                        <span class="block uppercase text-white text-sm font-semibold mb-2">Forma de Pagamento</span>
+                        <ul class="list-unstyled">
+                            <li>
+                                <img class="h-25 w-auto" src="../img/formasPagamento.png" alt="Forma de Pagamento">
+                            </li>
+                        </ul>
+                    </div>
+                  
+                </div>
+            </div>
+        </div>
+        <hr class="my-6 border-blueGray-300">
+        <div class="flex flex-wrap items-center md:justify-between justify-center">
+            <div class="w-full md:w-4/12 px-4 mx-auto text-center">
+                <div class="text-sm text-white font-semibold py-1">
+                    Copyright © <span id="get-current-year">2023</span><a href="#" class="text-white hover:text-blueGray-800"> Destiny by
+                        <a href="https://github.com/CleitonRSilvaa/Destiny" class="text-white hover:text-blueGray-800">Eco Coders</a>.
+                </div>
+            </div>
+        </div>
     </div>
-  </footer>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      // Toggle do menu mobile
+      let menuButton = document.querySelector('[aria-controls="mobile-menu"]');
+      let mobileMenu = document.getElementById('mobile-menu');
+
+      menuButton.addEventListener('click', function () {
+          mobileMenu.classList.toggle('hidden');
+      });
+
+      // Toggle do dropdown de perfil
+      let userMenuButton = document.getElementById('user-menu-button');
+      let userMenuDropdown = document.querySelector('[aria-labelledby="user-menu-button"]');
+
+      userMenuButton.addEventListener('click', function () {
+          userMenuDropdown.classList.toggle('hidden');
+      });
+  });
+
+</script>
+
 
   <script src="../jquery/jquery.min.js"></script>
   <script src="../jquery/jquery.mask.min.js"></script>

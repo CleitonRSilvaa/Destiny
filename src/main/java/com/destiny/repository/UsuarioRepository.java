@@ -11,21 +11,31 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
 
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     Usuario findByEmail(String email);
+
     Usuario findByCpf(String cpf);
+
     boolean existsByEmailAndIdNot(String email, Long id);
+
     boolean existsByCpfAndIdNot(String cpf, Long id);
+
     @Query("SELECT u FROM Usuario u WHERE LOWER(u.nome) LIKE LOWER(CONCAT('%', :nome, '%'))")
     List<UsuarioResumo> findByNomeContainingIgnoreCase(@Param("nome") String nome);
+
     public interface UsuarioResumo {
         Long getId();
+
         String getCpf();
+
         String getEmail();
+
         String getNome();
+
         StatusConta getStatusConta();
+
         TipoConta getTipoConta();
 
     }
@@ -33,13 +43,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Long> {
     @Query("select u.id as id, u.cpf as cpf, u.email as email, u.nome as nome, u.statusConta as statusConta, u.tipoConta as tipoConta from Usuario u")
     List<UsuarioResumo> findAllCustom();
 
-
     @Transactional
     @Modifying
     @Query("UPDATE Usuario u SET u.statusConta = ?1 WHERE u.id = ?2")
     void updateStatusConta(StatusConta statusConta, Long id);
-
-
-
 
 }

@@ -1,12 +1,6 @@
 @charset "UTF-8";
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css");
 
-body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
 #thumbnailContainer img {
   height: 100px;
   width: 100px !important;
@@ -39,4 +33,8 @@ body {
 .btn-primary:hover {
   background-color: #0056b3;
   border-color: #0056b3;
+}
+
+a{
+  text-decoration: none;
 }
