@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="../css/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
     <link href="../css/styleRegistroCliente.css" rel="stylesheet">
+    <link rel="shortcut icon" href="../img/LogoDestiny2.svg" type="image/x-icon">
     <script src="../js/sweetalert2.min.js"></script>
 
 </head>
@@ -55,10 +56,10 @@
                     <div class="hidden sm:ml-6 sm:block">
                         <div class="flex space-x-4">
                             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                            <a href="#" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Dashboard</a>
-                            <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Team</a>
-                            <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Projects</a>
-                            <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Calendar</a>
+                            <a href="#" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Pacotes</a>
+                            <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Passeios</a>
+                            <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Destinos</a>
+                            <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Itinerários</a>
                         </div>
                     </div>
                 </div>
@@ -93,9 +94,11 @@
                 -->
                         <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                             <!-- Active: "bg-gray-100", Not Active: "" -->
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Meu Perfil</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Meus pedidos</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Configurações</a>
+                            <a href="/logout" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-3">Sair</a>
+
                         </div>
                     </div>
                 </div>
@@ -106,10 +109,10 @@
         <div class="sm:hidden" id="mobile-menu">
             <div class="space-y-1 px-2 pb-3 pt-2">
                 <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                <a href="#" class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" aria-current="page">Dashboard</a>
-                <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Team</a>
-                <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Projects</a>
-                <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Calendar</a>
+                <a href="#" class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" aria-current="page">Pacotes</a>
+                <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Passeios</a>
+                <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Destinos</a>
+                <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Itinerários</a>
             </div>
         </div>
     </nav>
@@ -330,7 +333,7 @@
                                         Verifique se todos os seus dados estão corretos. Se estiver tudo certo, clique no botão 'Cadastrar'. Se precisar fazer alguma correção, clique no botão 'Voltar'.
                                     </div>
 
-                                    <button id="btnCadastar" @click="submitClienteForm()" class="w-40 block mx-auto focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-gray-600 bg-white hover:bg-gray-100 font-medium border" style="border: 2px solid #e0b0ff;">Cadastrar</button>
+                                    <button id="btnCadastar" @click="submitClienteForm()" class="text-white w-40 block mx-auto focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-white bg-white hover:bg-gray-100 font-medium border" style="border: 2px solid #e0b0ff; color: white;">Cadastrar</button>
 
                                     <button id="btnVolta" type="button" @click="step--" class="w-32 focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-white bg-white hover:bg-gray-100 font-medium border">Voltar</button>
 
@@ -389,35 +392,50 @@
         <div class="container mx-auto px-4">
             <div class="flex flex-wrap text-left lg:text-left">
                 <div class="w-full lg:w-6/12 px-4">
-                    <h4 class="text-3xl font-semibold text-white">Let's keep in touch!</h4>
+                    <img class="h-8 w-auto" src="../img/LogoDestiny.svg" alt="Your Company">
+                    <h1 class="text-2xl font-semibold text-white mt-6">Centrais de Atendimento</h1>
                     <h5 class="text-lg mt-0 mb-2 text-white">
-                        Find us on any of these platforms, we respond 1-2 business days.
+                        Suporte Pós Venda 11 4002 8922 <br>
+                        Segunda à Sexta: 09h às 21h <br>
+                        Sábado e Feriados Nacionais: 09h às 16h <br>
                     </h5>
                     <div class="mt-6 lg:mb-0 mb-6">
                         <!-- Aqui deixei os botões como estavam pois parecem ter cores específicas -->
-                        ...
+                        
                     </div>
                 </div>
                 <div class="w-full lg:w-6/12 px-4">
                     <div class="flex flex-wrap items-top mb-6">
                         <div class="w-full lg:w-4/12 px-4 ml-auto">
-                            <span class="block uppercase text-white text-sm font-semibold mb-2">Useful Links</span>
+                            <span class="block uppercase text-white text-sm font-semibold mb-2">Links Úteis</span>
                             <ul class="list-unstyled">
                                 <li>
-                                    <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">About Us</a>
+                                    <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Sobre Nós</a>
+                                    <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://github.com/CleitonRSilvaa/Destiny">GitHub</a>
                                 </li>
-                                ...
                             </ul>
                         </div>
                         <div class="w-full lg:w-4/12 px-4">
-                            <span class="block uppercase text-white text-sm font-semibold mb-2">Other Resources</span>
+                            <span class="block uppercase text-white text-sm font-semibold mb-2">Compra Segura</span>
                             <ul class="list-unstyled">
                                 <li>
-                                    <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">MIT License</a>
+                                    <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Termos e Condições</a>
+                                    <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Política de Privacidade</a>
+                                    <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Black Friday</a>
+                                    <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Oferta Destiny</a>
                                 </li>
-                                ...
                             </ul>
                         </div>
+
+                        <div class="w-full lg:w-4/12 px-4">
+                            <span class="block uppercase text-white text-sm font-semibold mb-2">Forma de Pagamento</span>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <img class="h-25 w-auto" src="../img/formasPagamento.png" alt="Forma de Pagamento">
+                                </li>
+                            </ul>
+                        </div>
+                      
                     </div>
                 </div>
             </div>
@@ -425,8 +443,8 @@
             <div class="flex flex-wrap items-center md:justify-between justify-center">
                 <div class="w-full md:w-4/12 px-4 mx-auto text-center">
                     <div class="text-sm text-white font-semibold py-1">
-                        Copyright © <span id="get-current-year">2021</span><a href="#" class="text-white hover:text-blueGray-800"> Notus JS by
-                            <a href="#" class="text-white hover:text-blueGray-800">Creative Tim</a>.
+                        Copyright © <span id="get-current-year">2023</span><a href="#" class="text-white hover:text-blueGray-800"> Destiny by
+                            <a href="https://github.com/CleitonRSilvaa/Destiny" class="text-white hover:text-blueGray-800">Eco Coders</a>.
                     </div>
                 </div>
             </div>
