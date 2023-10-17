@@ -1,5 +1,6 @@
 package com.destiny.controller;
 
+import com.destiny.model.CustomUserDetails;
 import com.destiny.model.MensagemResponse;
 import com.destiny.model.Produto;
 import com.destiny.model.StatusProduto;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -112,6 +115,16 @@ public class ProdutoController {
     public String buscar(@RequestParam(name = "id", required = false) Long id, Model model,
             RedirectAttributes redirect) {
         Optional<Produto> produtoOptional = produtoService.buscarProdutoPorId(id);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String nome = auth.getName();
+        if (auth.getPrincipal() instanceof CustomUserDetails) {
+            CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+            nome = userDetails.getNome();
+            System.out.println(nome);
+        }
+
+        model.addAttribute("nomeUsuario", nome);
 
         if (produtoOptional.isPresent()) {
             Produto produto = produtoOptional.get();

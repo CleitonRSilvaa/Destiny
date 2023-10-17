@@ -17,10 +17,7 @@
 
 </head>
 
-
 <!-- partial:index.partial.html -->
-
-
 
 <body class="antialiased sans-serif bg-gray-200">
     <nav class="bg-gray-800">
@@ -73,35 +70,36 @@
                     </button>
 
                     <!-- Profile dropdown -->
-                    <div class="relative ml-3">
+                    <div class="relative ml-3" th:if="${#authentication.authorities[0].authority == 'ROLE_CLIENTE'}">
                         <div>
                             <button type="button" class="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                                 <span class="absolute -inset-1.5"></span>
                                 <span class="sr-only">Open user menu</span>
-                                <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                                <img class="h-8 w-8 rounded-full" src="https://destinyproject.blob.core.windows.net/destinypodruto/perfil.png" alt="">
                             </button>
                         </div>
 
-                        <!--
-                  Dropdown menu, show/hide based on menu state.
-      
-                  Entering: "transition ease-out duration-100"
-                    From: "transform opacity-0 scale-95"
-                    To: "transform opacity-100 scale-100"
-                  Leaving: "transition ease-in duration-75"
-                    From: "transform opacity-100 scale-100"
-                    To: "transform opacity-0 scale-95"
-                -->
                         <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-                            <!-- Active: "bg-gray-100", Not Active: "" -->
+
+                            <div class="px-4 py-3">
+                                <span class="block text-sm text-gray-900 dark:text-white" th:text="${nomeUsuario}"></span>
+                                <span class="block text-sm  text-gray-500 truncate dark:text-gray-400" th:text="${#authentication.name}"></span>
+                                <hr>
+                            </div>
+
                             <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Meu Perfil</a>
                             <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Meus pedidos</a>
                             <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Configurações</a>
                             <a href="/logout" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-3">Sair</a>
-
                         </div>
                     </div>
                 </div>
+                <th:block sec:authorize="isAuthenticated()" th:if="${#authentication.authorities.?[authority == 'ROLE_ADMIN' || authority == 'ROLE_ESTOQUISTA'].size() > 0}">
+                    <a href="/home" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm mx-2 px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Menu</a>
+                </th:block>
+
+
+                <a sec:authorize="!isAuthenticated()" href="/login" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm mx-2 px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Entrar</a>
             </div>
         </div>
 
@@ -401,7 +399,7 @@
                     </h5>
                     <div class="mt-6 lg:mb-0 mb-6">
                         <!-- Aqui deixei os botões como estavam pois parecem ter cores específicas -->
-                        
+
                     </div>
                 </div>
                 <div class="w-full lg:w-6/12 px-4">
@@ -435,7 +433,7 @@
                                 </li>
                             </ul>
                         </div>
-                      
+
                     </div>
                 </div>
             </div>
