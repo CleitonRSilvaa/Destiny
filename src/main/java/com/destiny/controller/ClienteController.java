@@ -50,12 +50,11 @@ public class ClienteController {
         return clienteRepository.findAll();
     }
 
-        @GetMapping("/alterar")
+    @GetMapping("/alterar")
     public String telaAlterar() {
 
         return "cliente/AlterarCliente.html";
     }
-
 
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
@@ -231,6 +230,23 @@ public class ClienteController {
         }
 
         clienteRepository.deleteById(longId);
+        mensagemResponse.setStatus(200);
+        mensagemResponse.setMessage("sucess");
+        mensagemResponse.setDetails(detalhes);
+
+        return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
+    }
+
+    @PostMapping("/add/endereco")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<MensagemResponse> addECliente(@RequestBody Endereco endereco) {
+
+        List<String> errors = new ArrayList<>();
+        MensagemResponse mensagemResponse = new MensagemResponse();
+        List<String> detalhes = new ArrayList<>();
+
+        System.out.println(endereco);
+
         mensagemResponse.setStatus(200);
         mensagemResponse.setMessage("sucess");
         mensagemResponse.setDetails(detalhes);
