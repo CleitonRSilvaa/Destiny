@@ -50,132 +50,113 @@
     </div>
   </nav>
 
-  <main class="d-flex flex-nowrap h-100">
-    <h1 class="visually-hidden">Sidebars examples</h1>
+  <div class="container text-center h-100 ">
+    <div class="row no-gutters h-100 justify-content-center align-items-center">
+      <div class="col ">
+        <div class="card shadow-lg">
+          <form action="#">
+            <h1>
+              Alterar Dados Pessoais
+              <br>
+              <i class="fa fa-camera-retro fa-lg"></i>
+            </h1>
 
-    <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px;">
-      <ul class="list-unstyled ps-0">
-        <li class="mb-1">
-          <button class="btn btn-toggle btn-secondary d-inline-flex align-items-center rounded border-0 collapsed"
-            data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
-            Endereços
-          </button>
-          <div class="collapse show" id="home-collapse">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small container">
-              <li>
-                <table class="table-dark table table-hover dropdown-item">
-                  <tbody>
-                    <tr>
-                      <th scope="row">1</th>
-                      <td class="w-75">Mark</td>
-                      <td class="w-75">@mdo</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>Jacob</td>
-                      <td>@fat</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </li>
-            </ul>
-          </div>
-        </li>
-
-
-        <button type="button" class="btn btn-primary container" data-bs-toggle="modal" data-bs-target="#meuModal">
-          Adicionar Endereço
-        </button>
-        </li>
-
-      </ul>
-
-      <hr>
-    </div>
-
-    <div class="container">
-      <form action="#">
-        <h1>
-          Alterar Dados Pessoais
-          <br>
-          <i class="fa fa-camera-retro fa-lg"></i>
-        </h1>
-
-        <div class="float-label">
-          <label for="nome">Nome:</label>
-          <input type="text" id="nome" />
-        </div>
-
-        <div class="float-label">
-          <label for="dataNasc">Data Nascimento:</label>
-          <input type="date" id="dataNasc" />
-        </div>
-
-        <div class="float-label">
-          <label for="senha">Senha:</label>
-          <input type="password" name="senha" id="senha" />
-        </div>
-
-        <div class="float-label">
-          <label for="units">Genêro</label>
-          <select id="genero" name="genero">
-            <option value=""></option>
-            <option value="Masculino">Masculino</option>
-            <option value="Feminino">Feminino</option>
-            <option value="Outros">Outros</option>
-          </select>
-        </div>
-
-        <div class="float-label">
-          <fa class="fa eye fa-eye-slash"></fa>
-          <input type="password" name="pw" id="pw" />
-        </div>
-
-    </div>
-    </form>
-    </div>
-    <div class="modal" id="meuModal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Título do Modal</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-          </div>
-          <div class="modal-body">
-            <div class="mb-5 float-label">
-              <label class="font-bold mb-1 text-gray-700 block">Endereço de Entrega</label>
-              <input type="text" id="deliveryCep"
-                class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-                placeholder="Digite o CEP">
-              <input type="text" id="deliveryLogradouro"
-                class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-                placeholder="Logradouro">
-              <input type="text" id="deliveryBairro"
-                class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-                placeholder="Bairro">
-              <input type="text" id="deliveryLocalidade"
-                class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-                placeholder="Localidade">
-              <input type="text" id="deliveryUf"
-                class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
-                placeholder="UF">
+            <div class="float-label">
+              <input placeholder="Nome:" type="text" id="nome" />
             </div>
 
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-              <button type="button" class="btn btn-primary">Salvar mudanças</button>
+            <div class="float-label">
+              <input type="date" id="dataNasc" />
             </div>
-          </div>
+
+            <div class="float-label">
+              <input placeholder="Senha:" type="password" name="senha" id="senha" />
+            </div>
+
+            <div class="float-label">
+              <select id="genero" name="genero">
+                <option value="">Gênero:</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Feminino">Feminino</option>
+                <option value="Outros">Outros</option>
+              </select>
+            </div>
+            <button type="button" class="btn btn-primary container" data-bs-toggle="modal" data-bs-target="#meuModal">
+              Adicionar Endereço
+            </button>
+          </form>
         </div>
       </div>
 
+      <div class="col">
+        <div class="card tm shadow-lg">
+          <div class="container ma">
+            <div class="row container">
+          <div class="card " style="width: 17rem;">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">CEP</h5>
+              <h6 class="card-subtitle mb-2 text-body-secondary">Logradouro </h6>
+              <p class="card-text">Bairro</p>
+              <p class="card-text">Localidade - UF</p>
+              <div class="btn">
+                <a href="#" class="btn btn-danger">Button</a>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-      <script src="../js/produto/main.js"></script>
-      <script src="../js/bootstrap.bundle.min.js"></script>
-      <script src="../js/popper.min.js"></script>
-      <script src="../jquery/jquery.min.js"></script>
-      <script src="../jquery/jquery.mask.min.js"></script>
-      <script src="../js/cliente/main.js"></script>
+  </div>
+  </form>
+  </div>
+  <div class="modal" id="meuModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Título do Modal</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-5 float-label">
+            <label class="font-bold mb-1 text-gray-700 block">Endereço de Entrega</label>
+            <input type="text" id="deliveryCep"
+              class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+              placeholder="Digite o CEP">
+            <input type="text" id="deliveryLogradouro"
+              class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+              placeholder="Logradouro">
+            <input type="text" id="deliveryBairro"
+              class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+              placeholder="Bairro">
+            <input type="text" id="deliveryLocalidade"
+              class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+              placeholder="Localidade">
+            <input type="text" id="deliveryUf"
+              class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
+              placeholder="UF">
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            <button type="button" class="btn btn-primary">Salvar mudanças</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script src="../js/produto/main.js"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../jquery/jquery.min.js"></script>
+    <script src="../jquery/jquery.mask.min.js"></script>
+    <script src="../js/cliente/main.js"></script>
 </body>
 
 </html>

@@ -269,3 +269,18 @@ label{
 .btn-secondary{
   width: 240px;
 }
+.tm{
+  height:  540px;
+}
+.row .col {
+  position: unset ;
+}
+.ma{
+  padding-top: calc(var(--bs-gutter-x) * .5);
+}
+.form-check{
+  min-height: 0rem;
+}
+btn{
+  margin-top: 10px;
+}
