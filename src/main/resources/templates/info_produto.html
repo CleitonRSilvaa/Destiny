@@ -64,27 +64,19 @@
           </button>
 
           <!-- Profile dropdown -->
-          <div class="relative ml-3">
+          <div class="relative ml-3" th:if="${#authentication.authorities[0].authority == 'ROLE_CLIENTE'}">
             <div>
               <button type="button" class="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                 <span class="absolute -inset-1.5"></span>
                 <span class="sr-only">Open user menu</span>
-                <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                <img class="h-8 w-8 rounded-full" src="https://destinyproject.blob.core.windows.net/destinypodruto/perfil.png" alt="">
               </button>
             </div>
 
-            <!--
-              Dropdown menu, show/hide based on menu state.
-  
-              Entering: "transition ease-out duration-100"
-                From: "transform opacity-0 scale-95"
-                To: "transform opacity-100 scale-100"
-              Leaving: "transition ease-in duration-75"
-                From: "transform opacity-100 scale-100"
-                To: "transform opacity-0 scale-95"
-            -->
             <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-              <!-- Active: "bg-gray-100", Not Active: "" -->
+
+              <p class="block px-4 py-2 text-sm text-gray-700">Bem-vindo, <span th:text="${nomeUsuario}"></span>!</p>
+
               <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Meu Perfil</a>
               <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Meus pedidos</a>
               <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Configurações</a>
@@ -92,9 +84,14 @@
             </div>
           </div>
         </div>
+        <th:block sec:authorize="isAuthenticated()" th:if="${#authentication.authorities.?[authority == 'ROLE_ADMIN' || authority == 'ROLE_ESTOQUISTA'].size() > 0}">
+          <a href="/home" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm mx-2 px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Menu</a>
+        </th:block>
+
+
+        <a sec:authorize="!isAuthenticated()" href="/login" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm mx-2 px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Entrar</a>
       </div>
     </div>
-
     <!-- Mobile menu, show/hide based on menu state. -->
     <div class="sm:hidden" id="mobile-menu">
       <div class="space-y-1 px-2 pb-3 pt-2">
@@ -161,75 +158,75 @@
 
   <footer class="relative bg-gray-800 pt-8 pb-6">
     <div class="container mx-auto px-4">
-        <div class="flex flex-wrap text-left lg:text-left">
-            <div class="w-full lg:w-6/12 px-4">
-                <img class="h-8 w-auto" src="../img/LogoDestiny.svg" alt="Your Company">
-                <h1 class="text-2xl font-semibold text-white mt-6">Centrais de Atendimento</h1>
-                <h5 class="text-lg mt-0 mb-2 text-white">
-                    Suporte Pós Venda 11 4002 8922 <br>
-                    Segunda à Sexta: 09h às 21h <br>
-                    Sábado e Feriados Nacionais: 09h às 16h <br>
-                </h5>
-                <div class="mt-6 lg:mb-0 mb-6">
-                    <!-- Aqui deixei os botões como estavam pois parecem ter cores específicas -->
-                    
-                </div>
-            </div>
-            <div class="w-full lg:w-6/12 px-4">
-                <div class="flex flex-wrap items-top mb-6">
-                    <div class="w-full lg:w-4/12 px-4 ml-auto">
-                        <span class="block uppercase text-white text-sm font-semibold mb-2">Links Úteis</span>
-                        <ul class="list-unstyled">
-                            <li>
-                                <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Sobre Nós</a>
-                                <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://github.com/CleitonRSilvaa/Destiny">GitHub</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="w-full lg:w-4/12 px-4">
-                        <span class="block uppercase text-white text-sm font-semibold mb-2">Compra Segura</span>
-                        <ul class="list-unstyled">
-                            <li>
-                                <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Termos e Condições</a>
-                                <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Política de Privacidade</a>
-                                <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Black Friday</a>
-                                <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Oferta Destiny</a>
-                            </li>
-                        </ul>
-                    </div>
+      <div class="flex flex-wrap text-left lg:text-left">
+        <div class="w-full lg:w-6/12 px-4">
+          <img class="h-8 w-auto" src="../img/LogoDestiny.svg" alt="Your Company">
+          <h1 class="text-2xl font-semibold text-white mt-6">Centrais de Atendimento</h1>
+          <h5 class="text-lg mt-0 mb-2 text-white">
+            Suporte Pós Venda 11 4002 8922 <br>
+            Segunda à Sexta: 09h às 21h <br>
+            Sábado e Feriados Nacionais: 09h às 16h <br>
+          </h5>
+          <div class="mt-6 lg:mb-0 mb-6">
+            <!-- Aqui deixei os botões como estavam pois parecem ter cores específicas -->
 
-                    <div class="w-full lg:w-4/12 px-4">
-                        <span class="block uppercase text-white text-sm font-semibold mb-2">Forma de Pagamento</span>
-                        <ul class="list-unstyled">
-                            <li>
-                                <img class="h-25 w-auto" src="../img/formasPagamento.png" alt="Forma de Pagamento">
-                            </li>
-                        </ul>
-                    </div>
-                  
-                </div>
-            </div>
+          </div>
         </div>
-        <hr class="my-6 border-blueGray-300">
-        <div class="flex flex-wrap items-center md:justify-between justify-center">
-            <div class="w-full md:w-4/12 px-4 mx-auto text-center">
-                <div class="text-sm text-white font-semibold py-1">
-                    Copyright © <span id="get-current-year">2023</span><a href="#" class="text-white hover:text-blueGray-800"> Destiny by
-                        <a href="https://github.com/CleitonRSilvaa/Destiny" class="text-white hover:text-blueGray-800">Eco Coders</a>.
-                </div>
+        <div class="w-full lg:w-6/12 px-4">
+          <div class="flex flex-wrap items-top mb-6">
+            <div class="w-full lg:w-4/12 px-4 ml-auto">
+              <span class="block uppercase text-white text-sm font-semibold mb-2">Links Úteis</span>
+              <ul class="list-unstyled">
+                <li>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Sobre Nós</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://github.com/CleitonRSilvaa/Destiny">GitHub</a>
+                </li>
+              </ul>
             </div>
+            <div class="w-full lg:w-4/12 px-4">
+              <span class="block uppercase text-white text-sm font-semibold mb-2">Compra Segura</span>
+              <ul class="list-unstyled">
+                <li>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Termos e Condições</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Política de Privacidade</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Black Friday</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Oferta Destiny</a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="w-full lg:w-4/12 px-4">
+              <span class="block uppercase text-white text-sm font-semibold mb-2">Forma de Pagamento</span>
+              <ul class="list-unstyled">
+                <li>
+                  <img class="h-25 w-auto" src="../img/formasPagamento.png" alt="Forma de Pagamento">
+                </li>
+              </ul>
+            </div>
+
+          </div>
         </div>
+      </div>
+      <hr class="my-6 border-blueGray-300">
+      <div class="flex flex-wrap items-center md:justify-between justify-center">
+        <div class="w-full md:w-4/12 px-4 mx-auto text-center">
+          <div class="text-sm text-white font-semibold py-1">
+            Copyright © <span id="get-current-year">2023</span><a href="#" class="text-white hover:text-blueGray-800"> Destiny by
+              <a href="https://github.com/CleitonRSilvaa/Destiny" class="text-white hover:text-blueGray-800">Eco Coders</a>.
+          </div>
+        </div>
+      </div>
     </div>
-</footer>
+  </footer>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
       // Toggle do menu mobile
       let menuButton = document.querySelector('[aria-controls="mobile-menu"]');
       let mobileMenu = document.getElementById('mobile-menu');
 
       menuButton.addEventListener('click', function () {
-          mobileMenu.classList.toggle('hidden');
+        mobileMenu.classList.toggle('hidden');
       });
 
       // Toggle do dropdown de perfil
@@ -237,11 +234,11 @@
       let userMenuDropdown = document.querySelector('[aria-labelledby="user-menu-button"]');
 
       userMenuButton.addEventListener('click', function () {
-          userMenuDropdown.classList.toggle('hidden');
+        userMenuDropdown.classList.toggle('hidden');
       });
-  });
+    });
 
-</script>
+  </script>
 
 
   <script src="../jquery/jquery.min.js"></script>

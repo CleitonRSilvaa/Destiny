@@ -27,7 +27,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
         if (savedRequest != null) {
             // Redireciona para a última página solicitada antes do login
-            String redirectURL = determineTargetUrl(authentication);
+            // String redirectURL = determineTargetUrl(authentication);
+            String redirectURL = savedRequest.getRedirectUrl();
             response.sendRedirect(redirectURL);
         } else {
             // Se não houver uma página salva, use a lógica padrão
@@ -46,7 +47,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         } else if (roles.contains("ROLE_ESTOQUISTA")) {
             return "/estoque/dashboard";
         } else if (roles.contains("ROLE_CLIENTE")) { // Assumindo que clientes têm o papel "ROLE_CLIENTE"
-            return "/cliente/dashboard"; // ou qualquer outro URL específico para clientes
+            return "/"; // ou qualquer outro URL específico para clientes
         } else {
             return "/home"; // para outros usuários ou default
         }
