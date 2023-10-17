@@ -10,6 +10,8 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +76,12 @@ public class ErrorHandler {
         error.setDetails(detalhes);
         error.setStatus(401); // Unauthorized
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ModelAndView handleNotFoundError() {
+        ModelAndView mav = new ModelAndView("error404"); // nome do arquivo HTML sem a extensão
+        return mav;
     }
 
 }

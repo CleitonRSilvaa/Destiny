@@ -17,6 +17,13 @@ public class CustomUserDetails extends User {
     this.tipoConta = usuario.getTipoConta();
   }
 
+  // Construtor para Cliente
+  public CustomUserDetails(Cliente cliente) {
+    super(cliente.getEmail(), cliente.getSenha(), getAuthority(cliente));
+    this.nome = cliente.getNome();
+    this.tipoConta = cliente.getTipoConta();
+  }
+
   public String getNome() {
     return nome;
   }
@@ -25,8 +32,17 @@ public class CustomUserDetails extends User {
     return tipoConta;
   }
 
-  private static Collection<? extends GrantedAuthority> getAuthority(Usuario usuario) {
-    return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + usuario.getTipoConta().toString()));
+  private static Collection<? extends GrantedAuthority> getAuthority(Object user) {
+    if (user instanceof Usuario) {
+      return Collections
+          .singletonList(new SimpleGrantedAuthority("ROLE_" + ((Usuario) user).getTipoConta().toString()));
+    } else if (user instanceof Cliente) {
+      // Aqui, assumi que Cliente também tem um campo tipoConta. Ajuste conforme
+      // necessário.
+      return Collections
+          .singletonList(new SimpleGrantedAuthority("ROLE_" + ((Cliente) user).getTipoConta().toString()));
+    }
+    return Collections.emptyList();
   }
 
 }

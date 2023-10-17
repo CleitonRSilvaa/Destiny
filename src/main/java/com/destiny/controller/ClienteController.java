@@ -1,13 +1,19 @@
 package com.destiny.controller;
 
-
 import com.destiny.model.Cliente;
+import com.destiny.model.Endereco;
 import com.destiny.model.MensagemResponse;
+import com.destiny.model.StatusConta;
+import com.destiny.model.TipoConta;
 import com.destiny.model.ValidationException;
 import com.destiny.repository.ClienteRepository;
+import com.destiny.repository.EnderecoRepository;
+import com.destiny.repository.UsuarioRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -15,33 +21,52 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@RestController
-@RequestMapping("cliente")
+@Controller
+@RequestMapping("/cliente")
 public class ClienteController {
 
     @Autowired
     private ClienteRepository clienteRepository;
 
-    @GetMapping("clienteList")
-    public List<Map<String, Object>> list(){
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private EnderecoRepository enderecoRepository;
+
+    @GetMapping("/registra-me")
+    public String telaRegistarCliente() {
+
+        return "cliente/registroCliente";
+    }
+
+    @GetMapping("/clienteList")
+    public List<Map<String, Object>> list() {
         return clienteRepository.findAllCustom();
     }
 
-
     @GetMapping("/listDetalhada")
-    public List<Cliente> listAllDetalhes(){
+    public List<Cliente> listAllDetalhes() {
         return clienteRepository.findAll();
     }
 
-
-    @PostMapping("add")
+    @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<MensagemResponse> insertCliente(@RequestBody Cliente cliente) {
         List<String> errors = new ArrayList<>();
         MensagemResponse mensagemResponse = new MensagemResponse();
         List<String> detalhes = new ArrayList<>();
 
-        cliente.setStatusConta((byte) 1);
+        cliente.setStatusConta(StatusConta.ATIVA);
+        cliente.setTipoConta(TipoConta.CLIENTE);
+
+        List<Endereco> enderecos = cliente.getEnderecos();
+        Boolean enderecoEntregaFaturamento;
+
+        if (enderecos.size() == 1) {
+            enderecoEntregaFaturamento = true;
+        }
+        cliente.setEnderecos(null);
 
         if (cliente.getNome() == null) {
             errors.add("nome é obrigatório.");
@@ -49,15 +74,27 @@ public class ClienteController {
         if (cliente.getEmail() == null) {
             errors.add("email é obrigatório.");
         }
-        if (cliente.getCpf() == null) {
+        if (cliente.getCpf() == null || cliente.getCpf().isBlank()) {
             errors.add("cpf é obrigatório.");
         }
         if (cliente.getSenha() == null) {
             errors.add("senha é obrigatório.");
         }
 
+        if (cliente.getDataNacimento() == null) {
+            errors.add("Data de nacimento é obrigatório.");
+        }
 
-        if (clienteRepository.findByEmail(cliente.getEmail()) != null) {
+        if (enderecos.isEmpty()) {
+            errors.add("O endereço é obrigatório.");
+        }
+
+        if (!errors.isEmpty()) {
+            throw new ValidationException("parametros invalidos", errors);
+        }
+
+        if (clienteRepository.findByEmail(cliente.getEmail()) != null
+                || usuarioRepository.findByEmail(cliente.getEmail()) != null) {
             errors.add("email já está cadastrado.");
         }
 
@@ -71,6 +108,26 @@ public class ClienteController {
 
         clienteRepository.save(cliente);
 
+        for (Endereco endereco : enderecos) {
+
+            endereco.setCliente(cliente);
+
+            if (enderecos.size() == 1) {
+                Endereco endereco2 = new Endereco(endereco);
+                endereco2.setTipo(Endereco.tipoEndereco.FATURAMENTO);
+                endereco2.setPrincipal(false);
+                enderecoRepository.save(endereco2);
+
+                endereco.setTipo(Endereco.tipoEndereco.ENTREGA);
+                endereco.setPrincipal(true);
+                endereco.setCliente(cliente);
+                enderecoRepository.save(endereco);
+            }
+
+            enderecoRepository.save(endereco);
+
+        }
+
         mensagemResponse.setStatus(201);
         mensagemResponse.setMessage("sucess");
         mensagemResponse.setDetails(detalhes);
@@ -78,24 +135,21 @@ public class ClienteController {
         return new ResponseEntity<>(mensagemResponse, HttpStatus.CREATED);
     }
 
-
-
-    @PutMapping("update")
+    @PutMapping("/update")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MensagemResponse> updateCliente(@RequestBody Cliente cliente) {
         MensagemResponse mensagemResponse = new MensagemResponse();
         List<String> detalhes = new ArrayList<>();
         List<String> errors = new ArrayList<>();
 
-
-        if (!clienteRepository.existsById(cliente.getId())){
+        if (!clienteRepository.existsById(cliente.getId())) {
 
             mensagemResponse.setStatus(400);
 
             mensagemResponse.setMessage("erro");
-            if (cliente.getId()==0){
+            if (cliente.getId() == 0) {
                 detalhes.add("parementro id nao definido");
-            }else {
+            } else {
                 detalhes.add("id invalido");
             }
 
@@ -105,9 +159,7 @@ public class ClienteController {
 
         }
 
-
         clienteRepository.existsById(cliente.getId());
-
 
         if (cliente.getNome() == null) {
             errors.add("nome é obrigatório.");
@@ -122,7 +174,7 @@ public class ClienteController {
             errors.add("senha é obrigatório.");
         }
 
-        if (cliente.getStatusConta() == null){
+        if (cliente.getStatusConta() == null) {
             errors.add("statusConta é obrigatório.");
         }
 
@@ -138,7 +190,6 @@ public class ClienteController {
             throw new ValidationException("parametros invalidos", errors);
         }
 
-
         clienteRepository.save(cliente);
 
         mensagemResponse.setStatus(200);
@@ -148,7 +199,7 @@ public class ClienteController {
         return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MensagemResponse> deleteCliente(@PathVariable String id) {
         MensagemResponse mensagemResponse = new MensagemResponse();
@@ -164,8 +215,7 @@ public class ClienteController {
             throw new ValidationException("parametro invalido", detalhes);
         }
 
-
-        if(!clienteRepository.existsById(longId)){
+        if (!clienteRepository.existsById(longId)) {
             mensagemResponse.setStatus(400);
             mensagemResponse.setMessage("erro");
             detalhes.add("Id não existe");
@@ -183,7 +233,7 @@ public class ClienteController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Optional<Cliente> buscarCliente(@PathVariable String id){
+    public Optional<Cliente> buscarCliente(@PathVariable String id) {
         List<String> errors = new ArrayList<>();
         long longId = 0;
 
@@ -200,6 +250,5 @@ public class ClienteController {
         return clienteRepository.findById(longId);
 
     }
-
 
 }

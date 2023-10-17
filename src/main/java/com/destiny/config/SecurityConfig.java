@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -50,16 +52,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf(csrf -> csrf.disable())
                 .headers(headers -> headers.frameOptions().disable())
-                .exceptionHandling(handling -> handling.accessDeniedHandler(accessDeniedHandler()))
+                .exceptionHandling(handling -> handling
+                        .accessDeniedHandler(accessDeniedHandler())
+                        .defaultAuthenticationEntryPointFor(
+                                new LoginUrlAuthenticationEntryPoint("/login?type=admin"),
+                                new AntPathRequestMatcher("/admin/**"))
+                        .defaultAuthenticationEntryPointFor(
+                                new LoginUrlAuthenticationEntryPoint("/login?type=cliente"),
+                                new AntPathRequestMatcher("/cliente/**")))
                 .authorizeRequests(requests -> requests
                         .antMatchers("/h2-console/**", "/imagens/**", "/css/**", "/js/**", "/jquery/**", "/img/**",
-                                "/", "/produto/informacao/**")
+                                "/", "/produto/informacao/**", "/cliente/**")
                         .permitAll()
                         .antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN") // Adicionado o prefixo 'ROLE_'
                         .antMatchers("/usuario/**").hasAnyAuthority("ROLE_ADMIN")
                         .antMatchers("/estoque/**").hasAnyAuthority("ROLE_ESTOQUISTA", "ROLE_ADMIN")
                         .anyRequest().authenticated())
-                .formLogin(login -> login.loginPage("/login")
+                .formLogin(login -> login
+                        .loginPage("/login")
                         .failureHandler(customAuthenticationFailureHandler)
                         .successHandler(customAuthenticationSuccessHandler)
                         .permitAll())
