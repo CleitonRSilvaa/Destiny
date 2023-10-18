@@ -250,11 +250,37 @@ public class ClienteController {
         MensagemResponse mensagemResponse = new MensagemResponse();
         List<String> detalhes = new ArrayList<>();
 
-        System.out.println(endereco);
+        try {
 
-        mensagemResponse.setStatus(200);
-        mensagemResponse.setMessage("sucess");
-        mensagemResponse.setDetails(detalhes);
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+            if (auth instanceof AnonymousAuthenticationToken) {
+                mensagemResponse.setStatus(200);
+                mensagemResponse.setMessage("erro");
+                detalhes.add("usuario não esta autenticado");
+                mensagemResponse.setDetails(detalhes);
+                return new ResponseEntity<>(mensagemResponse, HttpStatus.ACCEPTED);
+            }
+
+            CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+
+            Optional<Cliente> cliente = clienteRepository.findById(userDetails.getId());
+            endereco.setCliente(cliente.get());
+            mensagemResponse.setStatus(200);
+            mensagemResponse.setMessage("success");
+            mensagemResponse.setDetails(detalhes);
+
+            enderecoRepository.save(endereco);
+            mensagemResponse.setStatus(200);
+            mensagemResponse.setMessage("success");
+            mensagemResponse.setDetails(detalhes);
+
+            return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
+        } catch (NumberFormatException e) {
+            errors.add("id not INT");
+        } catch (Exception e) {
+
+        }
 
         return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
     }
