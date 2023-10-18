@@ -10,11 +10,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 public class CustomUserDetails extends User {
   private final String nome;
   private final TipoConta tipoConta;
+  private final Long id;
 
   public CustomUserDetails(Usuario usuario) {
     super(usuario.getEmail(), usuario.getSenha(), getAuthority(usuario));
     this.nome = usuario.getNome();
     this.tipoConta = usuario.getTipoConta();
+    this.id = usuario.getId();
   }
 
   // Construtor para Cliente
@@ -22,6 +24,7 @@ public class CustomUserDetails extends User {
     super(cliente.getEmail(), cliente.getSenha(), getAuthority(cliente));
     this.nome = cliente.getNome();
     this.tipoConta = cliente.getTipoConta();
+    this.id = cliente.getId();
   }
 
   public String getNome() {
@@ -30,6 +33,10 @@ public class CustomUserDetails extends User {
 
   public TipoConta getTipoConta() {
     return tipoConta;
+  }
+
+  public Long getId() {
+    return id;
   }
 
   private static Collection<? extends GrantedAuthority> getAuthority(Object user) {

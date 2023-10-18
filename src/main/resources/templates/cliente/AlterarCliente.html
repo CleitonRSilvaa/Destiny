@@ -162,7 +162,7 @@
     <!-- Parte de Edição de Endereço -->
     <div class="w-1/2 pl-4">
       <h1 class="text-2xl mb-4">Endereços de Entrega</h1>
-      <button data-modal-target="staticModal" data-modal-toggle="staticModal" class="mt-1 px-2 py-2 bg-green-500 text-white rounded-md hover:bg-green-600" type="button">Adicionar Endereço</button>
+      <button data-modal-target="staticModal" data-modal-toggle="staticModal" class="m-3 mx-1 px-2 py-2 bg-green-500 text-white rounded-md hover:bg-green-600" type="button">Adicionar Endereço</button>
       <div id="addressList">
         <!-- Cards de Endereço (como exemplo) -->
         <div class="mb-4 bg-gray-200 p-4 rounded-md relative" data-endereco-id="1">
@@ -189,9 +189,31 @@
             </div>
           </div>
         </div>
+        <div class="mb-4 bg-gray-200 p-4 rounded-md relative" data-endereco-id="2">
+          <label class="inline-flex items-center">
+            <span class="ml-4 block">
+              CEP: <span class="font-semibold">12345-678</span><br>
+              Logradouro: <span class="font-semibold">Rua Exemplo</span><br>
+              Número: <span class="font-semibold">123</span><br>
+              Complemento: <span class="font-semibold">Apto 45</span><br>
+              Bairro: <span class="font-semibold">Centro</span><br>
+              Localidade: <span class="font-semibold">Cidade Exemplo</span><br>
+              UF: <span class="font-semibold">EX</span>
+            </span>
+
+          </label>
+
+          <div class="absolute top-2 right-2">
+            <button class="bg-gray-800 text-white px-2 py-1 rounded-full" onclick="toggleDropdown(this)">⋮</button>
+
+            <div class="dropdown-content hidden mt-2 rounded-md shadow-lg bg-gray-600 p-2">
+              <button onclick="removerEndereco(this)" class="block px-4 py-2 text-sm">Remover</button>
+              <button onclick="definirEnderecoPadrao(this)" class="block px-4 py-2 text-sm">Usar como endereço padrão</button>
+            </div>
+          </div>
+        </div>
 
       </div>
-      <button data-modal-target="staticModal" data-modal-toggle="staticModal" class="mt-4 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600" type="button">Adicionar Endereço</button>
     </div>
   </div>
 
@@ -364,26 +386,56 @@
 
     });
 
-    function removerEndereco(element) {
-      const enderecoId = element.closest('[data-endereco-id]').getAttribute('data-endereco-id');
-      fetch(`/api/remove-endereco/${enderecoId}`, {
-        method: 'DELETE',
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            console.log("Endereço removido com sucesso!");
-            // Remover elemento da página, se necessário.
-            element.closest('[data-endereco-id]').remove();
-          } else {
-            console.error("Erro ao remover o endereço!");
-          }
-        });
+    function removerEndereco(buttonElement) {
+  Swal.fire({
+    title: 'Você deseja excluir este endereço?',
+    text: "Esta ação não pode ser desfeita!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sim, excluir!',
+    cancelButtonText: 'Cancelar'
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        await executarRemocaoEndereco(buttonElement);
+        Swal.fire(
+          'Excluído!',
+          'O endereço foi excluído com sucesso.',
+          'success'
+        );
+      } catch (error) {
+        Swal.fire(
+          'Erro!',
+          'Houve um problema ao excluir o endereço. Tente novamente mais tarde.',
+          'error'
+        );
+      }
     }
+  });
+}
+
+async function executarRemocaoEndereco(element) {
+  const enderecoId = element.closest('[data-endereco-id]').getAttribute('data-endereco-id');
+  const response = await fetch(`http://localhost:8080/cliente/delete/endereco/${enderecoId}`, {
+    method: 'DELETE',
+  });
+  const data = await response.json();
+
+  if (data.message === 'sucess') {
+    console.log("Endereço removido com sucesso!");
+    element.closest('[data-endereco-id]').remove();
+  } else {
+    console.error("Erro ao remover o endereço!" , JSON.stringify(data));
+    throw new Error("Erro ao remover o endereço!");
+  }
+}
+
 
     function definirEnderecoPadrao(element) {
       const enderecoId = element.closest('[data-endereco-id]').getAttribute('data-endereco-id');
-      fetch(`/api/definir-padrao/${enderecoId}`, {
+      fetch(`/cliente/delete/endereco/${enderecoId}`, {
         method: 'PUT',
       })
         .then(response => response.json())
@@ -426,8 +478,9 @@
 
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../jquery/jquery.min.js"></script>
 
-  <script src="../js/cliente/main.js"></script>
 
 </body>
 

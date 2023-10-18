@@ -19,6 +19,7 @@ public class Endereco {
 
   @Column(nullable = false)
   private String cep;
+
   @Column(nullable = false)
   private String logradouro;
 
@@ -41,6 +42,8 @@ public class Endereco {
 
   private Boolean principal;
 
+  private StatusConta status;
+
   @ManyToOne
   @JoinColumn(name = "cliente_id", nullable = false)
   private Cliente cliente;
@@ -61,6 +64,7 @@ public class Endereco {
     this.tipo = outroEndereco.tipo;
     this.principal = outroEndereco.principal;
     this.cliente = outroEndereco.cliente;
+    this.status = outroEndereco.status;
   }
 
   @Override

@@ -1,6 +1,7 @@
 package com.destiny.controller;
 
 import com.destiny.model.Cliente;
+import com.destiny.model.CustomUserDetails;
 import com.destiny.model.Endereco;
 import com.destiny.model.MensagemResponse;
 import com.destiny.model.StatusConta;
@@ -10,12 +11,18 @@ import com.destiny.repository.ClienteRepository;
 import com.destiny.repository.EnderecoRepository;
 import com.destiny.repository.UsuarioRepository;
 
+import lombok.var;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLDataException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -231,7 +238,7 @@ public class ClienteController {
 
         clienteRepository.deleteById(longId);
         mensagemResponse.setStatus(200);
-        mensagemResponse.setMessage("sucess");
+        mensagemResponse.setMessage("success");
         mensagemResponse.setDetails(detalhes);
 
         return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
@@ -252,6 +259,73 @@ public class ClienteController {
         mensagemResponse.setDetails(detalhes);
 
         return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/endereco/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<MensagemResponse> adicinarEnderecoCliente(@PathVariable String id) {
+
+        List<String> errors = new ArrayList<>();
+        MensagemResponse mensagemResponse = new MensagemResponse();
+        List<String> detalhes = new ArrayList<>();
+
+        long longId = 0;
+
+        System.out.println(longId);
+
+        try {
+            longId = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            errors.add("id not INT");
+        }
+
+        enderecoRepository.updateStatusEndereco(StatusConta.INATIVA, longId);
+
+        mensagemResponse.setStatus(200);
+        mensagemResponse.setMessage("sucess");
+        mensagemResponse.setDetails(detalhes);
+
+        return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
+    }
+
+    @PutMapping("/padrao/endereco/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<MensagemResponse> alterarEnderecoPadrao(@PathVariable String id) {
+        List<String> errors = new ArrayList<>();
+        MensagemResponse mensagemResponse = new MensagemResponse();
+        List<String> detalhes = new ArrayList<>();
+
+        try {
+
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+            if (auth instanceof AnonymousAuthenticationToken) {
+                mensagemResponse.setStatus(200);
+                mensagemResponse.setMessage("erro");
+                detalhes.add("usuario não esta autenticado");
+                mensagemResponse.setDetails(detalhes);
+                return new ResponseEntity<>(mensagemResponse, HttpStatus.ACCEPTED);
+            }
+            long longId = Long.parseLong(id);
+
+            var userDetails = (CustomUserDetails) auth.getPrincipal();
+
+            enderecoRepository.updateAllEnderecoPadrao(userDetails.getId());
+            enderecoRepository.updateEnderecoPadrao(longId);
+
+            mensagemResponse.setStatus(200);
+            mensagemResponse.setMessage("success");
+            mensagemResponse.setDetails(detalhes);
+
+            return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
+        } catch (NumberFormatException e) {
+            errors.add("id not INT");
+        } catch (Exception e) {
+
+        }
+
+        return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
+
     }
 
     @GetMapping("/{id}")
