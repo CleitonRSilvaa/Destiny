@@ -17,7 +17,7 @@ public interface EnderecoRepository extends JpaRepository<Endereco, Long> {
 
     @Transactional
     @Modifying
-    @Query("UPDATE Endereco e SET e.principal= FALSE WHERE e.cliente_id = ?1 and e.tipo  = 0")
+    @Query("UPDATE Endereco e SET e.principal = FALSE WHERE e.cliente.id = ?1 and e.tipo = 0")
     void updateAllEnderecoPadrao(Long id);
 
     @Transactional

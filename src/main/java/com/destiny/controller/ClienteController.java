@@ -11,8 +11,6 @@ import com.destiny.repository.ClienteRepository;
 import com.destiny.repository.EnderecoRepository;
 import com.destiny.repository.UsuarioRepository;
 
-import lombok.var;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -308,7 +306,7 @@ public class ClienteController {
             }
             long longId = Long.parseLong(id);
 
-            var userDetails = (CustomUserDetails) auth.getPrincipal();
+            CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
 
             enderecoRepository.updateAllEnderecoPadrao(userDetails.getId());
             enderecoRepository.updateEnderecoPadrao(longId);
