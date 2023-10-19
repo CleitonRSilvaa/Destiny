@@ -141,20 +141,21 @@
       <form id="updateForm">
         <div class="mb-4">
           <label for="clientName" class="block text-sm font-medium text-gray-700">Nome</label>
-          <input type="text" id="clientName" name="clientName" class="mt-1 p-2 w-full border rounded-md" required>
+          <input th:value="${cliente.nome}" type="text" id="clientName" name="clientName" class="mt-1 p-2 w-full border rounded-md" required>
         </div>
         <div class="mb-4">
           <label for="birthDate" class="block text-sm font-medium text-gray-700">Data de Nascimento</label>
-          <input type="date" id="birthDate" name="birthDate" class="mt-1 p-2 w-full border rounded-md" required>
+          <input th:value="${cliente.dataNacimento}" type="date" id="birthDate" name="birthDate" class="mt-1 p-2 w-full border rounded-md" required>
         </div>
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700">Gênero</label>
-          <select name="gender" id="gender" class="mt-1 p-2 w-full border rounded-md" required>
-            <option value="masculino">Masculino</option>
-            <option value="feminino">Feminino</option>
-            <option value="outro">Outro</option>
+          <select th:field="*{cliente.genero}" name="gender" id="gender" class="mt-1 p-2 w-full border rounded-md" required>
+            <option th:value="'masculino'" th:selected="${cliente.genero == 'masculino'}">Masculino</option>
+            <option th:value="'feminino'" th:selected="${cliente.genero == 'feminino'}">Feminino</option>
+            <option th:value="'outro'" th:selected="${cliente.genero == 'outro'}">Outro</option>
           </select>
         </div>
+
         <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Atualizar</button>
       </form>
     </div>
@@ -164,54 +165,29 @@
       <h1 class="text-2xl mb-4">Endereços de Entrega</h1>
       <button data-modal-target="staticModal" data-modal-toggle="staticModal" class="m-3 mx-1 px-2 py-2 bg-green-500 text-white rounded-md hover:bg-green-600" type="button">Adicionar Endereço</button>
       <div id="addressList">
-        <!-- Cards de Endereço (como exemplo) -->
-        <div class="mb-4 bg-gray-200 p-4 rounded-md relative" data-endereco-id="1">
-          <label class="inline-flex items-center">
-            <span class="ml-4 block">
-              CEP: <span class="font-semibold">12345-678</span><br>
-              Logradouro: <span class="font-semibold">Rua Exemplo</span><br>
-              Número: <span class="font-semibold">123</span><br>
-              Complemento: <span class="font-semibold">Apto 45</span><br>
-              Bairro: <span class="font-semibold">Centro</span><br>
-              Localidade: <span class="font-semibold">Cidade Exemplo</span><br>
-              UF: <span class="font-semibold">EX</span>
-            </span>
 
-          </label>
-
-
-          <div class="absolute top-2 right-2">
-            <button class="bg-blue-500 text-white px-2 py-1 rounded-full" onclick="toggleDropdown(this)">⋮</button>
-
-            <div class="dropdown-content hidden mt-2 rounded-md shadow-lg bg-white">
-              <button onclick="removerEndereco(this)" class="block px-4 py-2 text-sm">Remover</button>
-              <button onclick="enderecoPadrao(this)" class="block px-4 py-2 text-sm">Usar como endereço predefinido de envios</button>
+        <th:block th:each="endereco, iterStat : ${cliente.enderecos}">
+          <div class="mb-4 bg-gray-200 p-4 rounded-md relative" th:data-endereco-id="${endereco.id}">
+            <label class="inline-flex items-center">
+              <span class="ml-4 block">
+                CEP: <span class="font-semibold" th:text="${endereco.cep}"></span><br>
+                Logradouro: <span class="font-semibold" th:text="${endereco.Logradouro}"></span><br>
+                Número: <span class="font-semibold" th:text="${endereco.numero}"></span><br>
+                Complemento: <span class="font-semibold" th:text="${endereco.complemento}"></span><br>
+                Bairro: <span class="font-semibold" th:text="${endereco.bairro}"></span><br>
+                Localidade: <span class="font-semibold" th:text="${endereco.localidade}"></span><br>
+                UF: <span class="font-semibold" th:text="${endereco.uf}"></span>
+              </span>
+            </label>
+            <div class="absolute top-2 right-2">
+              <button class="bg-blue-500 text-white px-2 py-1 rounded-full" onclick="toggleDropdown(this)">⋮</button>
+              <div class="dropdown-content hidden mt-2 rounded-md shadow-lg bg-white">
+                <button onclick="removerEndereco(this)" class="block px-4 py-2 text-sm">Remover</button>
+                <button onclick="enderecoPadrao(this)" class="block px-4 py-2 text-sm">Usar como endereço predefinido de envios</button>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="mb-4 bg-gray-200 p-4 rounded-md relative" data-endereco-id="2">
-          <label class="inline-flex items-center">
-            <span class="ml-4 block">
-              CEP: <span class="font-semibold">12345-678</span><br>
-              Logradouro: <span class="font-semibold">Rua Exemplo</span><br>
-              Número: <span class="font-semibold">123</span><br>
-              Complemento: <span class="font-semibold">Apto 45</span><br>
-              Bairro: <span class="font-semibold">Centro</span><br>
-              Localidade: <span class="font-semibold">Cidade Exemplo</span><br>
-              UF: <span class="font-semibold">EX</span>
-            </span>
-
-          </label>
-
-          <div class="absolute top-2 right-2">
-            <button class="bg-gray-800 text-white px-2 py-1 rounded-full" onclick="toggleDropdown(this)">⋮</button>
-
-            <div class="dropdown-content hidden mt-2 rounded-md shadow-lg bg-gray-600 p-2">
-              <button onclick="removerEndereco(this)" class="block px-4 py-2 text-sm">Remover</button>
-              <button onclick="definirEnderecoPadrao(this)" class="block px-4 py-2 text-sm">Usar como endereço padrão</button>
-            </div>
-          </div>
-        </div>
+        </th:block>
 
       </div>
     </div>
@@ -528,7 +504,7 @@
           } catch (error) {
             Swal.fire(
               'Erro!',
-              '' + error.message + ' Tente novamente mais tarde.',
+              error.message + ' Tente novamente mais tarde.',
               'error'
             );
           }
@@ -567,39 +543,83 @@
       }
     }
 
+    function validarCliente(cliente) {
+
+      let namePattern = /^[A-Za-z]{3,}\s[A-Za-z]{3,}(?:\s[A-Za-z]{1,})*$/;
+      if (!namePattern.test(cliente.nome.trim())) return 'O nome deve conter duas palavras com no mínimo 3 letras cada!';
+
+      const inputDate = new Date(cliente.dataNacimento);
+      const today = new Date();
+      const eighteenYearsAgo = new Date(
+        today.getFullYear() - 18,
+        today.getMonth(),
+        today.getDate()
+      );
+
+      if (inputDate > today) return "A data de nascimento não pode ser maior que a data atual!";
+
+      if (inputDate > eighteenYearsAgo) return "Você deve ter pelo menos 18 anos de idade!";
+
+
+      if (!cliente.genero.trim()) return "Gênero é obrigatório!";
+      return null;
+
+    }
+
     document.getElementById('updateForm').addEventListener('submit', function (event) {
+
       event.preventDefault(); // Impede a ação padrão de submit do formulário
 
-      const clientData = {
-        clientName: document.getElementById('clientName').value,
-        birthDate: document.getElementById('birthDate').value,
-        gender: document.getElementById('gender').value
+
+      const cliente = {
+        nome: document.getElementById('clientName').value,
+        dataNacimento: document.getElementById('birthDate').value,
+        genero: document.getElementById('gender').value,
       };
 
-      fetch('URL_DA_SUA_API', {
-        method: 'POST',
+
+      const validacaoErro = validarCliente(cliente);
+      if (validacaoErro) {
+        Swal.fire('Atenção!', validacaoErro, 'warning');
+        return;
+      }
+
+
+      fetch('http://localhost:8080/cliente/update', {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(clientData)
+        body: JSON.stringify(cliente)
       })
         .then(response => response.json())
         .then(data => {
+          console.info(data)
           // Aqui você pode lidar com a resposta da sua API
-          if (data.success) {
-            console.log('Dados atualizados com sucesso!');
-            // Você pode adicionar outras ações aqui, como mostrar uma mensagem para o usuário
+          if (data.status == 200) {
+            Swal.fire('', 'Cadastrado atualizado com sucesso.', 'success').then(() => {
+              location.reload()
+            });
+          } else if (data.status = 405 & data.path === "/login") {
+            Swal.fire('Atenção!', 'Sessão enserada logi novamento', 'warning').then(() => {
+              location.reload()
+            });
+
           } else {
-            console.error('Erro ao atualizar os dados:', data.message);
-            // Mostrar uma mensagem de erro para o usuário, se necessário
+            Swal.fire(
+              'Erro!',
+              '' + data.message + ' Tente novamente mais tarde.',
+              'error'
+            );
           }
         })
         .catch(error => {
+
+          console.error('Erro ao enviar os dados all :', data);
           console.error('Erro ao enviar os dados:', error);
           // Mostrar uma mensagem de erro para o usuário, se necessário
         });
     });
-
 
   </script>
 

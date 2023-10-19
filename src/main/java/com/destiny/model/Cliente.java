@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class Cliente {
     private String cpf;
 
     @Column(nullable = false)
-    private Date dataNacimento;
+    private LocalDate dataNacimento;
 
     private String genero;
 
@@ -48,7 +49,7 @@ public class Cliente {
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    private Date dataCriacao;
+    private LocalDate dataCriacao;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Endereco> enderecos;
@@ -61,4 +62,12 @@ public class Cliente {
         this.nome = nome.toUpperCase();
     }
 
+    public Cliente() {
+    }
+
+    public Cliente(String nome, LocalDate dataNascimento, String genero) {
+        this.nome = nome.toUpperCase();
+        this.genero = genero;
+        this.dataNacimento = dataNascimento;
+    }
 }

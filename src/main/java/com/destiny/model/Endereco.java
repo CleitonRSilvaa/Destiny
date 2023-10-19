@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Endereco {
 
-  public enum tipoEndereco {
+  public static enum tipoEndereco {
     ENTREGA,
     FATURAMENTO;
   }

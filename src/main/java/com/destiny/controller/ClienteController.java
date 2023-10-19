@@ -18,6 +18,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLDataException;
@@ -56,7 +57,21 @@ public class ClienteController {
     }
 
     @GetMapping("/alterar")
-    public String telaAlterar() {
+    public String telaAlterar(Model model) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+            return "/login";
+        }
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+        Optional optionalCliente = clienteRepository.findById(userDetails.getId());
+        Cliente cliente = (Cliente) optionalCliente.get();
+        cliente.setSenha("");
+        cliente.setEnderecos(null);
+        List enderecos = enderecoRepository.findByClienteIdAndStatusAndTipo(cliente.getId(), StatusConta.ATIVA,
+                Endereco.tipoEndereco.ENTREGA);
+        cliente.setEnderecos(enderecos);
+        model.addAttribute("cliente", cliente);
 
         return "cliente/AlterarCliente.html";
     }
@@ -124,6 +139,7 @@ public class ClienteController {
             endereco.setCliente(cliente);
 
             if (enderecos.size() == 1) {
+                endereco.setStatus(StatusConta.ATIVA);
                 Endereco endereco2 = new Endereco(endereco);
                 endereco2.setTipo(Endereco.tipoEndereco.FATURAMENTO);
                 endereco2.setPrincipal(false);
@@ -153,47 +169,54 @@ public class ClienteController {
         List<String> detalhes = new ArrayList<>();
         List<String> errors = new ArrayList<>();
 
-        if (!clienteRepository.existsById(cliente.getId())) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-            mensagemResponse.setStatus(400);
-
+        if (auth instanceof AnonymousAuthenticationToken) {
+            mensagemResponse.setStatus(200);
             mensagemResponse.setMessage("erro");
-            if (cliente.getId() == 0) {
+            detalhes.add("usuario não esta autenticado");
+            mensagemResponse.setDetails(detalhes);
+            return new ResponseEntity<>(mensagemResponse, HttpStatus.ACCEPTED);
+        }
+
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+
+        if (!clienteRepository.existsById(userDetails.getId())) {
+            mensagemResponse.setStatus(400);
+            mensagemResponse.setMessage("erro");
+            if (userDetails.getId() == 0) {
                 detalhes.add("parementro id nao definido");
             } else {
                 detalhes.add("id invalido");
             }
-
             mensagemResponse.setDetails(detalhes);
-
             return new ResponseEntity<>(mensagemResponse, HttpStatus.BAD_REQUEST);
 
         }
 
-        clienteRepository.existsById(cliente.getId());
+        System.out.println("Clienteeeeeeee " + cliente);
 
-        if (cliente.getNome() == null) {
+        Optional optionalCliente = clienteRepository.findById(userDetails.getId());
+
+        Cliente cliente2 = (Cliente) optionalCliente.get();
+
+        if (cliente.getNome().isBlank()) {
             errors.add("nome é obrigatório.");
         }
-        if (cliente.getEmail() == null) {
-            errors.add("email é obrigatório.");
+        if (cliente.getDataNacimento() == null) {
+            errors.add("data de nascimento é obrigatório.");
         }
-        if (cliente.getCpf() == null) {
+        if (cliente.getGenero().isBlank()) {
             errors.add("cpf é obrigatório.");
         }
-        if (cliente.getSenha() == null) {
-            errors.add("senha é obrigatório.");
-        }
 
-        if (cliente.getStatusConta() == null) {
-            errors.add("statusConta é obrigatório.");
-        }
-
-        if (clienteRepository.existsByEmailAndIdNot(cliente.getEmail(), cliente.getId())) {
+        if (clienteRepository.existsByEmailAndIdNot(cliente2.getEmail(),
+                cliente2.getId())) {
             errors.add("E-mail já associado a outro cliente.");
         }
 
-        if (clienteRepository.existsByCpfAndIdNot(cliente.getCpf(), cliente.getId())) {
+        if (clienteRepository.existsByCpfAndIdNot(cliente2.getCpf(),
+                cliente2.getId())) {
             errors.add("CPF já associado a outro cliente.");
         }
 
@@ -201,13 +224,17 @@ public class ClienteController {
             throw new ValidationException("parametros invalidos", errors);
         }
 
-        clienteRepository.save(cliente);
+        cliente2.setNome(cliente.getNome());
+        cliente2.setDataNacimento(cliente.getDataNacimento());
+        cliente2.setGenero(cliente.getGenero());
+        clienteRepository.save(cliente2);
 
         mensagemResponse.setStatus(200);
-        mensagemResponse.setMessage("sucess");
+        mensagemResponse.setMessage("success");
         mensagemResponse.setDetails(detalhes);
 
         return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
+
     }
 
     @DeleteMapping("/delete/{id}")
@@ -266,9 +293,7 @@ public class ClienteController {
 
             Optional<Cliente> cliente = clienteRepository.findById(userDetails.getId());
             endereco.setCliente(cliente.get());
-            mensagemResponse.setStatus(200);
-            mensagemResponse.setMessage("success");
-            mensagemResponse.setDetails(detalhes);
+            endereco.setStatus(StatusConta.ATIVA);
 
             enderecoRepository.save(endereco);
             mensagemResponse.setStatus(200);
@@ -277,12 +302,21 @@ public class ClienteController {
 
             return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
         } catch (NumberFormatException e) {
-            errors.add("id not INT");
+            detalhes.clear();
+            detalhes.add("id not INT");
+            mensagemResponse.setStatus(400);
+            mensagemResponse.setMessage("erro");
+            mensagemResponse.setDetails(detalhes);
+            return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
         } catch (Exception e) {
-
+            detalhes.clear();
+            detalhes.add(e.getLocalizedMessage());
+            mensagemResponse.setStatus(400);
+            mensagemResponse.setMessage("erro");
+            mensagemResponse.setDetails(detalhes);
+            return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/endereco/{id}")
@@ -295,14 +329,11 @@ public class ClienteController {
 
         long longId = 0;
 
-        System.out.println(longId);
-
         try {
             longId = Long.parseLong(id);
         } catch (NumberFormatException e) {
             errors.add("id not INT");
         }
-
         enderecoRepository.updateStatusEndereco(StatusConta.INATIVA, longId);
 
         mensagemResponse.setStatus(200);

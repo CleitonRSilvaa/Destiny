@@ -25,6 +25,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
         SavedRequest savedRequest = requestCache.getRequest(request, response);
 
+        System.out.println(savedRequest);
         if (savedRequest != null) {
             // Redireciona para a última página solicitada antes do login
             // String redirectURL = determineTargetUrl(authentication);
