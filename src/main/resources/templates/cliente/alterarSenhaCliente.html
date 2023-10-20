@@ -1,21 +1,19 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+
+
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Destiny</title>
+  <title>Alterar Senha</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-  <link rel="icon" href="../img/LogoDestiny2.svg">
-  <link rel="stylesheet" href="../css/stylesLanding.css">
+  <link rel="stylesheet" href="../css/sweetalert2.min.css">
+  <link rel="shortcut icon" href="../img/LogoDestiny2.svg" type="image/x-icon">
+  <script src="../js/sweetalert2.min.js"></script>
 </head>
 
-<body class="bg-gray-200">
-
+<body class="antialiased sans-serif bg-gray-200">
   <nav class="bg-gray-800">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
       <div class="relative flex h-16 items-center justify-between">
@@ -66,8 +64,8 @@
             <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
 
               <div class="px-4 py-3">
-                <span class="block text-sm text-gray-900 dark:text-white" th:text="${usuario.getNome}"></span>
-                <span class="block text-sm  text-gray-500 truncate dark:text-gray-400" th:text="${usuario.getUsername()}"></span>
+                <span class="block text-sm text-gray-900 dark:text-white" th:text="${cliente.nome}"></span>
+                <span class="block text-sm  text-gray-500 truncate dark:text-gray-400" th:text="${cliente.email}"></span>
                 <hr>
               </div>
               <a href="/" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Home</a>
@@ -97,59 +95,43 @@
       </div>
     </div>
   </nav>
+  <div class="bg-gray-200 h-screen flex justify-center items-center">
+    <div class="bg-white p-8 rounded-lg shadow-md w-96">
+      <h2 class="text-2xl mb-4">Alterar Senha</h2>
 
-  <section id="carousel" class="mt-5 mb-5">
-    <div class="owl-carousel owl-theme">
-      <div class="item"><img src="/img/ExperienciasExoticas.png" alt="Advertisement 1"></div>
-      <div class="item"><img src="/img/HoraDoDestiny.png" alt="Advertisement 2"></div>
-      <div class="item"><img src="/img/HoraDeViajar.png" alt="Advertisement 3"></div>
-      <div class="item"><img src="/img/SPA.png" alt="Advertisement 3"></div>
+      <form id="updatePassword" action="/cliente/change-password" method="POST">
+        <input th:value="${cliente.email}" type="hidden" name="email" id="email">
+        <div class="mb-4">
+          <label for="oldPassword" class="block text-sm font-medium text-gray-700">Senha Atual</label>
+          <input type="password" name="oldPassword" id="oldPassword" class="mt-1 p-2 w-full border rounded-md" required>
+          <div id="oldPasswordError" class="text-red-500 text-sm mt-1"></div>
 
+
+        </div>
+
+
+        <div class="mb-4">
+          <label for="newPassword" class="block text-sm font-medium text-gray-700">Nova Senha</label>
+          <input type="password" name="newPassword" id="newPassword" class="mt-1 p-2 w-full border rounded-md" required>
+          <div id="newPasswordError" class="text-red-500 text-sm mt-1"></div>
+
+        </div>
+
+        <div class="mb-4">
+          <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirme a Nova Senha</label>
+          <input type="password" name="confirmPassword" id="confirmPassword" class="mt-1 p-2 w-full border rounded-md" required>
+          <div id="confirmPasswordError" class="text-red-500 text-sm mt-1"></div>
+        </div>
+
+        <div>
+          <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 active:bg-blue-700">
+            Alterar Senha
+          </button>
+        </div>
+      </form>
     </div>
-  </section>
 
-  <section class="flex flex-wrap p-4 justify-center">
-    <th:block th:each="produto : ${produtoPage}">
-      <div class="relative flex w-72 mx-2 my-6 flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
-        <div class="relative mx-4 -mt-6 h-40 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
-          <th:block th:each="imagem, iterStat : ${produto.imagens}">
-            <img th:if="${imagem.principal}" th:src="${imagem.caminho}" class="card-img-top card-img-custom" alt="..." layout="fill">
-          </th:block>
-        </div>
-        <div class="star-rating" th:attr="data-rating=${produto.avaliacao}">
-          <span th:each=" star : ${#numbers.sequence(1,5)}" th:switch="${star}">
-            <i th:case="*{produto.avaliacao >= star}" class="fas fa-star"></i>
-            <i th:case="*{produto.avaliacao == star - 0.5}" class="fas fa-star-half-alt"></i>
-            <i th:case="*{produto.avaliacao < star}" class="far fa-star"></i>
-          </span>
-        </div>
-        <div class="p-6">
-          <h5 class="mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased" th:text="${produto.nome}">
-          </h5>
-          <p class="text-center" th:text="${'R$ '+ produto.valor}"></p>
-        </div>
-
-        <div class="p-6 pt-0">
-          <a th:href="@{'/produto/informacao?id=' + ${produto.id}}" class="select-none rounded-lg bg-pink-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button" data-ripple-light="true">
-            Saiba Mais
-          </a>
-        </div>
-      </div>
-    </th:block>
-
-  </section>
-
-
-
-
-
-  <div class="cart-circle">
-    <a class="nav-link" href="#">
-      <span class="badge badge-pill bg-danger text-white">1</span>
-      <span><i class="fas fa-shopping-cart text-white"></i></span>
-    </a>
   </div>
-
   <footer class="relative bg-gray-800 pt-8 pb-6">
     <div class="container mx-auto px-4">
       <div class="flex flex-wrap text-left lg:text-left">
@@ -213,92 +195,131 @@
     </div>
   </footer>
 
-  <script src="https://kit.fontawesome.com/9ef98eb577.js" crossorigin="anonymous"></script>
-  <script src="../jquery/jquery.min.js"></script>
-  <script src="../jquery/jquery.mask.min.js"></script>
-  <script src="../js/bootstrap.bundle.min.js"></script>
-  <script src="../js/popper.min.js"></script>
-
-
-
-
-
-
-  <!-- Initialize Owl Carousel -->
   <script>
 
-    document.addEventListener('DOMContentLoaded', function () {
-      // Toggle do menu mobile
+    document.addEventListener('DOMContentLoaded', () => {
+      initMenuToggle();
+    });
+
+
+
+    function initMenuToggle() {
       let menuButton = document.querySelector('[aria-controls="mobile-menu"]');
       let mobileMenu = document.getElementById('mobile-menu');
+      menuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
 
-      menuButton.addEventListener('click', function () {
-        mobileMenu.classList.toggle('hidden');
-      });
-
-      // Toggle do dropdown de perfil
       let userMenuButton = document.getElementById('user-menu-button');
       let userMenuDropdown = document.querySelector('[aria-labelledby="user-menu-button"]');
-
-      userMenuButton.addEventListener('click', function () {
-        userMenuDropdown.classList.toggle('hidden');
-      });
-    });
-
-    $(document).ready(function () {
-      $('.owl-carousel').owlCarousel({
-        loop: true,
-        margin: 10,
-        responsiveClass: true,
-        autoplay: true, // this allows the items to rotate automatically
-        autoplayTimeout: 3000, // this is the time delay between transitions in milliseconds (i.e., 3 seconds)
-        responsive: {
-          0: {
-            items: 1,
-            nav: true
-          },
-          600: {
-            items: 1,  // changed this to show only one image
-            nav: false
-          },
-          1000: {
-            items: 1,  // changed this to show only one image
-            nav: true,
-            loop: true
-          }
-        }
-      });
-    });
-
-
-    function renderStarRatings() {
-      $('.star-rating').each(function () {
-        const rating = parseFloat($(this).data('rating'));
-        $(this).empty(); // clear previous stars
-
-        for (let i = 1; i <= 5; i++) {
-          if (i <= rating) {
-            $(this).append('<i class="fas fa-star"></i>');
-          } else if (i - rating === 0.5) {
-            $(this).append('<i class="fas fa-star-half-alt"></i>');
-          } else {
-            $(this).append('<i class="far fa-star"></i>');
-          }
-        }
-      });
+      userMenuButton.addEventListener('click', () => userMenuDropdown.classList.toggle('hidden'));
     }
 
-    $(document).ready(function () {
-      renderStarRatings();
-    });
+    function validarCliente(cliente) {
 
+      // let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+      // if (!emailPattern.test(cliente.email.trim())) return 'Por favor, digite um e-mail válido!';
+
+      if (!cliente.senhaAntiga.trim()) return "Senha antiga é obrigatório!";
+
+      if (!cliente.senhaNova.trim()) return "Senha nova é obrigatório!";
+
+      return null;
+
+    }
+
+
+    document.getElementById('updatePassword').addEventListener('submit', function (event) {
+
+      event.preventDefault(); // Impede a ação padrão de submit do formulário
+
+      let oldPassword = document.getElementById('oldPassword').value;
+      let newPassword = document.getElementById('newPassword').value;
+      let confirmPassword = document.getElementById('confirmPassword').value;
+
+      // Resetar mensagens de erro
+      document.getElementById('oldPasswordError').textContent = '';
+      document.getElementById('newPasswordError').textContent = '';
+      document.getElementById('confirmPasswordError').textContent = '';
+
+      let hasErrors = false;
+
+      // Verifica se as senhas são iguais
+      if (newPassword !== confirmPassword) {
+        document.getElementById('confirmPasswordError').textContent = 'As senhas não conferem.';
+        hasErrors = true;
+      }
+
+      // Verifica se a senha nova é válida (exemplo: mínimo 8 caracteres)
+      if (newPassword.length < 5) {
+        document.getElementById('newPasswordError').textContent = 'A senha deve ter pelo menos 5 caracteres.';
+        hasErrors = true;
+      }
+
+
+      if (!hasErrors) {
+
+        const cliente = {
+          email: document.getElementById('email').value,
+          senhaAntiga: document.getElementById('oldPassword').value,
+          senhaNova: document.getElementById('newPassword').value,
+        };
+
+
+        const validacaoErro = validarCliente(cliente);
+        if (validacaoErro) {
+          Swal.fire('Atenção!', validacaoErro, 'warning');
+          return;
+        }
+
+
+        fetch('http://localhost:8080/cliente/alterar-senha', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(cliente)
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.info(data)
+            // Aqui você pode lidar com a resposta da sua API
+            if (data.status == 200) {
+              Swal.fire('', String(data.details[0]), 'success').then(() => {
+                window.location = '/logout';
+
+              });
+            } else if (data.status === 405 && data.path === "/login") {
+              Swal.fire('Atenção!', 'Sessão enserada logi novamento', 'warning').then(() => {
+                location.reload()
+              });
+
+            } else if (data.message === "paramentro-invalido") {
+              Swal.fire(
+                'Atenção!',
+                String(data.details[0]),
+                'warning'
+              );
+            } else {
+              Swal.fire(
+                'Atenção!',
+                String(data.details),
+                'error'
+              );
+
+            }
+          })
+          .catch(error => {
+
+            console.error('Erro ao enviar os dados all :', data);
+            console.error('Erro ao enviar os dados:', error);
+
+          });
+      }
+    });
 
 
   </script>
 
-  <!-- Owl Carousel JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-  <script src="https://unpkg.com/@material-tailwind/html@latest/scripts/ripple.js"></script>
+
 </body>
 
 </html>

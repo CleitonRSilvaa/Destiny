@@ -56,16 +56,18 @@
   background-repeat: no-repeat;
 }
 
-button,
+
 .divImg {
   background: linear-gradient(to bottom, #4b1c71, #cba075);
   border: none;
 }
 
-button:hover {
+/* button:hover {
   background: linear-gradient(to bottom, #cba075, #4b1c71);
-  /* Inverte o gradiente ao passar o mouse */
-}
+  
+} */
+/* Inverte o gradiente ao passar o mouse */
+
 
 input {
   border: 2px solid #e0b0ff;

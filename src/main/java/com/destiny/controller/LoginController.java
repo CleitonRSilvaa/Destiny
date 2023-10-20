@@ -28,7 +28,7 @@ public class LoginController {
                     return "redirect:/estoque/dashboard";
                 }
                 if (userDetails.getTipoConta().equals(TipoConta.CLIENTE)) {
-                    return "redirect:/cliente/dashboard";
+                    return "redirect:/";
                 }
             }
 

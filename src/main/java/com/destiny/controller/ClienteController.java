@@ -1,6 +1,7 @@
 package com.destiny.controller;
 
 import com.destiny.model.Cliente;
+import com.destiny.model.CustomUserDetails;
 import com.destiny.model.Endereco;
 import com.destiny.model.MensagemResponse;
 import com.destiny.model.StatusConta;
@@ -13,9 +14,15 @@ import com.destiny.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLDataException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +47,61 @@ public class ClienteController {
         return "cliente/registroCliente";
     }
 
+    @GetMapping("/alterar-senha")
+    public String telaAlterarSenhaCliente(Model model) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+            return "/login";
+        }
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+        Optional optionalCliente = clienteRepository.findById(userDetails.getId());
+        Cliente cliente = (Cliente) optionalCliente.get();
+        cliente.setSenha("");
+        cliente.setEnderecos(null);
+        model.addAttribute("cliente", cliente);
+
+        return "cliente/alterarSenhaCliente";
+    }
+
+    @PostMapping("/alterar-senha")
+    public ResponseEntity<MensagemResponse> alterarSenha(@RequestBody Cliente.AlterarSenhaDTO clienteUpdate) {
+
+        List<String> errors = new ArrayList<>();
+        MensagemResponse mensagemResponse = new MensagemResponse();
+        List<String> detalhes = new ArrayList<>();
+
+        Cliente cliente = clienteRepository.findByEmail(clienteUpdate.getEmail());
+
+        if (cliente == null) {
+            mensagemResponse.setStatus(400);
+            mensagemResponse.setMessage("error");
+            mensagemResponse.setDetails(detalhes);
+            return new ResponseEntity<>(mensagemResponse, HttpStatus.BAD_REQUEST);
+        }
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        // Verifica se a senha antiga informada é a mesma do banco
+        if (!encoder.matches(clienteUpdate.getSenhaAntiga(), cliente.getSenha())) {
+            detalhes.add("Senha atual incorreta.");
+            mensagemResponse.setStatus(400);
+            mensagemResponse.setMessage("paramentro-invalido");
+            mensagemResponse.setDetails(detalhes);
+            return new ResponseEntity<>(mensagemResponse, HttpStatus.BAD_REQUEST);
+        }
+
+        // Atualiza a senha e salva no banco
+        cliente.setSenha(clienteUpdate.getSenhaNova());
+        clienteRepository.save(cliente);
+
+        detalhes.add("Senha alterada com sucesso!");
+        mensagemResponse.setStatus(200);
+        mensagemResponse.setMessage("success");
+        mensagemResponse.setDetails(detalhes);
+        return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
+    }
+
     @GetMapping("/clienteList")
     public List<Map<String, Object>> list() {
         return clienteRepository.findAllCustom();
@@ -48,6 +110,26 @@ public class ClienteController {
     @GetMapping("/listDetalhada")
     public List<Cliente> listAllDetalhes() {
         return clienteRepository.findAll();
+    }
+
+    @GetMapping("/perfil")
+    public String telaAlterar(Model model) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+            return "/login";
+        }
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+        Optional optionalCliente = clienteRepository.findById(userDetails.getId());
+        Cliente cliente = (Cliente) optionalCliente.get();
+        cliente.setSenha("");
+        cliente.setEnderecos(null);
+        List enderecos = enderecoRepository.findByClienteIdAndStatusAndTipo(cliente.getId(), StatusConta.ATIVA,
+                Endereco.tipoEndereco.ENTREGA);
+        cliente.setEnderecos(enderecos);
+        model.addAttribute("cliente", cliente);
+
+        return "cliente/AlterarCliente.html";
     }
 
     @PostMapping("/add")
@@ -113,6 +195,7 @@ public class ClienteController {
             endereco.setCliente(cliente);
 
             if (enderecos.size() == 1) {
+                endereco.setStatus(StatusConta.ATIVA);
                 Endereco endereco2 = new Endereco(endereco);
                 endereco2.setTipo(Endereco.tipoEndereco.FATURAMENTO);
                 endereco2.setPrincipal(false);
@@ -142,47 +225,54 @@ public class ClienteController {
         List<String> detalhes = new ArrayList<>();
         List<String> errors = new ArrayList<>();
 
-        if (!clienteRepository.existsById(cliente.getId())) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-            mensagemResponse.setStatus(400);
-
+        if (auth instanceof AnonymousAuthenticationToken) {
+            mensagemResponse.setStatus(200);
             mensagemResponse.setMessage("erro");
-            if (cliente.getId() == 0) {
+            detalhes.add("usuario não esta autenticado");
+            mensagemResponse.setDetails(detalhes);
+            return new ResponseEntity<>(mensagemResponse, HttpStatus.ACCEPTED);
+        }
+
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+
+        if (!clienteRepository.existsById(userDetails.getId())) {
+            mensagemResponse.setStatus(400);
+            mensagemResponse.setMessage("erro");
+            if (userDetails.getId() == 0) {
                 detalhes.add("parementro id nao definido");
             } else {
                 detalhes.add("id invalido");
             }
-
             mensagemResponse.setDetails(detalhes);
-
             return new ResponseEntity<>(mensagemResponse, HttpStatus.BAD_REQUEST);
 
         }
 
-        clienteRepository.existsById(cliente.getId());
+        System.out.println("Clienteeeeeeee " + cliente);
 
-        if (cliente.getNome() == null) {
+        Optional optionalCliente = clienteRepository.findById(userDetails.getId());
+
+        Cliente cliente2 = (Cliente) optionalCliente.get();
+
+        if (cliente.getNome().isBlank()) {
             errors.add("nome é obrigatório.");
         }
-        if (cliente.getEmail() == null) {
-            errors.add("email é obrigatório.");
+        if (cliente.getDataNacimento() == null) {
+            errors.add("data de nascimento é obrigatório.");
         }
-        if (cliente.getCpf() == null) {
+        if (cliente.getGenero().isBlank()) {
             errors.add("cpf é obrigatório.");
         }
-        if (cliente.getSenha() == null) {
-            errors.add("senha é obrigatório.");
-        }
 
-        if (cliente.getStatusConta() == null) {
-            errors.add("statusConta é obrigatório.");
-        }
-
-        if (clienteRepository.existsByEmailAndIdNot(cliente.getEmail(), cliente.getId())) {
+        if (clienteRepository.existsByEmailAndIdNot(cliente2.getEmail(),
+                cliente2.getId())) {
             errors.add("E-mail já associado a outro cliente.");
         }
 
-        if (clienteRepository.existsByCpfAndIdNot(cliente.getCpf(), cliente.getId())) {
+        if (clienteRepository.existsByCpfAndIdNot(cliente2.getCpf(),
+                cliente2.getId())) {
             errors.add("CPF já associado a outro cliente.");
         }
 
@@ -190,13 +280,17 @@ public class ClienteController {
             throw new ValidationException("parametros invalidos", errors);
         }
 
-        clienteRepository.save(cliente);
+        cliente2.setNome(cliente.getNome());
+        cliente2.setDataNacimento(cliente.getDataNacimento());
+        cliente2.setGenero(cliente.getGenero());
+        clienteRepository.save(cliente2);
 
         mensagemResponse.setStatus(200);
-        mensagemResponse.setMessage("sucess");
+        mensagemResponse.setMessage("success");
         mensagemResponse.setDetails(detalhes);
 
         return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
+
     }
 
     @DeleteMapping("/delete/{id}")
@@ -225,16 +319,70 @@ public class ClienteController {
 
         clienteRepository.deleteById(longId);
         mensagemResponse.setStatus(200);
-        mensagemResponse.setMessage("sucess");
+        mensagemResponse.setMessage("success");
         mensagemResponse.setDetails(detalhes);
 
         return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Optional<Cliente> buscarCliente(@PathVariable String id) {
+    @PostMapping("/add/endereco")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<MensagemResponse> addECliente(@RequestBody Endereco endereco) {
+
         List<String> errors = new ArrayList<>();
+        MensagemResponse mensagemResponse = new MensagemResponse();
+        List<String> detalhes = new ArrayList<>();
+
+        try {
+
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+            if (auth instanceof AnonymousAuthenticationToken) {
+                mensagemResponse.setStatus(200);
+                mensagemResponse.setMessage("erro");
+                detalhes.add("usuario não esta autenticado");
+                mensagemResponse.setDetails(detalhes);
+                return new ResponseEntity<>(mensagemResponse, HttpStatus.ACCEPTED);
+            }
+
+            CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+
+            Optional<Cliente> cliente = clienteRepository.findById(userDetails.getId());
+            endereco.setCliente(cliente.get());
+            endereco.setStatus(StatusConta.ATIVA);
+
+            enderecoRepository.save(endereco);
+            mensagemResponse.setStatus(200);
+            mensagemResponse.setMessage("success");
+            mensagemResponse.setDetails(detalhes);
+
+            return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
+        } catch (NumberFormatException e) {
+            detalhes.clear();
+            detalhes.add("id not INT");
+            mensagemResponse.setStatus(400);
+            mensagemResponse.setMessage("erro");
+            mensagemResponse.setDetails(detalhes);
+            return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            detalhes.clear();
+            detalhes.add(e.getLocalizedMessage());
+            mensagemResponse.setStatus(400);
+            mensagemResponse.setMessage("erro");
+            mensagemResponse.setDetails(detalhes);
+            return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
+        }
+
+    }
+
+    @DeleteMapping("/delete/endereco/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<MensagemResponse> adicinarEnderecoCliente(@PathVariable String id) {
+
+        List<String> errors = new ArrayList<>();
+        MensagemResponse mensagemResponse = new MensagemResponse();
+        List<String> detalhes = new ArrayList<>();
+
         long longId = 0;
 
         try {
@@ -242,13 +390,73 @@ public class ClienteController {
         } catch (NumberFormatException e) {
             errors.add("id not INT");
         }
+        enderecoRepository.updateStatusEndereco(StatusConta.INATIVA, longId);
 
-        if (!errors.isEmpty()) {
-            throw new ValidationException("parametro invalido", errors);
+        mensagemResponse.setStatus(200);
+        mensagemResponse.setMessage("sucess");
+        mensagemResponse.setDetails(detalhes);
+
+        return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
+    }
+
+    @PutMapping("/padrao/endereco/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<MensagemResponse> alterarEnderecoPadrao(@PathVariable String id) {
+        List<String> errors = new ArrayList<>();
+        MensagemResponse mensagemResponse = new MensagemResponse();
+        List<String> detalhes = new ArrayList<>();
+
+        try {
+
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+            if (auth instanceof AnonymousAuthenticationToken) {
+                mensagemResponse.setStatus(200);
+                mensagemResponse.setMessage("erro");
+                detalhes.add("usuario não esta autenticado");
+                mensagemResponse.setDetails(detalhes);
+                return new ResponseEntity<>(mensagemResponse, HttpStatus.ACCEPTED);
+            }
+            long longId = Long.parseLong(id);
+
+            CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+
+            enderecoRepository.updateAllEnderecoPadrao(userDetails.getId());
+            enderecoRepository.updateEnderecoPadrao(longId);
+
+            mensagemResponse.setStatus(200);
+            mensagemResponse.setMessage("success");
+            mensagemResponse.setDetails(detalhes);
+
+            return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
+        } catch (NumberFormatException e) {
+            errors.add("id not INT");
+        } catch (Exception e) {
+
         }
 
-        return clienteRepository.findById(longId);
+        return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
 
     }
+
+    // @GetMapping("/{id}")
+    // @ResponseStatus(HttpStatus.OK)
+    // public Optional<Cliente> buscarCliente(@PathVariable String id) {
+    // List<String> errors = new ArrayList<>();
+    // long longId = 0;
+
+    // try {
+    // longId = Long.parseLong(id);
+    // } catch (NumberFormatException e) {
+    // errors.add("id not INT");
+    // }
+
+    // if (!errors.isEmpty()) {
+    // throw new ValidationException("parametro invalido", errors);
+    // }
+
+    // return clienteRepository.findById(longId);
+
+    // }
 
 }
