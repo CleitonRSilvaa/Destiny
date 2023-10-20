@@ -70,4 +70,12 @@ public class Cliente {
         this.genero = genero;
         this.dataNacimento = dataNascimento;
     }
+
+    @Data
+    public static class AlterarSenhaDTO {
+        private String email;
+        private String senhaAntiga;
+        private String senhaNova;
+    }
+
 }

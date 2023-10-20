@@ -42,14 +42,13 @@ public class AcessoController {
         model.addAttribute("produtoPage", listaProdutos);
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String nome = auth.getName();
+
+        CustomUserDetails userDetails = null;
         if (auth.getPrincipal() instanceof CustomUserDetails) {
-            CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
-            nome = userDetails.getNome();
-            System.out.println(nome);
+            userDetails = (CustomUserDetails) auth.getPrincipal();
         }
 
-        model.addAttribute("nomeUsuario", nome);
+        model.addAttribute("usuario", userDetails);
 
         return "landingPage";
     }

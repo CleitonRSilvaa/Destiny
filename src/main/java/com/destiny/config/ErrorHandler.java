@@ -10,11 +10,16 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class ErrorHandler {
@@ -79,9 +84,13 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ModelAndView handleNotFoundError() {
-        ModelAndView mav = new ModelAndView("error404"); // nome do arquivo HTML sem a extensão
-        return mav;
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<MensagemResponse> handleNotFoundError(NoHandlerFoundException ex) {
+        MensagemResponse error = new MensagemResponse();
+        error.setStatus(HttpStatus.NOT_FOUND.value());
+        error.setMessage("Página não encontrada");
+        error.setDetails(Arrays.asList(ex.getRequestURL() + " não foi encontrado"));
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
 }

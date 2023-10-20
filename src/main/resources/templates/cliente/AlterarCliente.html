@@ -7,11 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Atualização de Dados</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
   <link rel="stylesheet" href="../css/sweetalert2.min.css">
-  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
-  
   <link rel="shortcut icon" href="../img/LogoDestiny2.svg" type="image/x-icon">
   <script src="../js/sweetalert2.min.js"></script>
 
@@ -55,7 +51,8 @@
         </div>
         <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
           <div class="flex flex-shrink-0 items-center">
-            <img class="h-8 w-auto" src="../img/LogoDestiny.svg" alt="Your Company">
+            <a href="/"><img class="h-8 w-auto" src="../img/LogoDestiny.svg" alt="Your Company"></a>
+
           </div>
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
@@ -91,11 +88,12 @@
                 <span class="block text-sm  text-gray-500 truncate dark:text-gray-400" th:text="${cliente.email}"></span>
                 <hr>
               </div>
-
+              <a href="/" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Home</a>
               <a href="/cliente/perfil" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Meu Perfil</a>
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Meus pedidos</a>
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Configurações</a>
-              <a href="/logout" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-3">Sair</a>
+              <a href="/cliente/alterar-senha" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Alterar Senha</a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Meus pedidos</a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-3">Configurações</a>
+              <a href="/logout" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-4">Sair</a>
             </div>
           </div>
         </div>
@@ -153,7 +151,7 @@
 
         <th:block th:each="endereco, iterStat : ${cliente.enderecos}">
           <div th:class="${endereco.principal} ? 'mb-4 bg-blue-300 p-4 rounded-md relative' : 'mb-4 bg-gray-200 p-4 rounded-md relative'" th:data-endereco-id="${endereco.id}">
-            
+
             <label class="inline-flex items-center">
               <span class="ml-4 block">
                 CEP: <span class="font-semibold" th:text="${endereco.cep}"></span><br>
@@ -572,41 +570,46 @@
         return;
       }
 
-
-      fetch('http://localhost:8080/cliente/update', {
-        method: 'PUT',
+      fetch('http://localhost:8080/cliente/alterar-senha', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(cliente)
       })
-        .then(response => response.json())
+        .then(response => {
+          // Verificar se a resposta é bem-sucedida. Se não for, rejeitar a promessa.
+          if (!response.ok) {
+            throw new Error("Erro na resposta do servidor");
+          }
+          return response.json();
+        })
         .then(data => {
-          console.info(data)
-          // Aqui você pode lidar com a resposta da sua API
-          if (data.status == 200) {
-            Swal.fire('', 'Cadastrado atualizado com sucesso.', 'success').then(() => {
-              location.reload()
-            });
-          } else if (data.status = 405 & data.path === "/login") {
-            Swal.fire('Atenção!', 'Sessão enserada logi novamento', 'warning').then(() => {
-              location.reload()
-            });
+          console.info(data);
 
+          // Aqui você pode lidar com a resposta da sua API
+          if (data.status === 200) {
+            Swal.fire('', data.details[0], 'success').then(() => {
+              location.reload();
+            });
+          } else if (data.status === 405 && data.path === "/login") {
+            Swal.fire('Atenção!', 'Sessão encerrada. Faça login novamente.', 'warning').then(() => {
+              location.reload();
+            });
           } else {
-            Swal.fire(
-              'Erro!',
-              '' + data.message + ' Tente novamente mais tarde.',
-              'error'
-            );
+            Swal.fire('Erro!', data.details[0] + ' Tente novamente mais tarde.', 'error');
           }
         })
         .catch(error => {
+          console.error('Erro na requisição:', error);
 
-          console.error('Erro ao enviar os dados all :', data);
-          console.error('Erro ao enviar os dados:', error);
-          // Mostrar uma mensagem de erro para o usuário, se necessário
+          // Exiba uma mensagem de erro genérica para o usuário
+          Swal.fire('Erro!', 'Houve um problema na requisição. Tente novamente mais tarde.', 'error');
         });
+
+
+
+
     });
 
   </script>

@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +45,61 @@ public class ClienteController {
     public String telaRegistarCliente() {
 
         return "cliente/registroCliente";
+    }
+
+    @GetMapping("/alterar-senha")
+    public String telaAlterarSenhaCliente(Model model) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+            return "/login";
+        }
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+        Optional optionalCliente = clienteRepository.findById(userDetails.getId());
+        Cliente cliente = (Cliente) optionalCliente.get();
+        cliente.setSenha("");
+        cliente.setEnderecos(null);
+        model.addAttribute("cliente", cliente);
+
+        return "cliente/alterarSenhaCliente";
+    }
+
+    @PostMapping("/alterar-senha")
+    public ResponseEntity<MensagemResponse> alterarSenha(@RequestBody Cliente.AlterarSenhaDTO clienteUpdate) {
+
+        List<String> errors = new ArrayList<>();
+        MensagemResponse mensagemResponse = new MensagemResponse();
+        List<String> detalhes = new ArrayList<>();
+
+        Cliente cliente = clienteRepository.findByEmail(clienteUpdate.getEmail());
+
+        if (cliente == null) {
+            mensagemResponse.setStatus(400);
+            mensagemResponse.setMessage("error");
+            mensagemResponse.setDetails(detalhes);
+            return new ResponseEntity<>(mensagemResponse, HttpStatus.BAD_REQUEST);
+        }
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        // Verifica se a senha antiga informada é a mesma do banco
+        if (!encoder.matches(clienteUpdate.getSenhaAntiga(), cliente.getSenha())) {
+            detalhes.add("Senha atual incorreta.");
+            mensagemResponse.setStatus(400);
+            mensagemResponse.setMessage("paramentro-invalido");
+            mensagemResponse.setDetails(detalhes);
+            return new ResponseEntity<>(mensagemResponse, HttpStatus.BAD_REQUEST);
+        }
+
+        // Atualiza a senha e salva no banco
+        cliente.setSenha(clienteUpdate.getSenhaNova());
+        clienteRepository.save(cliente);
+
+        detalhes.add("Senha alterada com sucesso!");
+        mensagemResponse.setStatus(200);
+        mensagemResponse.setMessage("success");
+        mensagemResponse.setDetails(detalhes);
+        return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
     }
 
     @GetMapping("/clienteList")
@@ -383,24 +439,24 @@ public class ClienteController {
 
     }
 
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Optional<Cliente> buscarCliente(@PathVariable String id) {
-        List<String> errors = new ArrayList<>();
-        long longId = 0;
+    // @GetMapping("/{id}")
+    // @ResponseStatus(HttpStatus.OK)
+    // public Optional<Cliente> buscarCliente(@PathVariable String id) {
+    // List<String> errors = new ArrayList<>();
+    // long longId = 0;
 
-        try {
-            longId = Long.parseLong(id);
-        } catch (NumberFormatException e) {
-            errors.add("id not INT");
-        }
+    // try {
+    // longId = Long.parseLong(id);
+    // } catch (NumberFormatException e) {
+    // errors.add("id not INT");
+    // }
 
-        if (!errors.isEmpty()) {
-            throw new ValidationException("parametro invalido", errors);
-        }
+    // if (!errors.isEmpty()) {
+    // throw new ValidationException("parametro invalido", errors);
+    // }
 
-        return clienteRepository.findById(longId);
+    // return clienteRepository.findById(longId);
 
-    }
+    // }
 
 }
