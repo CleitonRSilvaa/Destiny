@@ -570,8 +570,9 @@
         return;
       }
 
-      fetch('http://localhost:8080/cliente/alterar-senha', {
-        method: 'POST',
+
+      fetch('http://localhost:8080/cliente/update', {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -589,15 +590,16 @@
 
           // Aqui você pode lidar com a resposta da sua API
           if (data.status === 200) {
-            Swal.fire('', data.details[0], 'success').then(() => {
+            Swal.fire('', 'Cadastrado atualizado com sucesso.', 'success').then(() => {
               location.reload();
             });
           } else if (data.status === 405 && data.path === "/login") {
             Swal.fire('Atenção!', 'Sessão encerrada. Faça login novamente.', 'warning').then(() => {
               location.reload();
             });
+
           } else {
-            Swal.fire('Erro!', data.details[0] + ' Tente novamente mais tarde.', 'error');
+            Swal.fire('Erro!', data.details + ' Tente novamente mais tarde.', 'error');
           }
         })
         .catch(error => {
@@ -611,6 +613,7 @@
 
 
     });
+
 
   </script>
 
