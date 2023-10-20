@@ -56,7 +56,7 @@ public class ClienteController {
         return clienteRepository.findAll();
     }
 
-    @GetMapping("/alterar")
+    @GetMapping("/perfil")
     public String telaAlterar(Model model) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

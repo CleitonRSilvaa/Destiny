@@ -11,7 +11,7 @@
 
   <link rel="stylesheet" href="../css/sweetalert2.min.css">
   <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
-  <link href="../css/styleRegistroCliente.css" rel="stylesheet">
+  
   <link rel="shortcut icon" href="../img/LogoDestiny2.svg" type="image/x-icon">
   <script src="../js/sweetalert2.min.js"></script>
 
@@ -42,23 +42,12 @@
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
       <div class="relative flex h-16 items-center justify-between">
         <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
-          <!-- Mobile menu button-->
           <button type="button" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
             <span class="absolute -inset-0.5"></span>
             <span class="sr-only">Open main menu</span>
-            <!--
-                Icon when menu is closed.
-    
-                Menu open: "hidden", Menu closed: "block"
-              -->
             <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
-            <!--
-                Icon when menu is open.
-    
-                Menu open: "block", Menu closed: "hidden"
-              -->
             <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -70,7 +59,6 @@
           </div>
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
-              <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
               <a href="#" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Pacotes</a>
               <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Passeios</a>
               <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Destinos</a>
@@ -86,7 +74,6 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
             </svg>
           </button>
-
           <!-- Profile dropdown -->
           <div class="relative ml-3" th:if="${#authentication.authorities[0].authority == 'ROLE_CLIENTE'}">
             <div>
@@ -100,12 +87,12 @@
             <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
 
               <div class="px-4 py-3">
-                <span class="block text-sm text-gray-900 dark:text-white" th:text="${nomeUsuario}"></span>
-                <span class="block text-sm  text-gray-500 truncate dark:text-gray-400" th:text="${#authentication.name}"></span>
+                <span class="block text-sm text-gray-900 dark:text-white" th:text="${cliente.nome}"></span>
+                <span class="block text-sm  text-gray-500 truncate dark:text-gray-400" th:text="${cliente.email}"></span>
                 <hr>
               </div>
 
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Meu Perfil</a>
+              <a href="/cliente/perfil" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Meu Perfil</a>
               <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Meus pedidos</a>
               <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Configurações</a>
               <a href="/logout" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-3">Sair</a>
@@ -121,10 +108,8 @@
       </div>
     </div>
 
-    <!-- Mobile menu, show/hide based on menu state. -->
     <div class="sm:hidden" id="mobile-menu">
       <div class="space-y-1 px-2 pb-3 pt-2">
-        <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
         <a href="#" class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" aria-current="page">Pacotes</a>
         <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Passeios</a>
         <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Destinos</a>
@@ -167,7 +152,8 @@
       <div id="addressList">
 
         <th:block th:each="endereco, iterStat : ${cliente.enderecos}">
-          <div class="mb-4 bg-gray-200 p-4 rounded-md relative" th:data-endereco-id="${endereco.id}">
+          <div th:class="${endereco.principal} ? 'mb-4 bg-blue-300 p-4 rounded-md relative' : 'mb-4 bg-gray-200 p-4 rounded-md relative'" th:data-endereco-id="${endereco.id}">
+            
             <label class="inline-flex items-center">
               <span class="ml-4 block">
                 CEP: <span class="font-semibold" th:text="${endereco.cep}"></span><br>
@@ -175,15 +161,16 @@
                 Número: <span class="font-semibold" th:text="${endereco.numero}"></span><br>
                 Complemento: <span class="font-semibold" th:text="${endereco.complemento}"></span><br>
                 Bairro: <span class="font-semibold" th:text="${endereco.bairro}"></span><br>
-                Localidade: <span class="font-semibold" th:text="${endereco.localidade}"></span><br>
+                Cidade: <span class="font-semibold" th:text="${endereco.localidade}"></span><br>
                 UF: <span class="font-semibold" th:text="${endereco.uf}"></span>
               </span>
             </label>
             <div class="absolute top-2 right-2">
               <button class="bg-blue-500 text-white px-2 py-1 rounded-full" onclick="toggleDropdown(this)">⋮</button>
               <div class="dropdown-content hidden mt-2 rounded-md shadow-lg bg-white">
-                <button onclick="removerEndereco(this)" class="block px-4 py-2 text-sm">Remover</button>
-                <button onclick="enderecoPadrao(this)" class="block px-4 py-2 text-sm">Usar como endereço predefinido de envios</button>
+                <button onclick="removerEndereco(this)" class="block p-4 py-2 text-sm">Remover</button>
+                <hr>
+                <button onclick="enderecoPadrao(this)" class="block p-4 py-2 text-sm">Usar como endereço parão</button>
               </div>
             </div>
           </div>
@@ -410,8 +397,7 @@
         const data = await response.json();
         if (data.message === 'success') {
           Swal.fire('', 'Endereço cadastrado com sucesso.', 'success').then(() => {
-            document.querySelector('[modal-backdrop]').remove(); // Adicione esta linha aqui
-            hideModal('staticModal');
+            location.reload()
 
           });
         } else {
@@ -485,12 +471,12 @@
     function enderecoPadrao(buttonElement) {
       Swal.fire({
         title: 'Você deseja definir este endereço como padrão?',
-        text: "Esta ação não pode ser desfeita!",
+        text: "",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Sim, excluir!',
+        confirmButtonText: 'Sim!',
         cancelButtonText: 'Cancelar'
       }).then(async (result) => {
         if (result.isConfirmed) {
@@ -500,7 +486,9 @@
               '',
               'Endereço definido como padrão com sucesso.',
               'success'
-            );
+            ).then(() => {
+              location.reload()
+            });
           } catch (error) {
             Swal.fire(
               'Erro!',
