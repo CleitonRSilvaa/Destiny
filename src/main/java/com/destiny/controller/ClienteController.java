@@ -205,9 +205,10 @@ public class ClienteController {
                 endereco.setPrincipal(true);
                 endereco.setCliente(cliente);
                 enderecoRepository.save(endereco);
+            } else {
+                endereco.setStatus(StatusConta.ATIVA);
+                enderecoRepository.save(endereco);
             }
-
-            enderecoRepository.save(endereco);
 
         }
 
