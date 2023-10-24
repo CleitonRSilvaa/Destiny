@@ -41,6 +41,9 @@
               <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Itinerários</a>
             </div>
           </div>
+          <div>
+            <samp class="text-white" id="carrinhoCount"></samp>
+          </div>
         </div>
         <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
           <button type="button" class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
@@ -123,16 +126,17 @@
 
         <!-- Product Info Section -->
         <div class="w-full md:w-1/2 p-8 shadow-lg border rounded bg-white px-4">
-          <h2 class="font-bold text-xl mb-4" th:text="${produto.nome}"></h2>
-          <p class="text-2xl text-blue-600 mb-4" th:text="${'R$' + produto.valor}"></p>
-          <p class="mb-4" th:text="${'Avaliação: ' + produto.avaliacao}"></p>
-          <p class="mb-4" th:text="${'Descrição: ' + produto.descricao}"></p>
+          <h2 class="font-bold text-xl mb-4" th:text="${produto.nome}" th:data-nome="${produto.nome}"></h2>
+          <p class="text-2xl text-blue-600 mb-4" th:text="${'R$' + produto.valor}" th:data-valor="${produto.valor}"></p>
+          <p class="mb-4" th:text="${'Avaliação: ' + produto.avaliacao}" th:data-avaliacao="${produto.avaliacao}"></p>
+          <p class="mb-4" th:text="${'Descrição: ' + produto.descricao}" th:data-descricao="${produto.descricao}"></p>
           <div class="mb-4">
             <label for="quantidade" class="block text-sm font-medium text-gray-700 mb-2">Quantidade</label>
-            <input type="number" class="form-input block w-full p-2 rounded border-gray-300" id="quantidade" name="quantidade" min="1" required>
+            <input type="number" value="1" class="form-input block w-full p-2 rounded border-gray-300" id="quantidade" name="quantidade" min="1" required>
           </div>
-          <button class="bg-green-500 text-white py-3 w-full rounded-lg mt-4" id="comprarBtn" disabled>Comprar</button>
+          <button class="bg-green-500 text-white py-3 w-full rounded-lg mt-4" id="comprarBtn" th:data-id="${produto.id}" onclick="adicionarAoCarrinho(this)">Comprar</button>
         </div>
+
       </div>
     </div>
 
@@ -209,23 +213,88 @@
   </footer>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      // Toggle do menu mobile
-      let menuButton = document.querySelector('[aria-controls="mobile-menu"]');
-      let mobileMenu = document.getElementById('mobile-menu');
+    // document.addEventListener('DOMContentLoaded', function () {
+    //   // Toggle do menu mobile
+    //   let menuButton = document.querySelector('[aria-controls="mobile-menu"]');
+    //   let mobileMenu = document.getElementById('mobile-menu');
 
-      menuButton.addEventListener('click', function () {
-        mobileMenu.classList.toggle('hidden');
-      });
+    //   menuButton.addEventListener('click', function () {
+    //     mobileMenu.classList.toggle('hidden');
+    //   });
 
-      // Toggle do dropdown de perfil
-      let userMenuButton = document.getElementById('user-menu-button');
-      let userMenuDropdown = document.querySelector('[aria-labelledby="user-menu-button"]');
+    //   // Toggle do dropdown de perfil
+    //   let userMenuButton = document.getElementById('user-menu-button');
+    //   let userMenuDropdown = document.querySelector('[aria-labelledby="user-menu-button"]');
 
-      userMenuButton.addEventListener('click', function () {
-        userMenuDropdown.classList.toggle('hidden');
-      });
+    //   userMenuButton.addEventListener('click', function () {
+    //     userMenuDropdown.classList.toggle('hidden');
+    //   });
+    // });
+
+    let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+
+    function adicionarAoCarrinho(btn) {
+      const produtoId = btn.getAttribute('data-id');
+      const nome = btn.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.getAttribute('data-nome');
+      const valor = parseFloat(btn.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.getAttribute('data-valor'));
+      const avaliacao = parseFloat(btn.previousElementSibling.previousElementSibling.previousElementSibling.getAttribute('data-avaliacao'));
+      const descricao = btn.previousElementSibling.previousElementSibling.getAttribute('data-descricao');
+      const quantidade = parseInt(document.getElementById('quantidade').value);
+
+      let produto = {
+        id: produtoId,
+        nome: nome,
+        valor: valor,
+        avaliacao: avaliacao,
+        descricao: descricao,
+        quantidade: quantidade,
+        subTotal: 0
+      };
+
+      adicionaAoCarrinhoLogic(produto);
+    }
+
+    function adicionaAoCarrinhoLogic(produto) {
+      let itemExistente = carrinho.find(item => item.id === produto.id);
+
+      if (itemExistente) {
+        itemExistente.quantidade += produto.quantidade;
+        itemExistente.subTotal = itemExistente.quantidade * itemExistente.valor
+      } else {
+        carrinho.push(produto);
+      }
+
+      // Aqui você pode adicionar uma lógica para atualizar a visualização do carrinho na tela, se necessário.
+      // Por exemplo, mostrando um número indicando quantos itens estão no carrinho.
+      atualizaVisualizacaoCarrinho();
+
+      atualizaLocalStorage();
+    }
+
+    function atualizaLocalStorage() {
+      localStorage.setItem('carrinho', JSON.stringify(carrinho));
+    }
+
+    function atualizaVisualizacaoCarrinho() {
+      console.info(carrinho)
+      const totalItens = carrinho.reduce((acc, produto) => acc + produto.quantidade, 0);
+      const totalValor = carrinho.reduce((acc, produto) => acc + produto.quantidade * produto.valor, 0);
+      console.info(totalItens)
+      console.info(totalValor)
+
+      document.getElementById('carrinhoCount').textContent = totalItens;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      atualizaVisualizacaoCarrinho();
     });
+
+    function limpaCarrinho() {
+      carrinho = [];
+      atualizaVisualizacaoCarrinho();
+      atualizaLocalStorage();
+    }
+
 
   </script>
 
