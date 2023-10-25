@@ -1,6 +1,10 @@
 let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
 
 function adicionarAoCarrinho(btn) {
+
+  console.log("Antes de desativar:", btn.disabled);
+  btn.disabled = true;
+  
   const produtoId = btn.getAttribute("data-id");
   const nome =
     btn.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.getAttribute(
@@ -31,11 +35,12 @@ function adicionarAoCarrinho(btn) {
     quantidade: quantidade,
     subTotal: 0,
   };
+  console.log("Depois de desativar:", btn.disabled);
+  adicionaAoCarrinhoLogic(produto, btn);
+ }
 
-  adicionaAoCarrinhoLogic(produto);
-}
-
-function adicionaAoCarrinhoLogic(produto) {
+function adicionaAoCarrinhoLogic(produto,btn) {
+  
   let itemExistente = carrinho.find((item) => item.id === produto.id);
 
   if (itemExistente) {
@@ -45,14 +50,26 @@ function adicionaAoCarrinhoLogic(produto) {
     carrinho.push(produto);
   }
 
+  //btn.disabled = false;
+  exibirModalNotificacao();
   // Aqui você pode adicionar uma lógica para atualizar a visualização do carrinho na tela, se necessário.
   // Por exemplo, mostrando um número indicando quantos itens estão no carrinho.
   atualizaVisualizacaoCarrinho();
 
-  atualizaLocalStorage();
+  atualizaLocalStorage(btn);
 }
 
-function atualizaLocalStorage() {
+function exibirPopup() {
+  const popup = document.getElementById("alertPopup");
+  popup.classList.remove("hidden");
+
+  setTimeout(() => {
+    popup.classList.add("hidden");
+  }, 3000);  // O popup será ocultado após 3 segundos
+}
+
+function atualizaLocalStorage(btn) {
+  btn.disabled = false;
   localStorage.setItem("carrinho", JSON.stringify(carrinho));
 }
 
@@ -66,11 +83,8 @@ function atualizaVisualizacaoCarrinho() {
     (acc, produto) => acc + produto.quantidade * produto.valor,
     0
   );
-  console.info(totalItens);
-  console.info(totalValor);
 
   document.getElementById("carrinhoCount").textContent = totalItens;
-  document.getElementById("carrinhoCount2").textContent = totalItens;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -81,4 +95,14 @@ function limpaCarrinho() {
   carrinho = [];
   atualizaVisualizacaoCarrinho();
   atualizaLocalStorage();
+}
+
+
+function exibirModalNotificacao() {
+  const modal = document.getElementById('modalNotification');
+  modal.classList.remove('hidden');
+
+  setTimeout(() => {
+    modal.classList.add('hidden');
+  }, 1000);  // O modal será ocultado após 3 segundos
 }
