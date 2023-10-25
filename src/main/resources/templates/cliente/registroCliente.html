@@ -291,8 +291,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
                         <div x-show.transition.in="step === 4" class="relative">
 
@@ -318,9 +316,9 @@
                                         Verifique se todos os seus dados estão corretos. Se estiver tudo certo, clique no botão 'Cadastrar'. Se precisar fazer alguma correção, clique no botão 'Voltar'.
                                     </div>
 
-                                    <button id="btnCadastar" @click="submitClienteForm()" class="text-white w-40 block mx-auto focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-white bg-white hover:bg-gray-100 font-medium border" style="border: 2px solid #e0b0ff; color: white;">Cadastrar</button>
+                                    <button id="btnCadastar" @click="submitClienteForm()" class="text-black w-40 block mx-auto focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-black bg-white hover:bg-gray-100 font-medium border" style="border: 2px solid #e0b0ff; color: white;">Cadastrar</button>
 
-                                    <button id="btnVolta" type="button" @click="step--" class="w-32 focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-white bg-white hover:bg-gray-100 font-medium border">Voltar</button>
+                                    <button id="btnVolta" type="button" @click="step--" class="w-32 focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-black bg-white hover:bg-gray-100 font-medium border">Voltar</button>
 
                                 </div>
                             </div>
@@ -333,7 +331,7 @@
                     <div class="max-w-3xl mx-auto px-4 p-4">
                         <div class="flex items-center justify-center">
                             <div class="w-1/2">
-                                <button type="button" x-show="step > 1" @click="step--" class="w-32 focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-white bg-white hover:bg-gray-100 font-medium border">Voltar</button>
+                                <button type="button" x-show="step > 1" @click="step--" class="w-32 focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-black bg-white hover:bg-gray-100 font-medium border">Voltar</button>
                             </div>
 
                             <div class="w-1/2 text-right">
