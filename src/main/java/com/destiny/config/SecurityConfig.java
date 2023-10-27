@@ -100,7 +100,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                                                 "/jquery/**", "/img/**",
                                                                 "/", "/produto/informacao/**",
                                                                 "/cliente/registra-me/**",
-                                                                "/cliente/add/**")
+                                                                "/cliente/add/**", "/carrinho/**")
                                                 .permitAll()
                                                 .antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN") // Adicionado o
                                                                                                         // prefixo
