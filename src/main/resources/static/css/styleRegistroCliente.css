@@ -100,3 +100,88 @@ input:focus {
 .black-svg {
   filter: invert(1);
 }
+
+button,
+.divImg {
+  transition: 0.3s;
+  color: white;
+  background-color: rgba(249, 115, 22, 0.5);
+}
+
+input {
+      border: 2px solid #FDC7A2;
+}
+
+input:focus {
+  border-color: #F97316;
+  /* Defina a cor da borda desejada quando o campo está em foco */
+  box-shadow: color(#734a91);
+  /* Remove a sombra ao redor do campo */
+}
+
+.border-b-2 py-4 {
+  border: 5px solid #c18078;
+}
+
+.has-error {
+  border-color: red;
+}
+
+.error-message {
+  color: red;
+  font-size: 15px;
+}
+
+.has-ok {
+  border-color: #86ffb5;
+}
+
+.black-svg {
+  filter: invert(1);
+}
+
+.bg-gray-800{
+    background-color: #030418;
+}
+
+.bg-gray-200{
+    background-color: #E9F2EA;
+}
+
+.bg-blue-700 {
+    background-color: #F97316;
+}
+
+.bg-blue-700:hover {
+    transition: 0.3s;
+    color: #f97316;
+    background-color: white;
+}
+
+.bg-gray-900{
+    background-color: #F97316;
+}
+
+.text-gray-400:hover {
+    transition: 0.3s;
+    color: white;
+    background-color: #f97316;
+}
+
+.bg-blue-500 {
+    background-color: white;
+    border-color: #f97316;
+    color: #f97316;
+}
+
+.bg-blue-500:hover {
+    transition: 0.3s;
+    color: white;
+    background-color: #f97316;
+}
+
+.bg-white{
+    background-color: white;
+    border-color: #f97316;
+    color: #f97316;
+}
