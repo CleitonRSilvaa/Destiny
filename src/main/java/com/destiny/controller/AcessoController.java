@@ -53,7 +53,7 @@ public class AcessoController {
         return "landingPage";
     }
 
-     @GetMapping("/carrinho")
+    @GetMapping("/carrinho")
     @ResponseStatus(HttpStatus.OK)
     public String carrinhoCompras(Model model) {
         var listaProdutos = produtoService.buscarProdutosPorStatus(StatusProduto.ATIVO);
@@ -90,6 +90,15 @@ public class AcessoController {
             model.addAttribute("errorMessage", session.getAttribute("message"));
             session.removeAttribute("message"); // Limpa a mensagem da sessão após lê-la
         }
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        CustomUserDetails userDetails = null;
+        if (auth.getPrincipal() instanceof CustomUserDetails) {
+            userDetails = (CustomUserDetails) auth.getPrincipal();
+        }
+
+        model.addAttribute("usuario", userDetails);
         return "index";
     }
 
