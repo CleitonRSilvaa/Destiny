@@ -71,6 +71,24 @@ public class AcessoController {
         return "carrinhoCompras";
     }
 
+    @GetMapping("/checkout")
+    @ResponseStatus(HttpStatus.OK)
+    public String checkout(Model model) {
+        var listaProdutos = produtoService.buscarProdutosPorStatus(StatusProduto.ATIVO);
+        model.addAttribute("produtoPage", listaProdutos);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        CustomUserDetails userDetails = null;
+        if (auth.getPrincipal() instanceof CustomUserDetails) {
+            userDetails = (CustomUserDetails) auth.getPrincipal();
+        }
+
+        model.addAttribute("usuario", userDetails);
+
+        return "pagCheckout";
+    }
+
     @GetMapping("/admin/dashboard")
     @ResponseStatus(HttpStatus.OK)
     public String admin(@RequestParam(required = false) String nomeBusca, Model model) {

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout Simples</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+</head>
+
+<body class="bg-gray-100 p-10">
+
+  <div x-data="{ step: 1, selectedAddress: null, newAddress: '', paymentMethod: '', items: ['Produto 1', 'Produto 2'] }">
+
+    <!-- Etapa 1: Seleção de Endereço -->
+    <div x-show="step === 1">
+      <div x-data="{ selectedAddress: null, newAddress: '' }" class="p-4">
+        <!-- Seleção de endereço existente -->
+        <div x-show="!selectedAddress">
+          <label for="addresses">Selecione um endereço:</label>
+          <select id="addresses" x-model="selectedAddress">
+            <!-- Você pode iterar sobre os endereços provenientes de sua API aqui -->
+            <option value="1">Endereço 1</option>
+            <option value="2">Endereço 2</option>
+          </select>
+        </div>
+
+        <!-- Cadastrar novo endereço -->
+        <div x-show="selectedAddress == 'new'">
+          <label for="newAddress">Novo Endereço:</label>
+          <input type="text" id="newAddress" x-model="newAddress" class="border p-2">
+        </div>
+
+        <button @click="selectedAddress = 'new'" class="mt-2 bg-blue-500 text-white p-2">Adicionar novo endereço</button>
+      </div>
+
+      <button @click="step++" class="mt-4 bg-blue-500 text-white p-2">Próxima Etapa</button>
+    </div>
+
+    <!-- Etapa 2: Métodos de Pagamento -->
+    <div x-show="step === 2">
+      <div x-data="{ paymentMethod: '' }" class="p-4">
+        <label>Selecione um método de pagamento:</label>
+        <div>
+          <input type="radio" id="boleto" value="boleto" x-model="paymentMethod">
+          <label for="boleto">Boleto</label>
+        </div>
+        <div>
+          <input type="radio" id="cartao" value="cartao" x-model="paymentMethod">
+          <label for="cartao">Cartão</label>
+        </div>
+        <div>
+          <input type="radio" id="pix" value="pix" x-model="paymentMethod">
+          <label for="pix">Pix</label>
+        </div>
+
+        <!-- Se o método de pagamento for Cartão -->
+        <div x-show="paymentMethod == 'cartao'" class="mt-2">
+          <label for="cardNumber">Número do Cartão:</label>
+          <input type="text" id="cardNumber" class="border p-2">
+        </div>
+
+        <!-- Se o método de pagamento for Pix (QR Code fake) -->
+        <div x-show="paymentMethod == 'pix'" class="mt-2">
+          <img src="data:image/png;base64,iVBOR...=" alt="QR Code PIX" />
+        </div>
+
+        <!-- Se o método de pagamento for Boleto -->
+        <div x-show="paymentMethod == 'boleto'" class="mt-2">
+          <p>Código de barras: 1234567890</p>
+        </div>
+      </div>
+
+      <button @click="step++" class="mt-4 bg-blue-500 text-white p-2">Próxima Etapa</button>
+    </div>
+
+    <!-- Etapa 3: Resumo da Compra -->
+    <div x-show="step === 3">
+      <div x-data="{ items: ['Produto 1', 'Produto 2'] }" class="p-4">
+        <h2>Resumo da Compra</h2>
+
+        <div>
+          <h3>Produtos no Carrinho:</h3>
+          <ul>
+            <template x-for="item in items">
+              <li x-text="item"></li>
+            </template>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Endereço:</h3>
+          <p><!-- Aqui você pode exibir o endereço escolhido pelo usuário --></p>
+        </div>
+
+        <div>
+          <h3>Método de Pagamento:</h3>
+          <p><!-- Aqui você pode exibir o método de pagamento escolhido --></p>
+        </div>
+
+        <button @click="alert('Compra finalizada!')" class="mt-4 bg-green-500 text-white p-2">Finalizar Compra</button>
+      </div>
+
+
+    </div>
+
+  </div>
+
+</body>
+
+</html>
