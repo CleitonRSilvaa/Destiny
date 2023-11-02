@@ -33,6 +33,50 @@
     .dropdown-content:hover {
       display: block;
     } */
+      .bg-blue-500 {
+      background-color: white;
+      border-color: #f97316;
+      color: #f97316;
+  }
+
+  .bg-blue-500:hover {
+      transition: 0.3s;
+      color: white;
+      background-color: #f97316;
+  }
+
+     input {
+    border: 2px solid #FDC7A2;
+}
+
+    .custom-border:focus {
+  border-color: #F97316;
+}
+
+    .p-4{
+    border-color: #F97316;
+    }
+
+  .text-gray-400:hover {
+      transition: 0.3s;
+      color: white;
+      background-color: #f97316;
+  }
+
+  .bg-blue-700 {
+      background-color: #F97316;
+  }
+
+  .bg-blue-700:hover {
+      transition: 0.3s;
+      color: #f97316;
+      background-color: white;
+  }
+
+  .bg-gray-800 {
+      background-color: #030418;
+}
+
   </style>
   <nav class="bg-gray-800">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -124,11 +168,11 @@
       <form id="updateForm">
         <div class="mb-4">
           <label for="clientName" class="block text-sm font-medium text-gray-700">Nome</label>
-          <input th:value="${cliente.nome}" type="text" id="clientName" name="clientName" class="mt-1 p-2 w-full border rounded-md" required>
+          <input th:value="${cliente.nome}" type="text" id="clientName" name="clientName" class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:shadow-outline custom-border" required>
         </div>
         <div class="mb-4">
           <label for="birthDate" class="block text-sm font-medium text-gray-700">Data de Nascimento</label>
-          <input th:value="${cliente.dataNacimento}" type="date" id="birthDate" name="birthDate" class="mt-1 p-2 w-full border rounded-md" required>
+          <input th:value="${cliente.dataNacimento}" type="date" id="birthDate" name="birthDate" class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:shadow-outline custom-border" required>
         </div>
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700">Gênero</label>
@@ -139,18 +183,18 @@
           </select>
         </div>
 
-        <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Atualizar</button>
+        <button type="submit" class="w-32 focus:outline-none border border-transparent py-2 px-5 rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium">Atualizar</button>
       </form>
     </div>
 
     <!-- Parte de Edição de Endereço -->
     <div class="w-1/2 pl-4">
       <h1 class="text-2xl mb-4">Endereços de Entrega</h1>
-      <button data-modal-target="staticModal" data-modal-toggle="staticModal" class="m-3 mx-1 px-2 py-2 bg-green-500 text-white rounded-md hover:bg-green-600" type="button">Adicionar Endereço</button>
+      <button data-modal-target="staticModal" data-modal-toggle="staticModal" class="m-3 mx-1 px-2 py-2 focus:outline-none border border-transparent rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium" type="button">Adicionar Endereço</button>
       <div id="addressList">
 
         <th:block th:each="endereco, iterStat : ${cliente.enderecos}">
-          <div th:class="${endereco.principal} ? 'mb-4 bg-blue-300 p-4 rounded-md relative' : 'mb-4 bg-gray-200 p-4 rounded-md relative'" th:data-endereco-id="${endereco.id}">
+          <div th:class="${endereco.principal} ? 'mb-4 p-4 rounded-md relative border rounded-md focus:outline-none focus:shadow-outline custom-border rounded-md relative'" th:data-endereco-id="${endereco.id}">
 
             <label class="inline-flex items-center">
               <span class="ml-4 block">
@@ -201,27 +245,27 @@
         <!-- Modal body -->
         <div class="p-6 space-y-6">
           <div class="mb-4">
-            <input type="text" id="cep" name="cep" placeholder="04005-005" class="mt-1 p-2 w-full border rounded-md" minlength="8" maxlength="9">
+            <input type="text" id="cep" name="cep" placeholder="04005-005" class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:shadow-outline custom-border" minlength="8" maxlength="9">
           </div>
           <div class="mb-4">
-            <input type="text" id="logradouro" name="logradouro" placeholder="Logradouro" class="mt-1 p-2 w-full border rounded-md">
+            <input type="text" id="logradouro" name="logradouro" placeholder="Logradouro" class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:shadow-outline custom-border">
           </div>
           <div class="grid grid-cols-2 gap-4 mb-4">
-            <input type="text" id="numero" name="numero" placeholder="Numero" class="p-2 border rounded-md">
-            <input type="text" id="complemento" name="complemento" placeholder="Complemento" class="p-2 border rounded-md">
+            <input type="text" id="numero" name="numero" placeholder="Número" class="p-2 border rounded-md focus:outline-none focus:shadow-outline custom-border">
+            <input type="text" id="complemento" name="complemento" placeholder="Complemento" class="p-2 border rounded-md focus:outline-none focus:shadow-outline custom-border">
           </div>
           <div class="mb-4">
-            <input type="text" id="bairro" name="bairro" placeholder="Bairro" class="mt-1 p-2 w-full border rounded-md">
+            <input type="text" id="bairro" name="bairro" placeholder="Bairro" class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:shadow-outline custom-border">
           </div>
           <div class="grid grid-cols-2 gap-4 mb-4">
-            <input type="text" id="localidade" name="localidade" placeholder="Cidade" class="p-2 border rounded-md">
-            <input type="text" id="uf" class="p-2 border rounded-md" placeholder="UF">
+            <input type="text" id="localidade" name="localidade" placeholder="Cidade" class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:shadow-outline custom-border">
+            <input type="text" id="uf" class="p-2 border rounded-md focus:outline-none focus:shadow-outline custom-border" placeholder="UF">
           </div>
         </div>
         <!-- Modal footer -->
         <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-          <button type="button" id="bntSalvaEndereco" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Salvar</button>
-          <button data-modal-hide="staticModal" type="button" class="text-black bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-black dark:hover:bg-gray-600 dark:focus:ring-gray-600">Cancelar</button>
+          <button type="button" id="bntSalvaEndereco" class="text-white px-5 py-2.5 focus:outline-none border border-transparent rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium">Salvar</button>
+          <button data-modal-hide="staticModal" type="button" class="text-black bg-white px-5 py-2.5 w-32 focus:outline-none border border-transparent py-2 px-5 rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium">Cancelar</button>
         </div>
       </div>
     </div>
