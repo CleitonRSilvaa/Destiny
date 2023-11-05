@@ -33,50 +33,49 @@
     .dropdown-content:hover {
       display: block;
     } */
-      .bg-blue-500 {
+    .bg-blue-500 {
       background-color: white;
       border-color: #f97316;
       color: #f97316;
-  }
-
-  .bg-blue-500:hover {
-      transition: 0.3s;
-      color: white;
-      background-color: #f97316;
-  }
-
-     input {
-    border: 2px solid #FDC7A2;
-}
-
-    .custom-border:focus {
-  border-color: #F97316;
-}
-
-    .p-4{
-    border-color: #F97316;
     }
 
-  .text-gray-400:hover {
+    .bg-blue-500:hover {
       transition: 0.3s;
       color: white;
       background-color: #f97316;
-  }
+    }
 
-  .bg-blue-700 {
+    input {
+      border: 2px solid #FDC7A2;
+    }
+
+    .custom-border:focus {
+      border-color: #F97316;
+    }
+
+    .p-4 {
+      border-color: #F97316;
+    }
+
+    .text-gray-400:hover {
+      transition: 0.3s;
+      color: white;
+      background-color: #f97316;
+    }
+
+    .bg-blue-700 {
       background-color: #F97316;
-  }
+    }
 
-  .bg-blue-700:hover {
+    .bg-blue-700:hover {
       transition: 0.3s;
       color: #f97316;
       background-color: white;
-  }
+    }
 
-  .bg-gray-800 {
+    .bg-gray-800 {
       background-color: #030418;
-}
-
+    }
   </style>
   <nav class="bg-gray-800">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -194,7 +193,7 @@
       <div id="addressList">
 
         <th:block th:each="endereco, iterStat : ${cliente.enderecos}">
-          <div th:class="${endereco.principal} ? 'mb-4 p-4 rounded-md relative border rounded-md focus:outline-none focus:shadow-outline custom-border rounded-md relative'" th:data-endereco-id="${endereco.id}">
+          <div th:class="${endereco.principal} ? 'mb-4 p-4 rounded-md relative border rounded-md focus:outline-none focus':'shadow-outline custom-border rounded-md relative'" th:data-endereco-id="${endereco.id}">
 
             <label class="inline-flex items-center">
               <span class="ml-4 block">
