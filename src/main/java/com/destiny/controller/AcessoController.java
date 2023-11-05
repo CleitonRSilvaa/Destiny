@@ -1,11 +1,13 @@
 package com.destiny.controller;
 
+import com.destiny.model.Cliente;
 import com.destiny.model.CustomUserDetails;
 import com.destiny.model.MensagemResponse;
 import com.destiny.model.Produto;
 import com.destiny.model.StatusProduto;
 import com.destiny.repository.ProdutoRepository;
 import com.destiny.repository.UsuarioRepository;
+import com.destiny.service.ClienteService;
 import com.destiny.service.ProdutoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,9 @@ public class AcessoController {
 
     @Autowired
     private ProdutoService produtoService;
+
+    @Autowired
+    private ClienteService clienteService;
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
@@ -85,6 +90,10 @@ public class AcessoController {
         }
 
         model.addAttribute("usuario", userDetails);
+
+        Cliente cliente = clienteService.getClienteBySection(auth);
+
+        model.addAttribute("cliente", cliente);
 
         return "pagCheckout";
     }

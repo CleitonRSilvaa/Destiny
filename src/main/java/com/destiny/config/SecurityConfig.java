@@ -106,6 +106,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                                                                                         // prefixo
                                                                                                         // 'ROLE_'
                                                 .antMatchers("/usuario/**").hasAnyAuthority("ROLE_ADMIN")
+                                                .antMatchers("/checkout/**").hasAnyAuthority("ROLE_CLIENTE")
                                                 .antMatchers("/estoque/**")
                                                 .hasAnyAuthority("ROLE_ESTOQUISTA", "ROLE_ADMIN")
                                                 .anyRequest().authenticated())
