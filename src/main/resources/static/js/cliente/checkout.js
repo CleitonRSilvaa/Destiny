@@ -8,6 +8,14 @@ document.addEventListener("DOMContentLoaded", () => {
   addEventListeners();
 });
 
+function selectAddress(selectedIndex) {
+  const addresses = document.querySelectorAll(".address-item");
+  addresses.forEach((address) => {
+    address.classList.remove("selected");
+  });
+  addresses[selectedIndex].classList.add("selected");
+}
+
 let carrinho2 = JSON.parse(localStorage.getItem("carrinho")) || [];
 
 let carrinhoContainer = document.getElementById("produto-list");
@@ -249,6 +257,7 @@ function app() {
       for (let i = 0; i < addressItems.length; i++) {
         if (addressItems[i].classList.contains("selected")) {
           result = addressItems[i].getAttribute("data-id");
+          var paragraph = addressItems[i].querySelector("p");
           pedido.enderecoID = result;
         }
       }
