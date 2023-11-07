@@ -15,7 +15,7 @@
 
 </head>
 
-<body class="antialiased sans-serif bg-gray-200">
+<body class="antialiased sans-serif ">
 
   <style>
     /* .dropdown:hover .dropdown-menu {
@@ -53,9 +53,9 @@
       border-color: #F97316;
     }
 
-    .p-4 {
+     .p-4 {
       border-color: #F97316;
-    }
+    } 
 
     .text-gray-400:hover {
       transition: 0.3s;
@@ -76,6 +76,12 @@
     .bg-gray-800 {
       background-color: #030418;
     }
+
+    .corDiferente{
+      border-color: green;
+
+    }
+
   </style>
   <nav class="bg-gray-800">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -193,7 +199,7 @@
       <div id="addressList">
 
         <th:block th:each="endereco, iterStat : ${cliente.enderecos}">
-          <div th:class="${endereco.principal} ? 'mb-4 p-4 rounded-md relative border rounded-md focus:outline-none focus':'shadow-outline custom-border rounded-md relative'" th:data-endereco-id="${endereco.id}">
+          <div th:class="${endereco.principal} ? 'mb-4 p-4 rounded-md relative border rounded-md focus:outline-none focus':'shadow-outline custom-border rounded-md relative corDiferente'" th:data-endereco-id="${endereco.id}">
 
             <label class="inline-flex items-center">
               <span class="ml-4 block">
@@ -224,7 +230,7 @@
 
 
   <!-- Main modal -->
-  <div id="staticModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+  <div id="staticModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full" >
     <div class="relative w-full max-w-2xl max-h-full">
       <!-- Modal content -->
       <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -389,7 +395,7 @@
 
     function showModal(modalId) {
       const modal = document.getElementById(modalId);
-      modal.style.display = 'block';
+      modal.style.display = 'flex';
     }
 
     function hideModal(modalId) {
