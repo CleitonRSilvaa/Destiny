@@ -25,6 +25,21 @@
         margin: 0;
       }
     }
+
+    .bg-blue-500 {
+		background-color: #f97316;
+		border-color: #f97316;
+		color: white;
+	}
+
+	.bg-blue-500:hover {
+		transition: 0.3s;
+		color: #f97316;
+		background-color: white;
+		border: 1px solid #f97316;
+		/* Adicione a borda ao passar o mouse */
+	}
+
   </style>
 
   <nav class="bg-gray-800">
@@ -127,7 +142,7 @@
 
     <div class="hidden text-center m-10" id="carrinho-vazio">
       <p class="mb-5 text-xl text-gray-800">Deseja olhar outros produtos similares?</p>
-      <a href="/" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full text-lg">
+      <a href="/" class="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">
         Voltar para a loja
       </a>
 
