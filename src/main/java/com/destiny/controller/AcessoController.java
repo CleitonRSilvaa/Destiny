@@ -66,6 +66,11 @@ public class AcessoController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
+        if (auth.isAuthenticated()) {
+            Cliente cliente = clienteService.getClienteBySection(auth);
+            model.addAttribute("cliente", cliente);
+        }
+
         CustomUserDetails userDetails = null;
         if (auth.getPrincipal() instanceof CustomUserDetails) {
             userDetails = (CustomUserDetails) auth.getPrincipal();

@@ -1,3 +1,29 @@
+$(document).ready(function () {
+  $("#cep").mask("00000-000");
+});
+
+const fetchAddress = () => {
+  let cep = document.getElementById(`cep`);
+
+  fetch(`https://viacep.com.br/ws/${cep.value}/json/`)
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.erro) {
+        alert("CEP não encontrado!");
+      } else {
+        // document.getElementById(`logradouro`).value = data.logradouro;
+        // document.getElementById(`bairro`).value = data.bairro;
+        // document.getElementById(`localidade`).value = data.localidade;
+        // document.getElementById(`uf`).value = data.uf;
+      }
+    })
+    .catch(() => {
+      alterAllInputsClass(true);
+      addressFields.classList.remove("hidden");
+      alert("Erro ao buscar o CEP!");
+    });
+};
+
 let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
 
 function adicionarAoCarrinho(btn) {
