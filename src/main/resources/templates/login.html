@@ -42,9 +42,12 @@
 <body class="bg-gray-200 h-screen flex justify-center items-center">
 
 	<div class="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
-		<div class="flex justify-center">
-			<img src="/img/LogoDestiny.svg" style="filter: invert(1)" alt="Destiny E-commerce Logo" class="mb-4 w-1/2 black-svg">
+		<div class="mt-4 flex justify-center ">
+			<a href="/" class="text-sm text-blue-600 hover:text-blue-500">
+				<img src="/img/LogoDestiny.svg" style="filter: invert(1)" alt="Destiny E-commerce Logo" class="mb-4 w-48 black-svg">
+			</a>
 		</div>
+
 		<form th:action="@{/login}" method="POST">
 			<div class="mb-4">
 				<label for="email" class="block text-sm font-medium text-gray-600 mb-2">E-mail:</label>
@@ -65,6 +68,15 @@
 		</form>
 		<div class="mt-4 text-center">
 			<p class="text-sm text-gray-600">Não tem uma conta? <a href="/cliente/registra-me" class="text-blue-500 hover:text-blue-600">Cadastre-se</a></p>
+		</div>
+		<div class="mt-6 flex justify-center text-center text-sm text-gray-500">
+			<p>
+				ou
+				<a href="/" class="text-sm text-blue-600 hover:text-blue-500">
+					voltar a home
+					<span aria-hidden="true"> &rarr;</span>
+				</a>
+			</p>
 		</div>
 	</div>
 

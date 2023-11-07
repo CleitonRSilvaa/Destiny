@@ -5,6 +5,7 @@ import com.destiny.model.CustomUserDetails;
 import com.destiny.model.MensagemResponse;
 import com.destiny.model.Produto;
 import com.destiny.model.StatusProduto;
+import com.destiny.model.TipoConta;
 import com.destiny.repository.ProdutoRepository;
 import com.destiny.repository.UsuarioRepository;
 import com.destiny.service.ClienteService;
@@ -66,14 +67,13 @@ public class AcessoController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if (auth.isAuthenticated()) {
-            Cliente cliente = clienteService.getClienteBySection(auth);
-            model.addAttribute("cliente", cliente);
-        }
-
         CustomUserDetails userDetails = null;
         if (auth.getPrincipal() instanceof CustomUserDetails) {
             userDetails = (CustomUserDetails) auth.getPrincipal();
+            if (userDetails.getTipoConta().equals(TipoConta.CLIENTE)) {
+                Cliente cliente = clienteService.getClienteBySection(auth);
+                model.addAttribute("cliente", cliente);
+            }
         }
 
         model.addAttribute("usuario", userDetails);
