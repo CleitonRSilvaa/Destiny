@@ -124,6 +124,7 @@
   </nav>
 
   <div id="divMan" x-data="app()" x-cloak>
+    <input type="hidden" id="cliente-id" th:data_id=${usuario.id}>
     <div autocomplete="off">
       <div class="container mx-auto px-4 py-10">
 
@@ -170,12 +171,15 @@
                 <div id="address-list" class="space-y-4">
                   <th:block th:each="endereco, iterStat : ${cliente.enderecos}">
 
-                    <div th:data-id="${endereco.id}" th:onclick="'selectAddress(' + ${iterStat.index} + ')'" th:class="${endereco.principal} ? 'address-item selected p-4 border-2 border-current rounded cursor-pointer hover:bg-gray-100' : 'address-item  p-4 border-2 border-current rounded cursor-pointer hover:bg-gray-100'">
-                      <p th:text="'Endereço ' + (${iterStat.index}) + ': ' + ${endereco.Logradouro} + ', ' + ${endereco.numero} + ', ' + ${endereco.bairro} + ' - ' + ${endereco.uf}"></p>
+                    <div th:data-id="${endereco.id}" th:data-cep="${endereco.cep}" th:onclick="'selectAddress(' + ${iterStat.index} + ')'" th:class="${endereco.principal} ? 'address-item selected p-4 border-2 border-current rounded cursor-pointer hover:bg-gray-100' : 'address-item  p-4 border-2 border-current rounded cursor-pointer hover:bg-gray-100'">
+                      <p th:text="${endereco.Logradouro} + ', ' + ${endereco.numero} + ', ' + ${endereco.bairro} + ' - ' + ${endereco.uf} +' / '+ ${endereco.cep}"></p>
 
                     </div>
 
                   </th:block>
+                  <p class="text-gray-700 p-1">Metodo de entrega:</p>
+                  <select id="frete" class="block p-2 text-gray-600 w-full text-sm flex justify-between border-2 border-current rounded cursor-pointer hover:bg-gray-100">
+                  </select>
 
 
                 </div>
@@ -215,7 +219,7 @@
                   </div>
 
 
-                  <div id="boleto" class="payment-item p-4 border-2 border-current rounded cursor-pointer hover:bg-gray-100 selected" onclick="togglePaymentMethod('boleto')">
+                  <div id="boleto" class="payment-item p-4 border-2 border-current rounded cursor-pointer hover:bg-gray-100" onclick="togglePaymentMethod('boleto')">
                     <div class="flex justify-center items-center h-12 mb-2">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="w-20 h-20">
                         <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
@@ -298,24 +302,24 @@
 
                       <div class="mb-4">
                         <h3 class="font-semibold">Endereço de Entrega</h3>
-                        <p>180 North King Street, Northampton MA 1060</p>
+                        <p id="resumo-endereco"></p>
+                      </div>
+                      <div class="mb-4">
+                        <h3 class="font-semibold">Frete</h3>
+
+                        <p id="resumo-frete">$8.00</p>
                       </div>
                       <div class="mb-4">
                         <h3 class="font-semibold">Forma de Pagamento</h3>
-                        <p>$56.00</p>
+                        <p id="resumo-pagamento"></p>
                       </div>
                       <div class="mb-4">
                         <h3 class="font-semibold">Subtotal</h3>
-                        <p>$56.00</p>
-                      </div>
-
-                      <div class="mb-4">
-                        <h3 class="font-semibold">Frete</h3>
-                        <p>$8.00</p>
+                        <p id="resumo-subtotal"></p>
                       </div>
                       <div class="mb-6">
                         <h3 class="font-semibold text-lg">Total</h3>
-                        <p class="text-lg">$36.00</p>
+                        <p id="resumo-total" class="text-lg">$36.00</p>
                       </div>
                       <button id="btnComprar" @click="submitCompra()" class="w-full bg-black text-white p-2 rounded hover:bg-gray-800">Finalizar Compra</button>
 

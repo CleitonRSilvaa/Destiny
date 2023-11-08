@@ -44,8 +44,9 @@ function gerarValoresFrete(cep) {
     const option = document.createElement("option");
     option.classList.add("text-gray-700");
     option.value = opcaoFrete.custo;
-    option.textContent = `Entrega ${opcaoFrete.tipo} (até ${opcaoFrete.prazo
-      } dias) - R$ ${opcaoFrete.custo.toFixed(2)}`;
+    option.textContent = `Entrega ${opcaoFrete.tipo} (até ${
+      opcaoFrete.prazo
+    } dias) - R$ ${opcaoFrete.custo.toFixed(2)}`;
     selectFrete.appendChild(option);
   });
 }
@@ -86,7 +87,7 @@ const fetchAddress = () => {
         let p = divEnderec.querySelector("p") || document.createElement("p");
 
         // Define o conteúdo do parágrafo com os dados da API
-        p.textContent = `Endereço: ${data.logradouro}, ${data.bairro} -  ${data.uf}`;
+        p.textContent = `${data.logradouro}, ${data.bairro} -  ${data.uf}`;
 
         // Adiciona o parágrafo na div se ele foi recém-criado
         if (!divEnderec.contains(p)) {
@@ -109,9 +110,7 @@ function adicionarAoCarrinho(btn) {
   const produtoId = document.getElementById("produto-id").value;
   const estoque = parseInt(document.getElementById("produto-quantidade").value);
   const nome = document.getElementById("produto-nome").value;
-  const valor = parseFloat(
-    document.getElementById("produto-valor").value
-  );
+  const valor = parseFloat(document.getElementById("produto-valor").value);
   const quantidade = parseInt(document.getElementById("quantidade").value);
   const imagem = document.getElementById("imgPrincipal").getAttribute("src");
 
@@ -145,6 +144,16 @@ function removerItemModalConfirme() {
 
 function aumentarQuantidade(id) {
   let itemExistente = carrinho.find((item) => item.id === String(id));
+
+  if (itemExistente.quantidade >= itemExistente.estoque) {
+    exibirModalNotificacao(
+      "Quantidade solicitada não disponível no estoque.",
+      2,
+      1900
+    );
+    return;
+  }
+
   if (itemExistente) {
     itemExistente.quantidade += 1;
     itemExistente.subTotal = itemExistente.quantidade * itemExistente.valor;
@@ -184,29 +193,36 @@ function toggleModal(modalID, value, erro = false, texto = "") {
 }
 
 function adicionaAoCarrinhoLogic(produto, btn) {
-
-  if (produto.quantidade > produto.estoque) {
-    console.log("Quantidade solicitada não disponível no estoque.");
-
-    // exibirNotificacaoEstoqueInsuficiente();
-    btn.disabled = false; // Reativa o botão, assumindo que ele foi desativado anteriormente
-    return; // Sai da função para evitar adicionar ao carrinho
-  }
-
-
-
   let itemExistente = carrinho.find((item) => item.id === produto.id);
 
   if (itemExistente) {
+    if (produto.quantidade + itemExistente.quantidade > produto.estoque) {
+      exibirModalNotificacao(
+        "Quantidade solicitada não disponível no estoque.",
+        2,
+        1900
+      );
+
+      return;
+    }
     itemExistente.quantidade += produto.quantidade;
     itemExistente.subTotal = itemExistente.quantidade * itemExistente.valor;
   } else {
+    if (produto.quantidade > produto.estoque) {
+      exibirModalNotificacao(
+        "Quantidade solicitada não disponível no estoque.",
+        2,
+        1900
+      );
+      return;
+    }
     produto.subTotal = produto.quantidade * produto.valor;
     carrinho.push(produto);
   }
 
   //btn.disabled = false;
-  exibirModalNotificacao();
+
+  exibirModalNotificacao("Produto adicionado ao carrinho!", 1);
   // Aqui você pode adicionar uma lógica para atualizar a visualização do carrinho na tela, se necessário.
   // Por exemplo, mostrando um número indicando quantos itens estão no carrinho.
   atualizaVisualizacaoCarrinho();
@@ -245,7 +261,9 @@ function atualizaVisualizacaoCarrinho() {
     0
   );
 
+  calculaFreteClienteLogado();
   document.getElementById("carrinhoCount").textContent = totalItens;
+
   return;
 }
 
@@ -256,11 +274,66 @@ function limpaCarrinho() {
   location.reload();
 }
 
-function exibirModalNotificacao() {
+function exibirModalNotificacao(text = "", tipo = 1, time = 1000) {
   const modal = document.getElementById("modalNotification");
+  const modalText = document.getElementById("modalNotification-text");
+
+  const boterTipo = {
+    1: "border-green-400",
+    2: "border-red-400",
+  };
+
+  modalText.innerText = text;
   modal.classList.remove("hidden");
+  modal.classList.add(boterTipo[tipo]);
 
   setTimeout(() => {
     modal.classList.add("hidden");
-  }, 1000); // O modal será ocultado após 3 segundos
+    modal.classList.remove(boterTipo[tipo]);
+  }, time); // O modal será ocultado após 3 segundos
+}
+
+function salvarPedidoNaSessao(pedido) {
+  localStorage.setItem("pedido", JSON.stringify(pedido));
+  return;
+}
+
+function calculaFreteClienteLogado() {
+  const pai = document.getElementById("detalhesValores");
+  const filho = pai.querySelector("#endereco");
+  if (filho !== null) {
+    cep = document
+      .getElementById("dados-enredeco-data")
+      .getAttribute("data-cep")
+      .replace("-", "");
+
+    console.info(cep);
+    gerarValoresFrete(cep);
+  }
+}
+
+function recuperarPedidoDaSessao() {
+  var pedidoRecuperado = JSON.parse(localStorage.getItem("pedido"));
+  return pedidoRecuperado;
+}
+
+var pedidoAtual = recuperarPedidoDaSessao();
+
+function fazerPedido() {
+  pedido = {
+    clienteID: "",
+    enderecoID: "",
+    valorTotal: "",
+    metodoPagamento: "",
+    items: [],
+    status: "",
+    frete: 0,
+  };
+  let frete = parseFloat(document.getElementById("frete").value);
+
+  pedido.frete = frete;
+
+  salvarPedidoNaSessao(pedido);
+
+  window.location.href = "/checkout";
 }

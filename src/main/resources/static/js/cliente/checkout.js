@@ -3,10 +3,26 @@ $(document).ready(function () {
   $("#card-no").mask("0000-0000-0000-0000");
   $("#codigo-cvc").mask("000");
 });
+let carrinho2 = JSON.parse(localStorage.getItem("carrinho")) || [];
 
+var freteFinal = 0;
 document.addEventListener("DOMContentLoaded", () => {
+  verificarCarrinhoTamanho();
   addEventListeners();
+  atualizaVisualizacaoCarrinho();
 });
+
+function verificarCarrinhoTamanho() {
+  if (carrinho2.length === 0) {
+    window.location.href = "/carrinho";
+  }
+}
+
+function atualizaVisualizacaoCarrinho() {
+  const totalItens = carrinho2.length;
+  document.getElementById("carrinhoCount").textContent = totalItens;
+  return;
+}
 
 function selectAddress(selectedIndex) {
   const addresses = document.querySelectorAll(".address-item");
@@ -14,9 +30,8 @@ function selectAddress(selectedIndex) {
     address.classList.remove("selected");
   });
   addresses[selectedIndex].classList.add("selected");
+  calculaFreteClienteLogadoCheckout();
 }
-
-let carrinho2 = JSON.parse(localStorage.getItem("carrinho")) || [];
 
 let carrinhoContainer = document.getElementById("produto-list");
 
@@ -217,9 +232,13 @@ function app() {
         case 1:
           return this.validateStep1();
         case 2:
-          return this.validateStep2();
+          if (this.validateStep2()) {
+            this.stepResumo();
+            return true;
+          }
+          return false;
         default:
-          return true;
+          return;
       }
     },
 
@@ -249,6 +268,9 @@ function app() {
     },
 
     validateStep1: function () {
+      resetMessages();
+
+      var paragraph;
       let result = null;
       var addressItems = document.querySelectorAll(
         "#address-list .address-item"
@@ -257,15 +279,26 @@ function app() {
       for (let i = 0; i < addressItems.length; i++) {
         if (addressItems[i].classList.contains("selected")) {
           result = addressItems[i].getAttribute("data-id");
-          var paragraph = addressItems[i].querySelector("p");
-          pedido.enderecoID = result;
+          paragraph = addressItems[i].querySelector("p");
+          pedido.enderecoID = parseInt(result);
         }
       }
 
-      if (result === null) alert("Selecione um endereço de entrega!");
-      // this.setErrorMessage(name, "Nome é obrigatório!", "red");
+      let frete = document.getElementById("frete").value;
 
-      console.info(pedido);
+      if (frete.trim().length === 0) {
+        showError("frete", "Selecione o tipo de entrega!");
+        return false;
+      }
+
+      if (result === null) alert("Selecione um endereço de entrega!");
+
+      document.getElementById("resumo-endereco").innerText =
+        paragraph.innerText;
+
+      freteFinal = frete;
+      document.getElementById("resumo-frete").innerText =
+        "R$ " + parseFloat(frete).toFixed(2);
       return result >= 0;
     },
 
@@ -274,7 +307,7 @@ function app() {
       let formaPag = {
         "payment-card": "CARTAO",
         pix: "PIX",
-        beleto: "BOLETO",
+        boleto: "BOLETO",
       };
       let isValid = true;
       let result = null;
@@ -332,8 +365,38 @@ function app() {
       }
 
       pedido.metodoPagamento = formaPag[result.toLowerCase()];
-      console.info(pedido);
+      document.getElementById("resumo-pagamento").innerText =
+        formaPag[result.toLowerCase()];
+
       return result !== null && isValid;
+    },
+
+    stepResumo: function () {
+      let idcliente = document
+        .getElementById("cliente-id")
+        .getAttribute("data_id");
+
+      let subTotalValor = carrinho2.reduce(
+        (acc, produto) => acc + produto.quantidade * produto.valor,
+        0
+      );
+
+      let frete = parseFloat(freteFinal);
+      let subTotal = parseFloat(subTotalValor);
+      let total = subTotal + frete;
+
+      pedido.clienteID = parseInt(idcliente);
+      pedido.items = carrinho2;
+      pedido.status = "PENDENTE";
+      pedido.valorTotal = total;
+
+      document.getElementById("resumo-subtotal").innerText =
+        "R$ " + subTotal.toFixed(2);
+
+      document.getElementById("resumo-total").innerText =
+        "R$ " + total.toFixed(2);
+      console.info(pedido);
+      return true;
     },
 
     submitCompra: function () {
@@ -438,8 +501,44 @@ function makeRequest(e, t, a, i) {
       },
     });
 }
+function gerarValoresFrete2(cep) {
+  const freteBase = parseInt(cep.slice(0, 5), 10) % 3; // Um exemplo simples baseado nos 5 primeiros dígitos do CEP
+  const valoresFrete = [
+    { tipo: "padrão", prazo: 7, custo: (freteBase + 1) * 10 }, // R$ 10, 20 ou 30
+    { tipo: "expressa", prazo: 3, custo: (freteBase + 3) * 10 }, // R$ 30, 40 ou 50
+    { tipo: "agendada", prazo: 10, custo: (freteBase + 5) * 10 }, // R$ 50, 60 ou 70
+  ];
+
+  const selectFrete = document.getElementById("frete");
+  selectFrete.innerHTML = ""; // Limpa as opções existentes
+  const option = document.createElement("option");
+  option.classList.add("text-gray-700");
+  selectFrete.appendChild(option);
+  valoresFrete.forEach((opcaoFrete) => {
+    const option = document.createElement("option");
+    option.classList.add("text-gray-700");
+    option.value = opcaoFrete.custo;
+    option.textContent = `Entrega ${opcaoFrete.tipo} (até ${
+      opcaoFrete.prazo
+    } dias) - R$ ${opcaoFrete.custo.toFixed(2)}`;
+    selectFrete.appendChild(option);
+  });
+}
+
+function calculaFreteClienteLogadoCheckout() {
+  var addressItems = document.querySelectorAll("#address-list .address-item");
+  let cepSelect;
+  for (let i = 0; i < addressItems.length; i++) {
+    if (addressItems[i].classList.contains("selected")) {
+      result = addressItems[i].getAttribute("data-id");
+      cepSelect = addressItems[i].getAttribute("data-cep");
+      gerarValoresFrete2(cepSelect.replace("-", ""));
+    }
+  }
+}
 
 window.onload = function () {
+  calculaFreteClienteLogadoCheckout();
   var inputs = document.querySelectorAll("input, textarea");
   inputs.forEach(function (input) {
     input.value = "";
