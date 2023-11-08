@@ -44,9 +44,8 @@ function gerarValoresFrete(cep) {
     const option = document.createElement("option");
     option.classList.add("text-gray-700");
     option.value = opcaoFrete.custo;
-    option.textContent = `Entrega ${opcaoFrete.tipo} (até ${
-      opcaoFrete.prazo
-    } dias) - R$ ${opcaoFrete.custo.toFixed(2)}`;
+    option.textContent = `Entrega ${opcaoFrete.tipo} (até ${opcaoFrete.prazo
+      } dias) - R$ ${opcaoFrete.custo.toFixed(2)}`;
     selectFrete.appendChild(option);
   });
 }
@@ -107,45 +106,23 @@ function adicionarAoCarrinho(btn) {
   console.log("Antes de desativar:", btn.disabled);
   btn.disabled = true;
 
-  const estoque = 0;
-
-  const produtoId = btn.getAttribute("data-id");
-  const nome =
-    btn.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.getAttribute(
-      "data-nome"
-    );
+  const produtoId = document.getElementById("produto-id").value;
+  const estoque = parseInt(document.getElementById("produto-quantidade").value);
+  const nome = document.getElementById("produto-nome").value;
   const valor = parseFloat(
-    btn.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.getAttribute(
-      "data-valor"
-    )
+    document.getElementById("produto-valor").value
   );
-  const avaliacao = parseFloat(
-    btn.previousElementSibling.previousElementSibling.previousElementSibling.getAttribute(
-      "data-avaliacao"
-    )
-  );
-  const descricao =
-    btn.previousElementSibling.previousElementSibling.getAttribute(
-      "data-descricao"
-    );
   const quantidade = parseInt(document.getElementById("quantidade").value);
-
-  // Assumindo que o elemento img tem um ID 'imgPrincipal'
-  let imagem = document.getElementById("imgPrincipal");
-
-  // Pegar o valor do atributo 'src'
-  const img = imagem.getAttribute("src");
+  const imagem = document.getElementById("imgPrincipal").getAttribute("src");
 
   let produto = {
     id: produtoId,
     nome: nome,
     valor: valor,
-    avaliacao: avaliacao,
-    descricao: descricao,
     quantidade: quantidade,
     estoque: estoque,
     subTotal: 0,
-    img: img,
+    img: imagem,
   };
   console.log("Depois de desativar:", btn.disabled);
   adicionaAoCarrinhoLogic(produto, btn);
@@ -207,6 +184,17 @@ function toggleModal(modalID, value, erro = false, texto = "") {
 }
 
 function adicionaAoCarrinhoLogic(produto, btn) {
+
+  if (produto.quantidade > produto.estoque) {
+    console.log("Quantidade solicitada não disponível no estoque.");
+
+    // exibirNotificacaoEstoqueInsuficiente();
+    btn.disabled = false; // Reativa o botão, assumindo que ele foi desativado anteriormente
+    return; // Sai da função para evitar adicionar ao carrinho
+  }
+
+
+
   let itemExistente = carrinho.find((item) => item.id === produto.id);
 
   if (itemExistente) {
