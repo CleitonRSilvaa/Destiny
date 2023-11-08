@@ -1,4 +1,4 @@
-package com.destiny.repository;
+package com.destiny.controller;
 
 import java.net.URI;
 import java.util.List;
@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.destiny.model.Pedido;
+import com.destiny.model.PedidoDetalhe;
+import com.destiny.repository.PedidoRepository;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -28,10 +30,25 @@ public class PedidoController {
 
   // Adicionar um novo pedido
   @PostMapping
-  public ResponseEntity<Pedido> createPedido(@RequestBody Pedido pedido) {
-    Pedido savedPedido = pedidoRepository.save(pedido);
-    URI location = URI.create(String.format("/pedidos/%s", savedPedido.getId()));
-    return ResponseEntity.created(location).body(savedPedido);
+  public boolean createPedido(@RequestBody Pedido pedido) {
+
+    System.out.println(pedido);
+
+    pedido.getCliente().setId(0);
+    // Pedido savedPedido = pedidoRepository.save(pedido);
+    // URI location = URI.create(String.format("/pedidos/%s", savedPedido.getId()));
+    // return ResponseEntity.created(location).body(savedPedido);
+    return true;
+  }
+
+  @PostMapping
+  public boolean createPedidoItem(@RequestBody PedidoDetalhe pedido) {
+
+    System.out.println(pedido);
+    // Pedido savedPedido = pedidoRepository.save(pedido);
+    // URI location = URI.create(String.format("/pedidos/%s", savedPedido.getId()));
+    // return ResponseEntity.created(location).body(savedPedido);
+    return true;
   }
 
   // Obter um pedido pelo ID
