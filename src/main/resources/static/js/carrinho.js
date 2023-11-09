@@ -299,16 +299,18 @@ function salvarPedidoNaSessao(pedido) {
 }
 
 function calculaFreteClienteLogado() {
-  const pai = document.getElementById("detalhesValores");
-  const filho = pai.querySelector("#endereco");
-  if (filho !== null) {
-    cep = document
-      .getElementById("dados-enredeco-data")
-      .getAttribute("data-cep")
-      .replace("-", "");
+  if (document.querySelector("#endereco") !== null) {
+    const pai = document.getElementById("detalhesValores");
+    const filho = pai.querySelector("#endereco");
+    if (filho !== null) {
+      cep = document
+        .getElementById("dados-enredeco-data")
+        .getAttribute("data-cep")
+        .replace("-", "");
 
-    console.info(cep);
-    gerarValoresFrete(cep);
+      console.info(cep);
+      gerarValoresFrete(cep);
+    }
   }
 }
 
