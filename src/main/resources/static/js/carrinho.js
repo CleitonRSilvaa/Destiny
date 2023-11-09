@@ -67,7 +67,7 @@ const fetchAddress = () => {
   let cep = document.getElementById(`cep`);
   resetMessages();
   if (cep.value.trim() === "") {
-    showError("cep", "Infrome um cep");
+    showError("cep", "Informe um CEP");
     return;
   }
   if (cep.value.length !== 9) {
