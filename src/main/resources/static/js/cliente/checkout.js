@@ -209,12 +209,11 @@ const fetchAddress = () => {
 };
 
 var pedido = {
-  clienteID: "",
-  enderecoID: "",
+  enderecoEntregaId: "",
+  clienteId: "",
   valorTotal: "",
   metodoPagamento: "",
-  items: [],
-  status: "",
+  itemsPedido: [],
 };
 
 function app() {
@@ -280,7 +279,7 @@ function app() {
         if (addressItems[i].classList.contains("selected")) {
           result = addressItems[i].getAttribute("data-id");
           paragraph = addressItems[i].querySelector("p");
-          pedido.enderecoID = parseInt(result);
+          pedido.enderecoEntregaId = parseInt(result);
         }
       }
 
@@ -385,10 +384,28 @@ function app() {
       let subTotal = parseFloat(subTotalValor);
       let total = subTotal + frete;
 
-      pedido.clienteID = parseInt(idcliente);
-      pedido.items = carrinho2;
-      pedido.status = "PENDENTE";
-      pedido.valorTotal = total;
+      // PedidoDetalhe = {
+      //   produtoId: 0,
+      //   nome: "string",
+      //   valor: 0,
+      //   quantidade: 0,
+      //   img: "string",
+      // };
+      const listaDeObjetos = [];
+      carrinho2.forEach((produto, index) => {
+        const objeto = {
+          produtoId: produto.id,
+          nome: produto.nome,
+          valor: produto.valor.toFixed(2),
+          quantidade: produto.quantidade,
+          img: produto.img,
+        };
+        listaDeObjetos.push(objeto);
+      });
+
+      pedido.clienteId = parseInt(idcliente);
+      pedido.itemsPedido = listaDeObjetos;
+      pedido.valorTotal = total.toFixed(2);
 
       document.getElementById("resumo-subtotal").innerText =
         "R$ " + subTotal.toFixed(2);
@@ -404,12 +421,7 @@ function app() {
       document.getElementById("btnComprar").disabled = true;
       document.getElementById("btnVolta").disabled = true;
 
-      makeRequest(
-        "POST",
-        "/pedido/novo-pedido",
-        pedido,
-        "Compra efetuada com sucesso"
-      );
+      makeRequest("POST", "/pedido", pedido, "Compra efetuada com sucesso");
       document.getElementById("loader").style.display = "none";
       document.getElementById("btnComprar").disabled = false;
       document.getElementById("btnVolta").disabled = false;

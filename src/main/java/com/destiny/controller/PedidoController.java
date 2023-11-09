@@ -21,7 +21,7 @@ import com.destiny.repository.PedidoDetalheRepository;
 import com.destiny.repository.PedidoRepository;
 
 @RestController
-@RequestMapping("/pedidos")
+@RequestMapping("/pedido")
 public class PedidoController {
 
   private final PedidoRepository pedidoRepository;
@@ -52,9 +52,11 @@ public class PedidoController {
 
     Pedido savedPedido = pedidoRepository.save(pedido);
     for (PedidoDetalhe pd : pedidodDto.getItemsPedido()) {
-      pedidoDetalheRepository.save(pd.setPedido(savedPedido))
+      pd.setPedido(savedPedido);
+      pedidoDetalheRepository.save(pd);
     }
-    URI location = URI.create(String.format("/pedidos/%s", savedPedido.getId()));
+
+    URI location = URI.create(String.format("/pedido/%s", savedPedido.getId()));
 
     return ResponseEntity.created(location).body(savedPedido);
 
