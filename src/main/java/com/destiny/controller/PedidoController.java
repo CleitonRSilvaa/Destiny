@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.destiny.model.Cliente;
 import com.destiny.model.Pedido;
+import com.destiny.model.PedidoDTO;
 import com.destiny.model.PedidoDetalhe;
+import com.destiny.repository.PedidoDetalheRepository;
 import com.destiny.repository.PedidoRepository;
 
 @RestController
@@ -22,26 +25,42 @@ import com.destiny.repository.PedidoRepository;
 public class PedidoController {
 
   private final PedidoRepository pedidoRepository;
+  private final PedidoDetalheRepository pedidoDetalheRepository;
 
   @Autowired
-  public PedidoController(PedidoRepository pedidoRepository) {
+  public PedidoController(PedidoRepository pedidoRepository, PedidoDetalheRepository pedidoDetalheRepository) {
     this.pedidoRepository = pedidoRepository;
+    this.pedidoDetalheRepository = pedidoDetalheRepository;
   }
 
   // Adicionar um novo pedido
   @PostMapping
-  public boolean createPedido(@RequestBody Pedido pedido) {
+  public ResponseEntity<Pedido> createPedido(@RequestBody PedidoDTO pedidodDto) {
 
-    System.out.println(pedido);
+    var pedido = new Pedido();
+    var cliente = new Cliente();
+    cliente.setId(pedidodDto.getClienteId());
+    pedido.setCliente(cliente);
+    pedido.setEnderecoEntregaId(pedidodDto.getEnderecoEntregaId());
+    pedido.setMetodoPagamento(pedidodDto.getMetodoPagamento());
+    pedido.setStatusPedido(Pedido.StatusPedido.PENDENTE);
+    // pedido.setItemsPedido();
+    pedido.setValorTotal(pedidodDto.getValorTotal());
+    pedido.setNumeroPedido();
 
-    pedido.getCliente().setId(0);
-    // Pedido savedPedido = pedidoRepository.save(pedido);
-    // URI location = URI.create(String.format("/pedidos/%s", savedPedido.getId()));
-    // return ResponseEntity.created(location).body(savedPedido);
-    return true;
+    System.out.println(pedido.toString());
+
+    Pedido savedPedido = pedidoRepository.save(pedido);
+    for (PedidoDetalhe pd : pedidodDto.getItemsPedido()) {
+      pedidoDetalheRepository.save(pd.setPedido(savedPedido))
+    }
+    URI location = URI.create(String.format("/pedidos/%s", savedPedido.getId()));
+
+    return ResponseEntity.created(location).body(savedPedido);
+
   }
 
-  @PostMapping
+  @PostMapping("/2")
   public boolean createPedidoItem(@RequestBody PedidoDetalhe pedido) {
 
     System.out.println(pedido);

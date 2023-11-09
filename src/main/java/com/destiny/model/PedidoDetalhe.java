@@ -31,4 +31,14 @@ public class PedidoDetalhe {
 
   private int quantidade;
 
+  @Override
+  public String toString() {
+    return "PedidoDetalhe{" +
+        "id=" + id +
+        ", pedidoId=" + (pedido != null ? pedido.getId() : "null") +
+        ", valor=" + valor +
+        ", quantidade=" + quantidade +
+        '}';
+  }
+
 }
