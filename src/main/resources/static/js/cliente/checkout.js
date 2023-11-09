@@ -3,7 +3,7 @@ $(document).ready(function () {
   $("#card-no").mask("0000-0000-0000-0000");
   $("#codigo-cvc").mask("000");
 });
-let carrinho2 = JSON.parse(localStorage.getItem("carrinho")) || [];
+let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
 
 var freteFinal = 0;
 document.addEventListener("DOMContentLoaded", () => {
@@ -13,13 +13,13 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function verificarCarrinhoTamanho() {
-  if (carrinho2.length === 0) {
+  if (carrinho.length === 0) {
     window.location.href = "/carrinho";
   }
 }
 
 function atualizaVisualizacaoCarrinho() {
-  const totalItens = carrinho2.length;
+  const totalItens = carrinho.length;
   document.getElementById("carrinhoCount").textContent = totalItens;
   return;
 }
@@ -36,7 +36,7 @@ function selectAddress(selectedIndex) {
 let carrinhoContainer = document.getElementById("produto-list");
 
 // Itera sobre os itens do carrinho e cria a marcação HTML para cada um
-carrinho2.forEach((item) => {
+carrinho.forEach((item) => {
   let itemDiv = `
   <div class="flex items-center mb-5">
     <div class="w-1/6">
@@ -375,7 +375,7 @@ function app() {
         .getElementById("cliente-id")
         .getAttribute("data_id");
 
-      let subTotalValor = carrinho2.reduce(
+      let subTotalValor = carrinho.reduce(
         (acc, produto) => acc + produto.quantidade * produto.valor,
         0
       );
@@ -384,15 +384,8 @@ function app() {
       let subTotal = parseFloat(subTotalValor);
       let total = subTotal + frete;
 
-      // PedidoDetalhe = {
-      //   produtoId: 0,
-      //   nome: "string",
-      //   valor: 0,
-      //   quantidade: 0,
-      //   img: "string",
-      // };
       const listaDeObjetos = [];
-      carrinho2.forEach((produto, index) => {
+      carrinho.forEach((produto, index) => {
         const objeto = {
           produtoId: produto.id,
           nome: produto.nome,
@@ -468,51 +461,88 @@ function resetMessages() {
   errorInputs.forEach((input) => input.classList.remove("border-red-500"));
 }
 
-function makeRequest(e, t, a, i) {
-  console.log(a),
-    $.ajax({
-      type: e,
-      url: `http://localhost:8080${t}`,
-      data: JSON.stringify(a),
-      contentType: "application/json; charset=utf-8",
-      success: function (e) {
-        [200, 201].includes(e.status) && "sucess" === e.message
-          ? Swal.fire({
-              icon: "success",
-              title: i,
-              showConfirmButton: true,
-              confirmButtonText: "OK",
-            }).then((result) => {
-              var inputs = document.querySelectorAll("input, textarea");
-              inputs.forEach(function (input) {
-                input.value = "";
-              });
-              limpaCarrinho();
-
-              window.location.href = "/meus-pedidos";
-            })
-          : Swal.fire({
-              icon: "error",
-              title: "Erro",
-              text: "Resposta inesperada do servidor. Por favor, tente novamente.",
-            });
-      },
-      error: function (e) {
-        let t = e.responseJSON,
-          a = "<br/><br/>"; // Iniciei a variável com as quebras de linha
-
-        if (t.details) {
-          a += t.details.map((detail) => "-" + detail).join("<br/>"); // Adicionando detalhes com quebras de linha
-        }
-
-        Swal.fire({
-          icon: "error",
-          title: t.message, // Definindo t.message como o título
-          html: a, // Configurando o conteúdo formatado em HTML como o corpo da mensagem
-        });
+async function makeRequest(e, t, a, i) {
+  console.info(a);
+  try {
+    const response = await fetch("http://localhost:8080" + t, {
+      method: e,
+      body: JSON.stringify(a),
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
       },
     });
+    const data = await response.json();
+
+    console.log(response.status);
+    [200, 201].includes(response.status)
+      ? respostaOK(data, i)
+      : respostaErro(data);
+  } catch (error) {
+    respostaErro(error);
+  }
 }
+
+function limpaCarrinho() {
+  carrinho = [];
+  atualizaVisualizacaoCarrinho();
+  atualizaLocalStorage();
+}
+function respostaOK(e, i) {
+  console.log(e);
+
+  Swal.fire({
+    icon: "success",
+    title: i,
+    text:
+      "Obrigado por fazer uma compra conosco! Seu número de pedido é #" +
+      e.numeroPedido +
+      " no valor de de: R$" +
+      e.valorTotal.toFixed(2) +
+      " reais. " +
+      "Por favor, mantenha este número seguro para referência futura. Se você tiver alguma dúvida ou precisar de ajuda, não hesite em entrar em contato conosco. Estamos sempre aqui para ajudá-lo. 😊",
+    showConfirmButton: true,
+    confirmButtonText: "OK",
+  }).then((result) => {
+    var inputs = document.querySelectorAll("input, textarea");
+    inputs.forEach(function (input) {
+      input.value = "";
+    });
+    limpaCarrinho();
+
+    window.location.href = "/cliente/meus-pedidos";
+  });
+}
+
+function respostaErro(e) {
+  console.error(e);
+  Swal.fire(
+    "Opoos!",
+    "Infelizmente não foi possível finalizar seu pedido. Tente novamente mais tarde. Se o problema persistir, entre em contato conosco para obter assistência 😊",
+    "warning"
+  );
+}
+
+function atualizaLocalStorage() {
+  // btn.disabled = false;
+  localStorage.setItem("carrinho", JSON.stringify(carrinho));
+  return;
+}
+
+function erroAll(e) {
+  let t = e.responseJSON,
+    a = "<br/><br/>"; // Iniciei a variável com as quebras de linha
+
+  if (t.details) {
+    a += t.details.map((detail) => "-" + detail).join("<br/>"); // Adicionando detalhes com quebras de linha
+  }
+
+  Swal.fire({
+    icon: "error",
+    title: t.message, // Definindo t.message como o título
+    html: a, // Configurando o conteúdo formatado em HTML como o corpo da mensagem
+  });
+}
+
 function gerarValoresFrete2(cep) {
   const freteBase = parseInt(cep.slice(0, 5), 10) % 3; // Um exemplo simples baseado nos 5 primeiros dígitos do CEP
   const valoresFrete = [

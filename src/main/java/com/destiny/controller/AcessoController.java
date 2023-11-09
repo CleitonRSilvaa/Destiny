@@ -95,10 +95,7 @@ public class AcessoController {
         }
 
         model.addAttribute("usuario", userDetails);
-
         Cliente cliente = clienteService.getClienteBySection(auth);
-
-        System.out.println(cliente);
         model.addAttribute("cliente", cliente);
 
         return "pagCheckout";

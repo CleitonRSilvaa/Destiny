@@ -98,7 +98,7 @@ public class UsuarioController {
         usuarioRepository.save(usuario);
 
         mensagemResponse.setStatus(201);
-        mensagemResponse.setMessage("sucess");
+        mensagemResponse.setMessage("success");
         mensagemResponse.setDetails(detalhes);
 
         return new ResponseEntity<>(mensagemResponse, HttpStatus.CREATED);
@@ -190,7 +190,7 @@ public class UsuarioController {
         usuarioRepository.save(usuario);
 
         mensagemResponse.setStatus(200);
-        mensagemResponse.setMessage("sucess");
+        mensagemResponse.setMessage("success");
         mensagemResponse.setDetails(detalhes);
 
         return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
@@ -223,7 +223,7 @@ public class UsuarioController {
 
         usuarioRepository.deleteById(longId);
         mensagemResponse.setStatus(200);
-        mensagemResponse.setMessage("sucess");
+        mensagemResponse.setMessage("success");
         mensagemResponse.setDetails(detalhes);
 
         return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
@@ -256,7 +256,7 @@ public class UsuarioController {
 
         usuarioRepository.updateStatusConta(statusConta.getStatus(), longId);
         mensagemResponse.setStatus(200);
-        mensagemResponse.setMessage("sucess");
+        mensagemResponse.setMessage("success");
         mensagemResponse.setDetails(detalhes);
 
         return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);

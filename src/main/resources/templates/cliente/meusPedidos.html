@@ -1,45 +1,39 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 
-
+<html lang="pt-BR">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Alterar Senha</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../css/sweetalert2.min.css">
-  <link rel="shortcut icon" href="../img/LogoDestiny2.svg" type="image/x-icon">
-  <script src="../js/sweetalert2.min.js"></script>
+  <title>Meus Pedidos</title>
+  <link href="../css/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/owl.carousel.min.css">
+  <link rel="stylesheet" href="../css/owl.theme.default.min.css">
+  <link rel="icon" href="../img/LogoDestiny2.svg">
+  <link rel="stylesheet" href="../css/stylesLanding.css">
+
 </head>
 
 <style>
-  .bg-gray-900 {
+  .bg-gray-800 {
+    background-color: #030418;
+  }
+
+  .bg-blue-700 {
     background-color: #F97316;
   }
 
-  .w-96 {
-    border: 2px solid #FDC7A2;
-  }
+  .bg-blue-700:hover {
+    transition: 0.3s;
+    color: #f97316;
+    background-color: white;
 
-  .p-2 {
-    border: 2px solid #FDC7A2;
-  }
-
-  .p-2:focus {
-    border-color: #F97316;
-  }
-
-  .text-gray-600 {
-    background-color: #f97316;
-    border-color: #f97316;
-    color: white;
   }
 
   .bg-blue-500 {
-    background-color: #f97316 !important;
-    border-color: #f97316 !important;
-    color: white !important;
+    background-color: #f97316;
+    border-color: #f97316;
+    color: white;
   }
 
   .bg-blue-500:hover {
@@ -49,13 +43,9 @@
     border: 1px solid #f97316;
     /* Adicione a borda ao passar o mouse */
   }
-
-  .bg-gray-800 {
-    background-color: #030418;
-  }
 </style>
 
-<body class="antialiased sans-serif bg-gray-200">
+<body class="bg-gray-200">
   <nav class="bg-gray-800">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
       <div class="relative flex h-16 items-center justify-between">
@@ -86,6 +76,19 @@
           </div>
         </div>
         <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+
+          <a href="/carrinho" class="mr-3 relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+            <span class="sr-only">Ver carrinho</span>
+
+            <div class="t-0 absolute left-3">
+              <p id="carrinhoCount" class="flex h-2 w-2 items-center justify-center rounded-full bg-red-500 p-3 text-xs text-white "></p>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="file: mt-4 h-6 w-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+            </svg>
+
+          </a>
+
           <button type="button" class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
             <span class="absolute -inset-1.5"></span>
             <span class="sr-only">View notifications</span>
@@ -106,15 +109,15 @@
             <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
 
               <div class="px-4 py-3">
-                <span class="block text-sm text-gray-900 dark:text-white" th:text="${cliente.nome}"></span>
-                <span class="block text-sm  text-gray-500 truncate dark:text-gray-400" th:text="${cliente.email}"></span>
+                <span class="block text-sm text-gray-900 dark:text-white" th:text="${usuario.getNome}"></span>
+                <span class="block text-sm  text-gray-500 truncate dark:text-gray-400" th:text="${usuario.getUsername()}"></span>
                 <hr>
               </div>
               <a href="/" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Home</a>
               <a href="/cliente/perfil" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Meu Perfil</a>
               <a href="/cliente/alterar-senha" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Alterar Senha</a>
               <a href="/cliente/meus-pedidos" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Meus pedidos</a>
-              <!--              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-3">Configurações</a>-->
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-3">Configurações</a>
               <a href="/logout" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-4">Sair</a>
             </div>
           </div>
@@ -137,43 +140,42 @@
       </div>
     </div>
   </nav>
-  <div class="bg-gray-200 h-screen flex justify-center items-center">
-    <div class="bg-white p-8 rounded-lg shadow-md w-96">
-      <h2 class="text-2xl mb-4">Alterar Senha</h2>
-
-      <form id="updatePassword" action="/cliente/change-password" method="POST">
-        <input th:value="${cliente.email}" type="hidden" name="email" id="email">
-        <div class="mb-4">
-          <label for="oldPassword" class="block text-sm font-medium text-gray-700">Senha Atual</label>
-          <input type="password" name="oldPassword" id="oldPassword" class="mt-1 p-2 w-full border rounded-md" required>
-          <div id="oldPasswordError" class="text-red-500 text-sm mt-1"></div>
 
 
-        </div>
+  <div class="p-4">
+    <div class="bg-white shadow-md rounded my-6 p-4">
+      <table class="w-full table-auto">
+        <thead>
+          <tr class="border border-radius" style="background-color: rgb(7, 9, 39) !important;">
+            <th class="px-4 py-2 text-white">Número do Pedido</th>
+            <th class="px-4 py-2 text-white">Data</th>
+            <th class="px-4 py-2 text-white">Valor Total</th>
+            <th class="px-4 py-2 text-white">Status</th>
+            <th class="px-4 py-2 text-white">Mais Detalhes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <th:block th:each="pedido, iterStat : ${cliente.pedidos}">
+            <tr class="text-center">
+              <td class="border px-4 py-2" th:text="${pedido.numeroPedido}"></td>
+              <td class="border px-4 py-2" th:text="${pedido.dataPedido}"></td>
+              <td class="border px-4 py-2" th:text="${'R$ '+pedido.valorTotal}"></td>
+              <td class="border px-4 py-2" th:text="${pedido.statusPedido}"></td>
+              <td class="border px-4 py-2">
+                <button class="bg-blue-500 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-full">
+                  Detalhes
+                </button>
+              </td>
+            </tr>
+          </th:block>
 
 
-        <div class="mb-4">
-          <label for="newPassword" class="block text-sm font-medium text-gray-700">Nova Senha</label>
-          <input type="password" name="newPassword" id="newPassword" class="mt-1 p-2 w-full border rounded-md" required>
-          <div id="newPasswordError" class="text-red-500 text-sm mt-1"></div>
-
-        </div>
-
-        <div class="mb-4">
-          <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirme a Nova Senha</label>
-          <input type="password" name="confirmPassword" id="confirmPassword" class="mt-1 p-2 w-full border rounded-md" required>
-          <div id="confirmPasswordError" class="text-red-500 text-sm mt-1"></div>
-        </div>
-
-        <div>
-          <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 active:bg-blue-700">
-            Alterar Senha
-          </button>
-        </div>
-      </form>
+        </tbody>
+      </table>
     </div>
-
   </div>
+
+
   <footer class="relative bg-gray-800 pt-8 pb-6">
     <div class="container mx-auto px-4">
       <div class="flex flex-wrap text-left lg:text-left">
@@ -205,10 +207,14 @@
               <span class="block uppercase text-white text-sm font-semibold mb-2">Compra Segura</span>
               <ul class="list-unstyled">
                 <li>
-                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Termos e Condições</a>
-                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Política de Privacidade</a>
-                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Black Friday</a>
-                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Oferta Destiny</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Termos e
+                    Condições</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Política de
+                    Privacidade</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Black
+                    Friday</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Oferta
+                    Destiny</a>
                 </li>
               </ul>
             </div>
@@ -229,8 +235,10 @@
       <div class="flex flex-wrap items-center md:justify-between justify-center">
         <div class="w-full md:w-4/12 px-4 mx-auto text-center">
           <div class="text-sm text-white font-semibold py-1">
-            Copyright © <span id="get-current-year">2023</span><a href="#" class="text-white hover:text-blueGray-800"> Destiny by
-              <a href="https://github.com/CleitonRSilvaa/Destiny" class="text-white hover:text-blueGray-800">Eco Coders</a>.
+            Copyright © <span id="get-current-year">2023</span><a href="#" class="text-white hover:text-blueGray-800">
+              Destiny by
+              <a href="https://github.com/CleitonRSilvaa/Destiny" class="text-white hover:text-blueGray-800">Eco
+                Coders</a>.
           </div>
         </div>
       </div>
@@ -256,113 +264,11 @@
       });
     });
   </script>
-
-  <script>
-    function validarCliente(cliente) {
-
-      // let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-      // if (!emailPattern.test(cliente.email.trim())) return 'Por favor, digite um e-mail válido!';
-
-      if (!cliente.senhaAntiga.trim()) return "Senha antiga é obrigatório!";
-
-      if (!cliente.senhaNova.trim()) return "Senha nova é obrigatório!";
-
-      return null;
-
-    }
+  <script src="../jquery/jquery.min.js"></script>
+  <script src="../jquery/jquery.mask.min.js"></script>
+  <script src="../js/carrinho.js"></script>
 
 
-    document.getElementById('updatePassword').addEventListener('submit', function (event) {
-
-      event.preventDefault(); // Impede a ação padrão de submit do formulário
-
-      let oldPassword = document.getElementById('oldPassword').value;
-      let newPassword = document.getElementById('newPassword').value;
-      let confirmPassword = document.getElementById('confirmPassword').value;
-
-      // Resetar mensagens de erro
-      document.getElementById('oldPasswordError').textContent = '';
-      document.getElementById('newPasswordError').textContent = '';
-      document.getElementById('confirmPasswordError').textContent = '';
-
-      let hasErrors = false;
-
-      // Verifica se as senhas são iguais
-      if (newPassword !== confirmPassword) {
-        document.getElementById('confirmPasswordError').textContent = 'As senhas não conferem.';
-        hasErrors = true;
-      }
-
-      // Verifica se a senha nova é válida (exemplo: mínimo 8 caracteres)
-      if (newPassword.length < 5) {
-        document.getElementById('newPasswordError').textContent = 'A senha deve ter pelo menos 5 caracteres.';
-        hasErrors = true;
-      }
-
-
-      if (!hasErrors) {
-
-        const cliente = {
-          email: document.getElementById('email').value,
-          senhaAntiga: document.getElementById('oldPassword').value,
-          senhaNova: document.getElementById('newPassword').value,
-        };
-
-
-        const validacaoErro = validarCliente(cliente);
-        if (validacaoErro) {
-          Swal.fire('Atenção!', validacaoErro, 'warning');
-          return;
-        }
-
-
-        fetch('http://localhost:8080/cliente/alterar-senha', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(cliente)
-        })
-          .then(response => response.json())
-          .then(data => {
-            console.info(data)
-            // Aqui você pode lidar com a resposta da sua API
-            if (data.status == 200) {
-              Swal.fire('', String(data.details[0]), 'success').then(() => {
-                window.location = '/logout';
-
-              });
-            } else if (data.status === 405 && data.path === "/login") {
-              Swal.fire('Atenção!', 'Sessão enserada logi novamento', 'warning').then(() => {
-                location.reload()
-              });
-
-            } else if (data.message === "paramentro-invalido") {
-              Swal.fire(
-                'Atenção!',
-                String(data.details[0]),
-                'warning'
-              );
-            } else {
-              Swal.fire(
-                'Atenção!',
-                String(data.details),
-                'error'
-              );
-
-            }
-          })
-          .catch(error => {
-
-            console.error('Erro ao enviar os dados all :', data);
-            console.error('Erro ao enviar os dados:', error);
-
-          });
-      }
-    });
-
-
-  </script>
 
 
 </body>

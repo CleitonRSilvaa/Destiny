@@ -17,8 +17,10 @@ import com.destiny.model.Cliente;
 import com.destiny.model.Pedido;
 import com.destiny.model.PedidoDTO;
 import com.destiny.model.PedidoDetalhe;
+import com.destiny.model.Produto;
 import com.destiny.repository.PedidoDetalheRepository;
 import com.destiny.repository.PedidoRepository;
+import com.destiny.repository.ProdutoRepository;
 
 @RestController
 @RequestMapping("/pedido")
@@ -33,32 +35,44 @@ public class PedidoController {
     this.pedidoDetalheRepository = pedidoDetalheRepository;
   }
 
+  @Autowired
+  private ProdutoRepository produtoRepository;
+
   // Adicionar um novo pedido
   @PostMapping
   public ResponseEntity<Pedido> createPedido(@RequestBody PedidoDTO pedidodDto) {
 
-    var pedido = new Pedido();
-    var cliente = new Cliente();
-    cliente.setId(pedidodDto.getClienteId());
-    pedido.setCliente(cliente);
-    pedido.setEnderecoEntregaId(pedidodDto.getEnderecoEntregaId());
-    pedido.setMetodoPagamento(pedidodDto.getMetodoPagamento());
-    pedido.setStatusPedido(Pedido.StatusPedido.PENDENTE);
-    // pedido.setItemsPedido();
-    pedido.setValorTotal(pedidodDto.getValorTotal());
-    pedido.setNumeroPedido();
+    try {
+      var pedido = new Pedido();
+      var cliente = new Cliente();
+      cliente.setId(pedidodDto.getClienteId());
+      pedido.setCliente(cliente);
+      pedido.setEnderecoEntregaId(pedidodDto.getEnderecoEntregaId());
+      pedido.setMetodoPagamento(pedidodDto.getMetodoPagamento());
+      pedido.setStatusPedido(Pedido.StatusPedido.AGUARDANDO_PAGAMENTO);
+      pedido.setValorTotal(pedidodDto.getValorTotal());
+      pedido.setNumeroPedido();
 
-    System.out.println(pedido.toString());
+      Pedido savedPedido = pedidoRepository.save(pedido);
+      for (PedidoDetalhe pd : pedidodDto.getItemsPedido()) {
+        pd.setPedido(savedPedido);
+        pedidoDetalheRepository.save(pd);
+        // Recupera o produto do banco de dados
+        Produto produto = produtoRepository.findById(pd.getProdutoId()).orElse(null);
 
-    Pedido savedPedido = pedidoRepository.save(pedido);
-    for (PedidoDetalhe pd : pedidodDto.getItemsPedido()) {
-      pd.setPedido(savedPedido);
-      pedidoDetalheRepository.save(pd);
+        if (produto != null) {
+          produto.setQuantidade(produto.getQuantidade() - pd.getQuantidade());
+          produtoRepository.save(produto);
+        }
+
+      }
+
+      URI location = URI.create(String.format("/pedido/%s", savedPedido.getId()));
+
+      return ResponseEntity.created(location).body(savedPedido);
+    } catch (Exception e) {
+      return (ResponseEntity) ResponseEntity.status(404);
     }
-
-    URI location = URI.create(String.format("/pedido/%s", savedPedido.getId()));
-
-    return ResponseEntity.created(location).body(savedPedido);
 
   }
 

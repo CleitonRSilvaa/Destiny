@@ -53,7 +53,6 @@ public class ProdutoService {
   @Autowired
   private AzureBlobAdapter azureBlobAdapter;
 
-
   @Transactional
   public Produto cadastrarProduto(Produto produto, MultipartFile[] imagens, int imgPrincipal) {
     try {
@@ -70,7 +69,7 @@ public class ProdutoService {
               novaImagem.setPrincipal(true);
             }
             p++;
-            //novaImagem.setCaminho("imagens/produtos/" + imgFileName);
+            // novaImagem.setCaminho("imagens/produtos/" + imgFileName);
             novaImagem.setCaminho(imgFileName);
             novaImagem.setProduto(produto);
             imagemRepository.save(novaImagem);
@@ -151,7 +150,7 @@ public class ProdutoService {
 
     produtoRepository.updateStatusProduto(statusUpdateRequestProduto.getStatus(), longId);
     mensagemResponse.setStatus(200);
-    mensagemResponse.setMessage("sucess");
+    mensagemResponse.setMessage("success");
     mensagemResponse.setDetails(detalhes);
 
     return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
@@ -172,6 +171,7 @@ public class ProdutoService {
   }
 
   public List<Produto> buscarProdutosPorStatus(StatusProduto statusProduto) {
+
     return produtoRepository.findAllByStatusProduto(statusProduto);
   }
 
@@ -217,7 +217,7 @@ public class ProdutoService {
           if (imagemDell.isPresent()) {
             var img = imagemDell.get();
             imagemRepository.deleteById(img.getId());
-            //removeImagemDoServidor(img.getCaminho());
+            // removeImagemDoServidor(img.getCaminho());
           }
         }
       }
@@ -262,7 +262,7 @@ public class ProdutoService {
               novaImagem.setPrincipal(false);
             }
             p++;
-           // novaImagem.setCaminho("imagens/produtos/" + imgFileName);
+            // novaImagem.setCaminho("imagens/produtos/" + imgFileName);
             novaImagem.setCaminho(imgFileName);
             novaImagem.setProduto(produto);
             imagemRepository.save(novaImagem);
@@ -286,20 +286,21 @@ public class ProdutoService {
     }
   }
 
-//  private String salvaImagemNoServidor(MultipartFile imagem) throws IOException {
-//
-//      String url =
-//      logger.info("url :"+ url);
-//    return imgFileName;
-//  }
+  // private String salvaImagemNoServidor(MultipartFile imagem) throws IOException
+  // {
+  //
+  // String url =
+  // logger.info("url :"+ url);
+  // return imgFileName;
+  // }
 
-//  private void removeImagemDoServidor(String nomeArquivo) {
-//    Path caminho = Paths.get(directoryPathString + nomeArquivo);
-//    try {
-//      Files.delete(caminho);
-//    } catch (IOException e) {
-//      e.printStackTrace();
-//    }
-//  }
+  // private void removeImagemDoServidor(String nomeArquivo) {
+  // Path caminho = Paths.get(directoryPathString + nomeArquivo);
+  // try {
+  // Files.delete(caminho);
+  // } catch (IOException e) {
+  // e.printStackTrace();
+  // }
+  // }
 
 }

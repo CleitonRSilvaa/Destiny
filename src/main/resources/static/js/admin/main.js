@@ -126,7 +126,7 @@ function makeRequest(e, t, a, i) {
       data: JSON.stringify(a),
       contentType: "application/json; charset=utf-8",
       success: function (e) {
-        [200, 201].includes(e.status) && "sucess" === e.message
+        [200, 201].includes(e.status) && "success" === e.message
           ? (Swal.fire({
               position: "top-end",
               icon: "success",

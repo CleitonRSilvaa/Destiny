@@ -22,8 +22,8 @@
       display: block;
     } */
 
-    body{
-    background-color: #E9F2EA;
+    body {
+      background-color: #E9F2EA;
     }
 
     .dropdown-content {
@@ -95,17 +95,13 @@
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
       <div class="relative flex h-16 items-center justify-between">
         <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
-          <button type="button"
-            class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-            aria-controls="mobile-menu" aria-expanded="false">
+          <button type="button" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
             <span class="absolute -inset-0.5"></span>
             <span class="sr-only">Open main menu</span>
-            <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-              aria-hidden="true">
+            <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
-            <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-              aria-hidden="true">
+            <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
@@ -117,88 +113,63 @@
           </div>
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
-              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                aria-current="page">Pacotes</a>
-              <a href="#"
-                class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Passeios</a>
-              <a href="#"
-                class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Destinos</a>
-              <a href="#"
-                class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Itinerários</a>
+              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Pacotes</a>
+              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Passeios</a>
+              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Destinos</a>
+              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Itinerários</a>
             </div>
           </div>
         </div>
         <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-          <button type="button"
-            class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+          <button type="button" class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
             <span class="absolute -inset-1.5"></span>
             <span class="sr-only">View notifications</span>
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-              aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
             </svg>
           </button>
           <!-- Profile dropdown -->
           <div class="relative ml-3" th:if="${#authentication.authorities[0].authority == 'ROLE_CLIENTE'}">
             <div>
-              <button type="button"
-                class="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+              <button type="button" class="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                 <span class="absolute -inset-1.5"></span>
                 <span class="sr-only">Open user menu</span>
-                <img class="h-8 w-8 rounded-full"
-                  src="https://destinyproject.blob.core.windows.net/destinypodruto/perfil.png" alt="">
+                <img class="h-8 w-8 rounded-full" src="https://destinyproject.blob.core.windows.net/destinypodruto/perfil.png" alt="">
               </button>
             </div>
 
-            <div
-              class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden"
-              role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+            <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
 
               <div class="px-4 py-3">
                 <span class="block text-sm text-gray-900 dark:text-white" th:text="${cliente.nome}"></span>
-                <span class="block text-sm  text-gray-500 truncate dark:text-gray-400"
-                  th:text="${cliente.email}"></span>
+                <span class="block text-sm  text-gray-500 truncate dark:text-gray-400" th:text="${cliente.email}"></span>
                 <hr>
               </div>
-              <a href="/" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1"
-                id="user-menu-item-0">Home</a>
-              <a href="/cliente/perfil" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1"
-                id="user-menu-item-0">Meu Perfil</a>
-              <a href="/cliente/alterar-senha" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
-                tabindex="-1" id="user-menu-item-1">Alterar Senha</a>
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1"
-                id="user-menu-item-2">Meus pedidos</a>
-<!--              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1"-->
-<!--                id="user-menu-item-3">Configurações</a>-->
-              <a href="/logout" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1"
-                id="user-menu-item-4">Sair</a>
+              <a href="/" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Home</a>
+              <a href="/cliente/perfil" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Meu Perfil</a>
+              <a href="/cliente/alterar-senha" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Alterar Senha</a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Meus pedidos</a>
+              <!--              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1"-->
+              <!--                id="user-menu-item-3">Configurações</a>-->
+              <a href="/logout" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-4">Sair</a>
             </div>
           </div>
         </div>
-        <th:block sec:authorize="isAuthenticated()"
-          th:if="${#authentication.authorities.?[authority == 'ROLE_ADMIN' || authority == 'ROLE_ESTOQUISTA'].size() > 0}">
-          <a href="/home" type="button"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm mx-2 px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Menu</a>
+        <th:block sec:authorize="isAuthenticated()" th:if="${#authentication.authorities.?[authority == 'ROLE_ADMIN' || authority == 'ROLE_ESTOQUISTA'].size() > 0}">
+          <a href="/home" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm mx-2 px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Menu</a>
         </th:block>
 
 
-        <a sec:authorize="!isAuthenticated()" href="/login" type="button"
-          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm mx-2 px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Entrar</a>
+        <a sec:authorize="!isAuthenticated()" href="/login" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm mx-2 px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Entrar</a>
       </div>
     </div>
 
     <div class="sm:hidden" id="mobile-menu">
       <div class="space-y-1 px-2 pb-3 pt-2">
-        <a href="#" class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium"
-          aria-current="page">Pacotes</a>
-        <a href="#"
-          class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Passeios</a>
-        <a href="#"
-          class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Destinos</a>
-        <a href="#"
-          class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Itinerários</a>
+        <a href="#" class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" aria-current="page">Pacotes</a>
+        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Passeios</a>
+        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Destinos</a>
+        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Itinerários</a>
       </div>
     </div>
   </nav>
@@ -211,41 +182,33 @@
       <form id="updateForm">
         <div class="mb-4">
           <label for="clientName" class="block text-sm font-medium text-gray-700">Nome</label>
-          <input th:value="${cliente.nome}" type="text" id="clientName" name="clientName"
-            class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:shadow-outline custom-border" required>
+          <input th:value="${cliente.nome}" type="text" id="clientName" name="clientName" class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:shadow-outline custom-border" required>
         </div>
         <div class="mb-4">
           <label for="birthDate" class="block text-sm font-medium text-gray-700">Data de Nascimento</label>
-          <input th:value="${cliente.dataNacimento}" type="date" id="birthDate" name="birthDate"
-            class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:shadow-outline custom-border" required>
+          <input th:value="${cliente.dataNacimento}" type="date" id="birthDate" name="birthDate" class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:shadow-outline custom-border" required>
         </div>
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700">Gênero</label>
-          <select th:field="*{cliente.genero}" name="gender" id="gender" class="mt-1 p-2 w-full border rounded-md"
-            required>
+          <select th:field="*{cliente.genero}" name="gender" id="gender" class="mt-1 p-2 w-full border rounded-md" required>
             <option th:value="'masculino'" th:selected="${cliente.genero == 'masculino'}">Masculino</option>
             <option th:value="'feminino'" th:selected="${cliente.genero == 'feminino'}">Feminino</option>
             <option th:value="'outro'" th:selected="${cliente.genero == 'outro'}">Outro</option>
           </select>
         </div>
 
-        <button type="submit"
-          class="w-32 focus:outline-none border border-transparent py-2 px-5 rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium">Atualizar</button>
+        <button type="submit" class="w-32 focus:outline-none border border-transparent py-2 px-5 rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium">Atualizar</button>
       </form>
     </div>
 
     <!-- Parte de Edição de Endereço -->
     <div class="w-1/2 pl-4">
       <h1 class="text-2xl mb-4">Endereços de Entrega</h1>
-      <button data-modal-target="staticModal" data-modal-toggle="staticModal"
-        class="m-3 mx-1 px-2 py-2 focus:outline-none border border-transparent rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium"
-        type="button">Adicionar Endereço</button>
+      <button data-modal-target="staticModal" data-modal-toggle="staticModal" class="m-3 mx-1 px-2 py-2 focus:outline-none border border-transparent rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium" type="button">Adicionar Endereço</button>
       <div id="addressList">
 
         <th:block th:each="endereco, iterStat : ${cliente.enderecos}">
-          <div
-            th:class="${endereco.principal} ? 'mb-4 p-4 rounded-md relative border-2 rounded-md focus:outline-none focus':'mb-4 p-4 rounded-md relative border-2 rounded-md focus:outline-none custom-border-endereco'"
-            th:data-endereco-id="${endereco.id}">
+          <div th:class="${endereco.principal} ? 'mb-4 p-4 rounded-md relative border-2 rounded-md focus:outline-none focus':'mb-4 p-4 rounded-md relative border-2 rounded-md focus:outline-none custom-border-endereco'" th:data-endereco-id="${endereco.id}">
 
             <label class="inline-flex items-center">
               <span class="ml-4 block">
@@ -276,8 +239,7 @@
 
 
   <!-- Main modal -->
-  <div id="staticModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true"
-    class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+  <div id="staticModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative w-full max-w-2xl max-h-full">
       <!-- Modal content -->
       <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -287,12 +249,9 @@
             Endereço de Entrega
           </h3>
 
-          <button type="button"
-            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-            data-modal-hide="staticModal">
+          <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="staticModal">
             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
             </svg>
             <span class="sr-only">Close modal</span>
           </button>
@@ -300,37 +259,27 @@
         <!-- Modal body -->
         <div class="p-6 space-y-6">
           <div class="mb-4">
-            <input type="text" id="cep" name="cep" placeholder="04005-005"
-              class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:shadow-outline custom-border"
-              minlength="8" maxlength="9">
+            <input type="text" id="cep" name="cep" placeholder="04005-005" class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:shadow-outline custom-border" minlength="8" maxlength="9">
           </div>
           <div class="mb-4">
-            <input type="text" id="logradouro" name="logradouro" placeholder="Logradouro"
-              class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:shadow-outline custom-border">
+            <input type="text" id="logradouro" name="logradouro" placeholder="Logradouro" class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:shadow-outline custom-border">
           </div>
           <div class="grid grid-cols-2 gap-4 mb-4">
-            <input type="text" id="numero" name="numero" placeholder="Número"
-              class="p-2 border rounded-md focus:outline-none focus:shadow-outline custom-border">
-            <input type="text" id="complemento" name="complemento" placeholder="Complemento"
-              class="p-2 border rounded-md focus:outline-none focus:shadow-outline custom-border">
+            <input type="text" id="numero" name="numero" placeholder="Número" class="p-2 border rounded-md focus:outline-none focus:shadow-outline custom-border">
+            <input type="text" id="complemento" name="complemento" placeholder="Complemento" class="p-2 border rounded-md focus:outline-none focus:shadow-outline custom-border">
           </div>
           <div class="mb-4">
-            <input type="text" id="bairro" name="bairro" placeholder="Bairro"
-              class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:shadow-outline custom-border">
+            <input type="text" id="bairro" name="bairro" placeholder="Bairro" class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:shadow-outline custom-border">
           </div>
           <div class="grid grid-cols-2 gap-4 mb-4">
-            <input type="text" id="localidade" name="localidade" placeholder="Cidade"
-              class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:shadow-outline custom-border">
-            <input type="text" id="uf"
-              class="p-2 border rounded-md focus:outline-none focus:shadow-outline custom-border" placeholder="UF">
+            <input type="text" id="localidade" name="localidade" placeholder="Cidade" class="mt-1 p-2 w-full border rounded-md focus:outline-none focus:shadow-outline custom-border">
+            <input type="text" id="uf" class="p-2 border rounded-md focus:outline-none focus:shadow-outline custom-border" placeholder="UF">
           </div>
         </div>
         <!-- Modal footer -->
         <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-          <button type="button" id="bntSalvaEndereco"
-            class="text-white px-5 py-2.5 focus:outline-none border border-transparent rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium">Salvar</button>
-          <button data-modal-hide="staticModal" type="button"
-            class="text-black bg-white px-5 py-2.5 w-32 focus:outline-none border border-transparent py-2 px-5 rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium">Cancelar</button>
+          <button type="button" id="bntSalvaEndereco" class="text-white px-5 py-2.5 focus:outline-none border border-transparent rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium">Salvar</button>
+          <button data-modal-hide="staticModal" type="button" class="text-black bg-white px-5 py-2.5 w-32 focus:outline-none border border-transparent py-2 px-5 rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium">Cancelar</button>
         </div>
       </div>
     </div>
@@ -359,8 +308,7 @@
               <ul class="list-unstyled">
                 <li>
                   <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Sobre Nós</a>
-                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm"
-                    href="https://github.com/CleitonRSilvaa/Destiny">GitHub</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://github.com/CleitonRSilvaa/Destiny">GitHub</a>
                 </li>
               </ul>
             </div>
@@ -412,6 +360,8 @@
   <script src="../jquery/jquery.mask.min.js"></script>
 
   <script>
+
+    var dataResponse;
 
     $(document).ready(function () {
       $("#cep").mask("00000-000");
@@ -573,11 +523,24 @@
               'success'
             );
           } catch (error) {
-            Swal.fire(
-              'Erro!',
-              'Houve um problema ao excluir o endereço. Tente novamente mais tarde.',
-              'error'
-            );
+
+            let t = dataResponse,
+              a = "<br/><br/>"; // Iniciei a variável com as quebras de linha
+
+            if (t.details) {
+              a += t.details.map((detail) => "-" + detail).join("<br/>"); // Adicionando detalhes com quebras de linha
+            }
+
+            Swal.fire({
+              icon: "warning",
+              title: t.message, // Definindo t.message como o título
+              html: a, // Configurando o conteúdo formatado em HTML como o corpo da mensagem
+            });
+            // Swal.fire(
+            //   'Erro!',
+            //   'Houve um problema ao excluir o endereço. Tente novamente mais tarde.',
+            //   'error'
+            // );
           }
         }
       });
@@ -622,12 +585,14 @@
       });
       const data = await response.json();
 
-      if (data.message === 'sucess') {
+
+      if (data.message === 'success') {
         console.log("Endereço removido com sucesso!");
         element.closest('[data-endereco-id]').remove();
       } else {
+        dataResponse = data;
         console.error("Erro ao remover o endereço!", JSON.stringify(data));
-        throw new Error("Erro ao remover o endereço!");
+        throw new Error(JSON.stringify(data));
       }
     }
 
@@ -730,7 +695,6 @@
 
 
     });
-
 
   </script>
 

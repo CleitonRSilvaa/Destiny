@@ -30,6 +30,7 @@ public class Pedido {
   private static final Random random = new Random();
 
   public static enum StatusPedido {
+    AGUARDANDO_PAGAMENTO,
     PENDENTE,
     APROVADO,
     CANCELADO
@@ -85,7 +86,7 @@ public class Pedido {
         ", dataPedido=" + dataPedido +
         ", metodoPagamento='" + metodoPagamento + '\'' +
         ", valorTotal='" + valorTotal + '\'' +
-        ", itemsPedido='" + itemsPedido.toString() + '\'' +
+        ", itemsPedido='" + itemsPedido + '\'' +
         '}';
   }
 
