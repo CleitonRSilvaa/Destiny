@@ -104,13 +104,16 @@ function handleEnderecoSave() {
 
 async function salvarNovoEndereco(endereco) {
   try {
-    const response = await fetch(`http://localhost:8080/cliente/add/endereco`, {
-      method: "POST",
-      body: JSON.stringify(endereco),
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
-    });
+    const response = await fetch(
+      `https://destinyproject.azurewebsites.net/cliente/add/endereco`,
+      {
+        method: "POST",
+        body: JSON.stringify(endereco),
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+        },
+      }
+    );
     const data = await response.json();
     if (data.message === "success") {
       Swal.fire("", "Endereço cadastrado com sucesso.", "success").then(() => {
@@ -479,13 +482,16 @@ function resetMessages() {
 async function makeRequest(e, t, a, i) {
   console.info(a);
   try {
-    const response = await fetch("http://localhost:8080" + t, {
-      method: e,
-      body: JSON.stringify(a),
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
-    });
+    const response = await fetch(
+      "https://destinyproject.azurewebsites.net" + t,
+      {
+        method: e,
+        body: JSON.stringify(a),
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+        },
+      }
+    );
     const data = await response.json();
 
     console.log(response.status);

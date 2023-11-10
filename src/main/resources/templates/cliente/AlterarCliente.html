@@ -452,7 +452,7 @@
 
     async function salvarNovoEndereco(endereco) {
       try {
-        const response = await fetch(`http://localhost:8080/cliente/add/endereco`, {
+        const response = await fetch(`https://destinyproject.azurewebsites.net/cliente/add/endereco`, {
           method: 'POST',
           body: JSON.stringify(endereco),
           headers: {
@@ -580,7 +580,7 @@
 
     async function executarRemocaoEndereco(element) {
       const enderecoId = element.closest('[data-endereco-id]').getAttribute('data-endereco-id');
-      const response = await fetch(`http://localhost:8080/cliente/delete/endereco/${enderecoId}`, {
+      const response = await fetch(`https://destinyproject.azurewebsites.net/cliente/delete/endereco/${enderecoId}`, {
         method: 'DELETE',
       });
       const data = await response.json();
@@ -598,7 +598,7 @@
 
     async function executarEnderecoPadrao(element) {
       const enderecoId = element.closest('[data-endereco-id]').getAttribute('data-endereco-id');
-      const response = await fetch(`http://localhost:8080/cliente/padrao/endereco/${enderecoId}`, {
+      const response = await fetch(`https://destinyproject.azurewebsites.net/cliente/padrao/endereco/${enderecoId}`, {
         method: 'PUT',
       });
       const data = await response.json();
@@ -653,7 +653,7 @@
       }
 
 
-      fetch('http://localhost:8080/cliente/update', {
+      fetch('https://destinyproject.azurewebsites.net/cliente/update', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'

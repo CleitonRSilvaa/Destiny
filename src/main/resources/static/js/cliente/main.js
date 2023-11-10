@@ -515,7 +515,7 @@ function makeRequest(e, t, a, i) {
   console.log(a),
     $.ajax({
       type: e,
-      url: `http://localhost:8080${t}`,
+      url: `https://destinyproject.azurewebsites.net${t}`,
       data: JSON.stringify(a),
       contentType: "application/json; charset=utf-8",
       success: function (e) {
