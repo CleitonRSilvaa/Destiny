@@ -6,18 +6,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Destiny</title>
-  <link href="../css/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../css/owl.carousel.min.css">
-  <link rel="stylesheet" href="../css/owl.theme.default.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
   <link rel="icon" href="../img/LogoDestiny2.svg">
   <link rel="stylesheet" href="../css/stylesLanding.css">
 </head>
-
-<style>
-  .bg-pink-500{
-  background-color:rgb(230, 140, 76);
-  }
-</style>
 
 <body class="bg-gray-200">
 
@@ -235,14 +230,23 @@
     </div>
   </footer>
 
+  <script src="https://kit.fontawesome.com/9ef98eb577.js" crossorigin="anonymous"></script>
   <script src="../jquery/jquery.min.js"></script>
   <script src="../jquery/jquery.mask.min.js"></script>
   <script src="../js/bootstrap.bundle.min.js"></script>
   <script src="../js/popper.min.js"></script>
   <script src="../js/carrinho.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-  <script src="https://unpkg.com/@material-tailwind/html@latest/scripts/ripple.js"></script>
-  <script th:if="${#authentication.authorities[0].authority == 'ROLE_CLIENTE'}">
+
+
+
+
+
+
+
+
+  <!-- Initialize Owl Carousel -->
+  <script>
+
     document.addEventListener('DOMContentLoaded', function () {
       // Toggle do menu mobile
       let menuButton = document.querySelector('[aria-controls="mobile-menu"]');
@@ -260,15 +264,6 @@
         userMenuDropdown.classList.toggle('hidden');
       });
     });
-  </script>
-
-
-
-
-
-
-  <script>
-
 
     $(document).ready(function () {
       $('.owl-carousel').owlCarousel({
@@ -320,7 +315,9 @@
 
   </script>
 
-
+  <!-- Owl Carousel JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+  <script src="https://unpkg.com/@material-tailwind/html@latest/scripts/ripple.js"></script>
 </body>
 
 </html>
