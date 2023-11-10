@@ -2,8 +2,10 @@ package com.destiny.controller;
 
 import com.destiny.model.Cliente;
 import com.destiny.model.CustomUserDetails;
+import com.destiny.model.Endereco;
 import com.destiny.model.MensagemResponse;
 import com.destiny.model.Produto;
+import com.destiny.model.StatusConta;
 import com.destiny.model.StatusProduto;
 import com.destiny.model.TipoConta;
 import com.destiny.repository.ProdutoRepository;
@@ -72,6 +74,8 @@ public class AcessoController {
             userDetails = (CustomUserDetails) auth.getPrincipal();
             if (userDetails.getTipoConta().equals(TipoConta.CLIENTE)) {
                 Cliente cliente = clienteService.getClienteBySection(auth);
+
+                cliente.setEnderecos(clienteService.findByClienteIdAndStatusAndTipoOrderByPrincipalDesc(cliente));
                 model.addAttribute("cliente", cliente);
             }
         }
@@ -93,9 +97,10 @@ public class AcessoController {
         if (auth.getPrincipal() instanceof CustomUserDetails) {
             userDetails = (CustomUserDetails) auth.getPrincipal();
         }
-
-        model.addAttribute("usuario", userDetails);
         Cliente cliente = clienteService.getClienteBySection(auth);
+        model.addAttribute("usuario", userDetails);
+
+        cliente.setEnderecos(clienteService.findByClienteIdAndStatusAndTipoOrderByPrincipalDesc(cliente));
         model.addAttribute("cliente", cliente);
 
         return "pagCheckout";

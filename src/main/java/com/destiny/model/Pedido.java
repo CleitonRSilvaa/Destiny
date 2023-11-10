@@ -61,6 +61,9 @@ public class Pedido {
   private String metodoPagamento;
 
   @Column(nullable = false)
+  private int parcelas;
+
+  @Column(nullable = false)
   private BigDecimal valorTotal;
 
   @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)

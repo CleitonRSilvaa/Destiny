@@ -213,6 +213,7 @@ var pedido = {
   clienteId: "",
   valorTotal: "",
   metodoPagamento: "",
+  parcelas: 1,
   itemsPedido: [],
 };
 
@@ -364,6 +365,15 @@ function app() {
       }
 
       pedido.metodoPagamento = formaPag[result.toLowerCase()];
+
+      if (pedido.metodoPagamento === "CARTAO") {
+        pedido.parcelas = document.getElementById("parcelas").value;
+      }
+      parcelasDetails = document.getElementById("parcelasInfo");
+      pedido.metodoPagamento === "CARTAO"
+        ? parcelasDetails.classList.remove("hidden")
+        : parcelasDetails.classList.add("hidden");
+
       document.getElementById("resumo-pagamento").innerText =
         formaPag[result.toLowerCase()];
 
@@ -405,6 +415,11 @@ function app() {
 
       document.getElementById("resumo-total").innerText =
         "R$ " + total.toFixed(2);
+
+      document.getElementById("resumo-percelas").innerText =
+        pedido.parcelas.toString() +
+        "x de R$ " +
+        (total / pedido.parcelas).toFixed(2).toString();
       console.info(pedido);
       return true;
     },
@@ -414,7 +429,7 @@ function app() {
       document.getElementById("btnComprar").disabled = true;
       document.getElementById("btnVolta").disabled = true;
 
-      makeRequest("POST", "/pedido", pedido, "Compra efetuada com sucesso");
+      makeRequest("POST", "/pedido", pedido, "Pedido gerado com sucesso");
       document.getElementById("loader").style.display = "none";
       document.getElementById("btnComprar").disabled = false;
       document.getElementById("btnVolta").disabled = false;

@@ -125,11 +125,11 @@ public class ProdutoController {
         CustomUserDetails userDetails = null;
         if (auth.getPrincipal() instanceof CustomUserDetails) {
             userDetails = (CustomUserDetails) auth.getPrincipal();
+            Cliente cliente = clienteService.getClienteBySection(auth);
+            model.addAttribute("cliente", cliente);
         }
 
         model.addAttribute("usuario", userDetails);
-        Cliente cliente = clienteService.getClienteBySection(auth);
-        model.addAttribute("cliente", cliente);
 
         if (produtoOptional.isPresent()) {
             Produto produto = produtoOptional.get();

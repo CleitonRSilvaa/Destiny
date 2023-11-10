@@ -42,4 +42,21 @@ public class ClienteService {
 
   }
 
+  public List<Endereco> findByClienteIdAndStatusAndTipoOrderByPrincipalDesc(Cliente cliente) {
+    List<Endereco> enderecos = enderecoRepository.findByClienteIdAndStatusAndTipo(cliente.getId(),
+        StatusConta.ATIVA,
+        Endereco.tipoEndereco.ENTREGA);
+
+    enderecos.sort((e1, e2) -> {
+      if (e1.getPrincipal() && !e2.getPrincipal()) {
+        return -1;
+      } else if (!e1.getPrincipal() && e2.getPrincipal()) {
+        return 1;
+      }
+      return 0;
+    });
+
+    return enderecos;
+  }
+
 }
