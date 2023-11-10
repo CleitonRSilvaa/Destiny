@@ -1,9 +1,11 @@
 package com.destiny.controller;
 
+import com.destiny.model.Cliente;
 import com.destiny.model.CustomUserDetails;
 import com.destiny.model.MensagemResponse;
 import com.destiny.model.Produto;
 import com.destiny.model.StatusProduto;
+import com.destiny.service.ClienteService;
 import com.destiny.service.ProductDetailService;
 import com.destiny.service.ProdutoService;
 import org.slf4j.Logger;
@@ -30,6 +32,9 @@ public class ProdutoController {
 
     @Autowired
     private ProdutoService produtoService;
+
+    @Autowired
+    private ClienteService clienteService;
 
     private static final Logger logger = LoggerFactory.getLogger(ProdutoController.class);
 
@@ -117,14 +122,14 @@ public class ProdutoController {
         Optional<Produto> produtoOptional = produtoService.buscarProdutoPorId(id);
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String nome = auth.getName();
+        CustomUserDetails userDetails = null;
         if (auth.getPrincipal() instanceof CustomUserDetails) {
-            CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
-            nome = userDetails.getNome();
-            System.out.println(nome);
+            userDetails = (CustomUserDetails) auth.getPrincipal();
+            Cliente cliente = clienteService.getClienteBySection(auth);
+            model.addAttribute("cliente", cliente);
         }
 
-        model.addAttribute("nomeUsuario", nome);
+        model.addAttribute("usuario", userDetails);
 
         if (produtoOptional.isPresent()) {
             Produto produto = produtoOptional.get();

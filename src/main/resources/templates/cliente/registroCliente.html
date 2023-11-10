@@ -78,7 +78,7 @@
                             <a href="/cliente/perfil" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Meu Perfil</a>
                             <a href="/cliente/alterar-senha" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Alterar Senha</a>
                             <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Meus pedidos</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-3">Configurações</a>
+                            <!--                            <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-3">Configurações</a>-->
                             <a href="/logout" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-4">Sair</a>
                         </div>
                     </div>
@@ -129,12 +129,12 @@
                                 </div>
                             </div>
 
-                            <div class="flex items-center md:w-64">
-                                <div class="w-full bg-white rounded-full mr-2">
-                                    <div class="rounded-full bg-green-500 text-xs leading-none h-2 text-center text-white" :style="'width: '+ parseInt(step / 4 * 100) +'%'"></div>
-                                </div>
-                                <div class="text-xs w-10 text-gray-600" x-text="parseInt(step / 4 * 100) +'%'"></div>
-                            </div>
+                            <!--                            <div class="flex items-center md:w-64">-->
+                            <!--                                <div class="w-full bg-white rounded-full mr-2">-->
+                            <!--                                    <div class="rounded-full bg-green-500 text-xs leading-none h-2 text-center text-white" :style="'width: '+ parseInt(step / 4 * 100) +'%'"></div>-->
+                            <!--                                </div>-->
+                            <!--                                <div class="text-xs w-10 text-gray-600" x-text="parseInt(step / 4 * 100) +'%'"></div>-->
+                            <!--                            </div>-->
                         </div>
                     </div>
                     <!-- /Top Navigation -->
@@ -142,28 +142,28 @@
                     <!-- Step Content -->
                     <div class="py-10">
                         <div x-show.transition.in="step === 1">
-                            <div class="mb-5 text-center">
-                                <div class="divImg mx-auto w-32 h-32 mb-2 border rounded-full relative bg-gray-100 mb-4 shadow-inset">
-                                    <img id="image" class="object-cover w-full h-32 rounded-full" :src="image" />
-                                </div>
+                            <!--                            <div class="mb-5 text-center">-->
+                            <!--                                <div class="divImg mx-auto w-32 h-32 mb-2 border rounded-full relative bg-gray-100 mb-4 shadow-inset">-->
+                            <!--                                    <img id="image" class="object-cover w-full h-32 rounded-full" :src="image" />-->
+                            <!--                                </div>-->
 
-                                <label for="fileInput" type="button" class="cursor-pointer inine-flex justify-between items-center focus:outline-none border py-2 px-4 rounded-lg shadow-sm text-left text-gray-600 bg-white hover:bg-gray-100 font-medium">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="inline-flex flex-shrink-0 w-6 h-6 -mt-1 mr-1" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <rect x="0" y="0" width="24" height="24" stroke="none"></rect>
-                                        <path d="M5 7h1a2 2 0 0 0 2 -2a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2" />
-                                        <circle cx="12" cy="13" r="3" />
-                                    </svg>
-                                    Buscar Foto
-                                </label>
+                            <!--                                <label for="fileInput" type="button" class="cursor-pointer inine-flex justify-between items-center focus:outline-none border py-2 px-4 rounded-lg shadow-sm text-left text-gray-600 bg-white hover:bg-gray-100 font-medium">-->
+                            <!--                                    <svg xmlns="http://www.w3.org/2000/svg" class="inline-flex flex-shrink-0 w-6 h-6 -mt-1 mr-1" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">-->
+                            <!--                                        <rect x="0" y="0" width="24" height="24" stroke="none"></rect>-->
+                            <!--                                        <path d="M5 7h1a2 2 0 0 0 2 -2a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2" />-->
+                            <!--                                        <circle cx="12" cy="13" r="3" />-->
+                            <!--                                    </svg>-->
+                            <!--                                    Buscar Foto-->
+                            <!--                                </label>-->
 
-                                <div class="mx-auto w-48 text-gray-500 text-xs text-center mt-1">Clique para adicionar foto de perfil</div>
+                            <!--                                <div class="mx-auto w-48 text-gray-500 text-xs text-center mt-1">Clique para adicionar foto de perfil</div>-->
 
-                                <input name="photo" id="fileInput" accept="image/*" class="hidden" type="file" @change="let file = document.getElementById('fileInput').files[0];
-								var reader = new FileReader();
-								reader.onload = (e) => image = e.target.result;
-								reader.readAsDataURL(file);">
+                            <!--                                <input name="photo" id="fileInput" accept="image/*" class="hidden" type="file" @change="let file = document.getElementById('fileInput').files[0];-->
+                            <!--								var reader = new FileReader();-->
+                            <!--								reader.onload = (e) => image = e.target.result;-->
+                            <!--								reader.readAsDataURL(file);">-->
 
-                            </div>
+                            <!--                            </div>-->
 
                             <div class="mb-5">
                                 <label for="name" class="font-bold mb-1 text-gray-700 block">Nome</label>
@@ -187,7 +187,7 @@
                                 <div class="mb-5">
                                     <label for="genero" class="font-bold mb-1 text-gray-700 block">Gênero</label>
                                     <select id="genero" name="genero" class="h-12 w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" required>
-                                        <option value="Masculino">Masculino</option>
+                                        <option value="">Masculino</option>
                                         <option value="Feminino">Feminino</option>
                                         <option value="Outro">Outro</option>
                                     </select>
@@ -316,9 +316,9 @@
                                         Verifique se todos os seus dados estão corretos. Se estiver tudo certo, clique no botão 'Cadastrar'. Se precisar fazer alguma correção, clique no botão 'Voltar'.
                                     </div>
 
-                                    <button id="btnCadastar" @click="submitClienteForm()" class="text-black w-40 block mx-auto focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-black bg-white hover:bg-gray-100 font-medium border" style="border: 2px solid #e0b0ff; color: white;">Cadastrar</button>
+                                    <button id="btnCadastar" @click="submitClienteForm()" class="text-white w-40 block mx-auto focus:outline-none border border-transparent py-2 px-5 rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium">Cadastrar</button>
 
-                                    <button id="btnVolta" type="button" @click="step--" class="w-32 focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-black bg-white hover:bg-gray-100 font-medium border">Voltar</button>
+                                    <button id="btnVolta" type="button" @click="step--" class="w-32 focus:outline-none border border-transparent py-2 px-5 rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium">Voltar</button>
 
                                 </div>
                             </div>
@@ -331,7 +331,7 @@
                     <div class="max-w-3xl mx-auto px-4 p-4">
                         <div class="flex items-center justify-center">
                             <div class="w-1/2">
-                                <button type="button" x-show="step > 1" @click="step--" class="w-32 focus:outline-none py-2 px-5 rounded-lg shadow-sm text-center text-black bg-white hover:bg-gray-100 font-medium border">Voltar</button>
+                                <button type="button" x-show="step > 1" @click="step--" class="w-32 focus:outline-none border border-transparent py-2 px-5 rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium">Voltar</button>
                             </div>
 
                             <div class="w-1/2 text-right">

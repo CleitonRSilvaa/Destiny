@@ -193,7 +193,7 @@ function makeRequest(type, url, data, successMessage) {
     success: function (response) {
       if (
         [200, 201].includes(response.status) &&
-        response.message === "sucess"
+        response.message === "success"
       ) {
         Swal.fire({
           position: "top-end",

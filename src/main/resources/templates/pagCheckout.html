@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout Destiny</title>
+  <link href="../css/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
+  <link rel="stylesheet" href="../css/stylesLanding.css">
+  <link rel="shortcut icon" href="../img/LogoDestiny2.svg" type="image/x-icon">
+  <script src="../js/sweetalert2.min.js"></script>
+
+  <style>
+    /* Estilo adicional para o endereço selecionado */
+    .selected {
+      border: 2px solid #34D399;
+      /* Cor verde do Tailwind */
+      background-color: #ECFDF5;
+    }
+
+    .bg-blue-500 {
+      background-color: #f97316;
+      border-color: #f97316;
+      color: white;
+    }
+
+    .bg-blue-500:hover {
+      transition: 0.3s;
+      color: #f97316;
+      background-color: white;
+      border: 1px solid #f97316;
+      /* Adicione a borda ao passar o mouse */
+    }
+
+    .bg-black{
+    background-color: #030418;
+    }
+
+    .bg-black:hover{
+      background-color: #0e1036fd;
+    }
+
+
+  </style>
+
+</head>
+
+
+<body class="antialiased sans-serif bg-gray-200">
+  <nav class="bg-gray-800">
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+      <div class="relative flex h-16 items-center justify-between">
+        <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+          <button type="button" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+            <span class="absolute -inset-0.5"></span>
+            <span class="sr-only">Open main menu</span>
+            <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+            <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+          <div class="flex flex-shrink-0 items-center">
+            <a href="/"><img class="h-8 w-auto" src="../img/LogoDestiny.svg" alt="Your Company"></a>
+
+          </div>
+          <div class="hidden sm:ml-6 sm:block">
+            <div class="flex space-x-4">
+              <a href="#" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Pacotes</a>
+              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Passeios</a>
+              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Destinos</a>
+              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Itinerários</a>
+            </div>
+          </div>
+        </div>
+        <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+
+          <a href="/carrinho" class="mr-3 relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+            <span class="sr-only">Ver carrinho</span>
+
+            <div class="t-0 absolute left-3">
+              <p id="carrinhoCount" class="flex h-2 w-2 items-center justify-center rounded-full bg-red-500 p-3 text-xs text-white "></p>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="file: mt-4 h-6 w-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+            </svg>
+
+          </a>
+
+          <button type="button" class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+            <span class="absolute -inset-1.5"></span>
+            <span class="sr-only">View notifications</span>
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+            </svg>
+          </button>
+          <!-- Profile dropdown -->
+          <div class="relative ml-3" th:if="${#authentication.authorities[0].authority == 'ROLE_CLIENTE'}">
+            <div>
+              <button type="button" class="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                <span class="absolute -inset-1.5"></span>
+                <span class="sr-only">Open user menu</span>
+                <img class="h-8 w-8 rounded-full" src="https://destinyproject.blob.core.windows.net/destinypodruto/perfil.png" alt="">
+              </button>
+            </div>
+
+            <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+
+              <div class="px-4 py-3">
+                <span class="block text-sm text-gray-900 dark:text-white" th:text="${usuario.getNome}"></span>
+                <span class="block text-sm  text-gray-500 truncate dark:text-gray-400" th:text="${usuario.getUsername()}"></span>
+                <hr>
+              </div>
+              <a href="/" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Home</a>
+              <a href="/cliente/perfil" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Meu Perfil</a>
+              <a href="/cliente/alterar-senha" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Alterar Senha</a>
+              <a href="/cliente/meus-pedidos" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Meus pedidos</a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-3">Configurações</a>
+              <a href="/logout" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-4">Sair</a>
+            </div>
+          </div>
+        </div>
+        <th:block sec:authorize="isAuthenticated()" th:if="${#authentication.authorities.?[authority == 'ROLE_ADMIN' || authority == 'ROLE_ESTOQUISTA'].size() > 0}">
+          <a href="/home" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm mx-2 px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Menu</a>
+        </th:block>
+
+
+        <a sec:authorize="!isAuthenticated()" href="/login" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm mx-2 px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Entrar</a>
+      </div>
+    </div>
+
+    <div class="sm:hidden" id="mobile-menu">
+      <div class="space-y-1 px-2 pb-3 pt-2">
+        <a href="#" class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" aria-current="page">Pacotes</a>
+        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Passeios</a>
+        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Destinos</a>
+        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Itinerários</a>
+      </div>
+    </div>
+  </nav>
+
+  <div id="divMan" x-data="app()" x-cloak>
+    <input type="hidden" id="cliente-id" th:data_id=${usuario.id}>
+    <div autocomplete="off">
+      <div class="container mx-auto px-4 py-10">
+
+        <div x-show.transition="step != 'complete'">
+          <!-- Top Navigation -->
+          <div class="border-b-2 py-4">
+            <div class="uppercase tracking-wide text-xs font-bold text-gray-500 mb-1 leading-tight" x-text="`Passo: ${step} de 3`"></div>
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+              <div class="flex-1">
+                <div x-show="step === 1">
+                  <div class="text-lg font-bold text-gray-700 leading-tight">Endereço de entrega</div>
+                </div>
+
+                <div x-show="step === 2">
+                  <div class="text-lg font-bold text-gray-700 leading-tight">formas Pagamento</div>
+                </div>
+
+                <div x-show="step === 3">
+                  <div class="text-lg font-bold text-gray-700 leading-tight">Resumo</div>
+                </div>
+
+
+              </div>
+
+              <!--                            <div class="flex items-center md:w-64">-->
+              <!--                                <div class="w-full bg-white rounded-full mr-2">-->
+              <!--                                    <div class="rounded-full bg-green-500 text-xs leading-none h-2 text-center text-white" :style="'width: '+ parseInt(step / 4 * 100) +'%'"></div>-->
+              <!--                                </div>-->
+              <!--                                <div class="text-xs w-10 text-gray-600" x-text="parseInt(step / 4 * 100) +'%'"></div>-->
+              <!--                            </div>-->
+            </div>
+          </div>
+          <!-- /Top Navigation -->
+
+          <!-- Step Content -->
+          <div class="py-10">
+            <div x-show.transition.in="step === 1">
+
+              <div class="container mx-auto p-6 bg-white rounded-lg shadow m-4 dark:bg-gray-800">
+                <h1 class="text-2xl font-semibold mb-4">Selecione o Endereço de Entrega</h1>
+                <button id="add-address" onclick="toggleModal('popup-modal')" class="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                  Adicionar Novo Endereço
+                </button>
+                <div id="address-list" class="space-y-4">
+                  <th:block th:each="endereco, iterStat : ${cliente.enderecos}">
+
+                    <div th:data-id="${endereco.id}" th:data-cep="${endereco.cep}" th:onclick="'selectAddress(' + ${iterStat.index} + ')'" th:class="${endereco.principal} ? 'address-item selected p-4 border-2 border-current rounded cursor-pointer hover:bg-gray-100' : 'address-item  p-4 border-2 border-current rounded cursor-pointer hover:bg-gray-100'">
+                      <p th:text="${endereco.Logradouro} + ', ' + ${endereco.numero} + ', ' + ${endereco.bairro} + ' - ' + ${endereco.uf} +' / '+ ${endereco.cep}"></p>
+
+                    </div>
+
+                  </th:block>
+                  <p class="text-gray-700 p-1">Metodo de entrega:</p>
+                  <select id="frete" class="block p-2 text-gray-600 w-full text-sm flex justify-between border-2 border-current rounded cursor-pointer hover:bg-gray-100">
+                  </select>
+
+
+                </div>
+              </div>
+
+            </div>
+            <div x-show.transition.in="step === 2">
+
+              <div class="container mx-auto p-6 bg-white shadow-lg rounded">
+                <div class="mb-4">
+                  <h2 class="text-xl font-semibold">Selecione a forma de pagamento</h2>
+                </div>
+
+                <div id="payment-list" class="grid grid-cols-3 gap-4 mb-4 justify-center">
+                  <!-- Credit or Debit Card -->
+                  <div id="payment-card" class="payment-item p-4 border-2 border-current rounded cursor-pointer hover:bg-gray-100" onclick="togglePaymentMethod('payment-card')">
+                    <div class="flex justify-center items-center h-12 mb-2">
+                      <svg class="w-12 h-12 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M4 9h2m3 0h5M1 5h18M2 1h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1Z" />
+                      </svg>
+                    </div>
+                    <p class="text-center">Cartão de Credito ou Debito</p>
+                  </div>
+
+                  <!-- Pix -->
+                  <div id="pix" class="payment-item p-4 border-2 border-current rounded cursor-pointer hover:bg-gray-100" onclick="togglePaymentMethod('pix')">
+                    <div class="flex justify-center items-center h-12 mb-2">
+                      <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" class="w-12 h-12">
+                        <defs />
+                        <g fill="#4BB8A9" fill-rule="evenodd">
+                          <path d="M393.072 391.897c-20.082 0-38.969-7.81-53.176-22.02l-77.069-77.067c-5.375-5.375-14.773-5.395-20.17 0l-76.784 76.786c-14.209 14.207-33.095 22.019-53.179 22.019h-9.247l97.521 97.52c30.375 30.375 79.614 30.375 109.988 0l97.239-97.238h-15.123zm-105.049 74.327c-8.55 8.53-19.93 13.25-32.05 13.25h-.02c-12.12 0-23.522-4.721-32.05-13.25l-56.855-56.855c7.875-4.613 15.165-10.248 21.758-16.84l63.948-63.948 64.23 64.23c7.637 7.66 16.188 14.013 25.478 18.952l-54.439 54.46zM310.958 22.78c-30.374-30.374-79.613-30.374-109.988 0l-97.52 97.52h9.247c20.082 0 38.97 7.834 53.178 22.02l76.784 76.785c5.57 5.592 14.622 5.57 20.17 0l77.069-77.068c14.207-14.187 33.094-22.02 53.176-22.02h15.123l-97.239-97.237zm6.028 96.346l-64.23 64.23-63.97-63.97c-6.593-6.592-13.86-12.206-21.736-16.818l56.853-56.877c17.69-17.645 46.476-17.668 64.121 0l54.44 54.461c-9.292 4.961-17.842 11.315-25.479 18.974h.001z" />
+                          <path d="M489.149 200.97l-58.379-58.377h-37.706c-13.838 0-27.394 5.635-37.185 15.426l-77.068 77.069c-7.202 7.18-16.623 10.77-26.067 10.77-9.443 0-18.885-3.59-26.066-10.77l-76.785-76.785c-9.792-9.814-23.346-15.427-37.207-15.427h-31.81L22.78 200.97c-30.374 30.375-30.374 79.614 0 109.988l58.095 58.074 31.81.021c13.86 0 27.416-5.635 37.208-15.426l76.784-76.764c13.925-13.947 38.208-13.924 52.133-.02l77.068 77.066c9.791 9.792 23.346 15.405 37.185 15.405h37.706l58.379-58.356c30.374-30.374 30.374-79.613 0-109.988zm-362.19 129.724c-3.763 3.786-8.942 5.917-14.273 5.917H94.302l-48.59-48.564c-17.689-17.69-17.689-46.476 0-64.143L94.3 175.296h18.385c5.331 0 10.51 2.154 14.295 5.918l74.74 74.74-74.761 74.74zm339.257-42.647l-48.848 48.87h-24.305c-5.309 0-10.508-2.155-14.251-5.92l-75.023-75.043 75.023-75.023c3.743-3.764 8.942-5.918 14.252-5.918h24.304l48.847 48.891c8.573 8.551 13.273 19.93 13.273 32.05 0 12.141-4.7 23.52-13.273 32.093z" />
+                        </g>
+                      </svg>
+                    </div>
+                    <p class="text-center">Pix</p>
+                  </div>
+
+
+                  <div id="boleto" class="payment-item p-4 border-2 border-current rounded cursor-pointer hover:bg-gray-100" onclick="togglePaymentMethod('boleto')">
+                    <div class="flex justify-center items-center h-12 mb-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="w-20 h-20">
+                        <path d="M40-200v-560h80v560H40Zm120 0v-560h80v560h-80Zm120 0v-560h40v560h-40Zm120 0v-560h80v560h-80Zm120 0v-560h120v560H520Zm160 0v-560h40v560h-40Zm120 0v-560h120v560H800Z" />
+                      </svg>
+                    </div>
+                    <p class="text-center">Boleto</p>
+                  </div>
+                </div>
+
+                <div id="card-details" class="hidden">
+                  <div class="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
+                    <p class="text-gray-400">Conclua seu pedido fornecendo seus detalhes de pagamento.</p>
+                    <div class="">
+
+                      <label for="card-holder" class="mt-4 mb-2 block text-sm font-medium">Nome impresso no cartão</label>
+                      <div class="relative">
+                        <input type="text" id="card-holder" name="card-holder" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm uppercase shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Nome impresso no cartão" autocomplete="off" />
+                        <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
+                          </svg>
+                        </div>
+                      </div>
+                      <label for="card-no" class="mt-4 mb-2 block text-sm font-medium">Número do cartão</label>
+                      <div class="">
+                        <div class="relative w-12/12 flex-shrink-0">
+                          <input type="text" id="card-no" name="card-no" class="w-full rounded-md border border-gray-200 px-2 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="xxxx-xxxx-xxxx-xxxx" autocomplete="off" />
+                          <div class="pointer-events-none absolute inset-y-0 left-0 inline-flex items-center px-3">
+                            <svg class="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                              <path d="M11 5.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1z" />
+                              <path d="M2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2zm13 2v5H1V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1zm-1 9H2a1 1 0 0 1-1-1v-1h14v1a1 1 0 0 1-1 1z" />
+                            </svg>
+                          </div>
+                        </div>
+                        <div class="flex flex-wrap -mx-2"> <!-- mx-2 for margin adjustments -->
+                          <div class="px-2 w-full lg:w-1/3"> <!-- ajuste de largura para responsividade -->
+                            <label for="parcelas" class="mt-4 mb-2 block text-sm font-medium">Número de Parcelas</label>
+                            <select name="parcelas" id="parcelas" class="w-full rounded-md border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500">
+                              <option value=1>1x</option>
+                              <option value=2>2x</option>
+                              <option value=3>3x</option>
+                              <option value=4>4x</option>
+                              <option value=5>5x</option>
+                              <option value=6>6x</option>
+                              <option value=7>7x</option>
+                              <option value=8>8x</option>
+                              <option value=9>9x</option>
+                              <option value=10>10x</option>
+                            </select>
+                          </div>
+
+                          <div class="px-2 w-full lg:w-1/3"> <!-- width adjustments for responsiveness -->
+                            <label for="data-vencimento" class="mt-4 mb-2 block text-sm font-medium">Data de Vencimento</label>
+                            <input type="month" name="data-vencimento" id="data-vencimento" min="2023-11" class="w-full rounded-md border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" />
+                          </div>
+
+                          <div class="px-2 w-full lg:w-1/3"> <!-- width adjustments for responsiveness -->
+                            <label for="codigo-cvc" class="mt-4 mb-2 block text-sm font-medium">Código de Segurança (CVC)</label>
+                            <input type="text" name="credit-cvc" id="codigo-cvc" class="w-full rounded-md border border-gray-200 px-2 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="CVC" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div x-show.transition.in="step === 3" class="relative">
+
+              <div id="loader" style="display: none;">
+                <div class="absolute bg-white bg-opacity-60 z-10 h-full w-full flex items-center justify-center">
+                  <div class="flex items-center">
+                    <span class="text-3xl mr-4">Realizando compra...</span>
+                    <svg class="animate-spin h-8 w-8 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                      </path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-lg p-10 flex items-center shadow-lg  justify-between">
+                <div>
+
+                  <div class="container mx-auto mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Lista de Produtos -->
+                    <div id="produto-list" class="md:col-span-2">
+
+                    </div>
+
+                    <!-- Resumo do Pedido -->
+                    <div class="md:col-span-1 bg-white p-6 rounded-lg shadow-md">
+                      <h2 class="text-xl font-bold mb-6 border-b pb-2">Resumo do pedido</h2>
+
+                      <div class="mb-4">
+                        <h3 class="font-semibold">Endereço de Entrega</h3>
+                        <p id="resumo-endereco"></p>
+                      </div>
+                      <div class="mb-4">
+                        <h3 class="font-semibold">Frete</h3>
+
+                        <p id="resumo-frete">$8.00</p>
+                      </div>
+                      <div class="mb-4">
+                        <h3 class="font-semibold">Forma de Pagamento</h3>
+                        <p id="resumo-pagamento"></p>
+                      </div>
+                      <div id="parcelasInfo" class="hidden mb-4">
+                        <h3 class="font-semibold">Parcelas</h3>
+                        <p id="resumo-percelas"></p>
+                      </div>
+                      <div class="mb-4">
+                        <h3 class="font-semibold">Subtotal</h3>
+                        <p id="resumo-subtotal"></p>
+                      </div>
+                      <div class="mb-6">
+                        <h3 class="font-semibold text-lg">Total</h3>
+                        <p id="resumo-total" class="text-lg"></p>
+                      </div>
+                      <button id="btnComprar" @click="submitCompra()" class="w-full bg-black text-white p-2 rounded hover:bg-gray-800">Finalizar Compra</button>
+
+                    </div>
+                  </div>
+
+                  <button id="btnVolta" type="button" @click="step--" class="text-white w-40 block mx-auto focus:outline-none border border-transparent py-2 px-5 rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium">Voltar</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <!-- Bottom Navigation -->
+        <div class="bg-white rounded-lg shadow m-4 dark:bg-gray-800" x-show="step !=3">
+          <div class="max-w-3xl mx-auto px-4 p-4">
+            <div class="flex items-center justify-center">
+              <div class="w-1/2">
+                <button type="button" x-show="step > 1" @click="step--" class="w-32 focus:outline-none border border-transparent py-2 px-5 rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium">Voltar</button>
+              </div>
+
+              <div class="w-1/2 text-right">
+                <button type="button" x-show="step < 3" @click="goToNextStep()" class="w-32 focus:outline-none border border-transparent py-2 px-5 rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium">Avançar</button>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> <!-- / Bottom Navigation https://placehold.co/300x300/e2e8f0/cccccc -->
+  </div>
+
+
+  <div id="popup-modal" tabindex="-1" class="fixed inset-0 z-50 hidden overflow-x-hidden overflow-y-auto md:px-4 md:py-20">
+    <div class="flex items-center justify-center min-h-full p-4 text-center sm:p-0">
+      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 inline-block align-bottom">
+        <button type="button" onclick="toggleModal('popup-modal','')" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal">
+          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+        <div class="p-6 text-center">
+          <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+          <div class="mb-5">
+            <label class="font-bold mb-1 text-gray-700 block">Novo endereço de entrega</label>
+            <input type="text" id="cep" class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Digite o CEP">
+
+            <div id="deliveryAddressFieldsInfo" class="hidden">
+              <input type="text" id="logradouro" class="w-full px-4 py-3 mb-2 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Logradouro">
+              <div class="flex flex-wrap -mx-3">
+                <div class="w-full md:w-1/6 px-3 mb-2">
+                  <input type="text" id="numero" class="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Numero">
+                </div>
+                <div class="w-full md:w-5/6 px-3 mb-2">
+                  <input type="text" id="complemento" class="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Complemento">
+                </div>
+              </div>
+              <div class="flex flex-wrap -mx-3">
+                <div class="w-full md:w-1/2 px-3 mb-2">
+                  <input type="text" id="bairro" class="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Bairro">
+                </div>
+                <div class="w-full md:w-1/3 px-3 mb-2">
+                  <input type="text" id="localidade" class="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Cidade">
+                </div>
+                <div class="w-full md:w-1/6 px-3 mb-2">
+                  <input type="text" id="uf" class="w-full px-4 py-3 rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="UF">
+                </div>
+              </div>
+            </div>
+          </div>
+          <button onclick="handleEnderecoSave()" data-modal-hide="popup-modal" type="button" class="text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+            Salvar
+          </button>
+          <button onclick="toggleModal('popup-modal','')" data-modal-hide="popup-modal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="popup-modal-backdrop"></div>
+
+
+
+  <footer class="relative bg-gray-800 pt-8 pb-6">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-wrap text-left lg:text-left">
+        <div class="w-full lg:w-6/12 px-4">
+          <img class="h-8 w-auto" src="../img/LogoDestiny.svg" alt="Your Company">
+          <h1 class="text-2xl font-semibold text-white mt-6">Centrais de Atendimento</h1>
+          <h5 class="text-lg mt-0 mb-2 text-white">
+            Suporte Pós Venda 11 4002 8922 <br>
+            Segunda à Sexta: 09h às 21h <br>
+            Sábado e Feriados Nacionais: 09h às 16h <br>
+          </h5>
+          <div class="mt-6 lg:mb-0 mb-6">
+            <!-- Aqui deixei os botões como estavam pois parecem ter cores específicas -->
+
+          </div>
+        </div>
+        <div class="w-full lg:w-6/12 px-4">
+          <div class="flex flex-wrap items-top mb-6">
+            <div class="w-full lg:w-4/12 px-4 ml-auto">
+              <span class="block uppercase text-white text-sm font-semibold mb-2">Links Úteis</span>
+              <ul class="list-unstyled">
+                <li>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Sobre Nós</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://github.com/CleitonRSilvaa/Destiny">GitHub</a>
+                </li>
+              </ul>
+            </div>
+            <div class="w-full lg:w-4/12 px-4">
+              <span class="block uppercase text-white text-sm font-semibold mb-2">Compra Segura</span>
+              <ul class="list-unstyled">
+                <li>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Termos e Condições</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Política de Privacidade</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Black Friday</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Oferta Destiny</a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="w-full lg:w-4/12 px-4">
+              <span class="block uppercase text-white text-sm font-semibold mb-2">Forma de Pagamento</span>
+              <ul class="list-unstyled">
+                <li>
+                  <img class="h-25 w-auto" src="../img/formasPagamento.png" alt="Forma de Pagamento">
+                </li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <hr class="my-6 border-blueGray-300">
+      <div class="flex flex-wrap items-center md:justify-between justify-center">
+        <div class="w-full md:w-4/12 px-4 mx-auto text-center">
+          <div class="text-sm text-white font-semibold py-1">
+            Copyright © <span id="get-current-year">2023</span><a href="#" class="text-white hover:text-blueGray-800"> Destiny by
+              <a href="https://github.com/CleitonRSilvaa/Destiny" class="text-white hover:text-blueGray-800">Eco Coders</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+
+
+  <script th:if="${#authentication.authorities[0].authority == 'ROLE_CLIENTE'}">
+    document.addEventListener('DOMContentLoaded', function () {
+      // Toggle do menu mobile
+      let menuButton = document.querySelector('[aria-controls="mobile-menu"]');
+      let mobileMenu = document.getElementById('mobile-menu');
+
+      menuButton.addEventListener('click', function () {
+        mobileMenu.classList.toggle('hidden');
+      });
+
+      // Toggle do dropdown de perfil
+      let userMenuButton = document.getElementById('user-menu-button');
+      let userMenuDropdown = document.querySelector('[aria-labelledby="user-menu-button"]');
+
+      userMenuButton.addEventListener('click', function () {
+        userMenuDropdown.classList.toggle('hidden');
+      });
+    });
+  </script>
+
+
+  <script src="../js/popper.min.js"></script>
+  <script src="../jquery/jquery.min.js"></script>
+  <script src="../jquery/jquery.mask.min.js"></script>
+  <script src="../js/cliente/checkout.js"></script>
+</body>
+
+
+
+</html>

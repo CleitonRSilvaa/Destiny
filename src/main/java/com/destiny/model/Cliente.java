@@ -54,6 +54,9 @@ public class Cliente {
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Endereco> enderecos;
 
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<Pedido> pedidos;
+
     public void setSenha(String senha) {
         this.senha = new BCryptPasswordEncoder().encode(senha);
     }

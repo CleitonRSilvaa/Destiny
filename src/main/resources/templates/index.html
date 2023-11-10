@@ -7,7 +7,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Destiny</title>
-  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <!-- Initialize Owl Carousel -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../css/sweetalert2.min.css">
   <link href="../css/style.css" rel="stylesheet">
   <script src="../js/sweetalert2.min.js"></script>
@@ -35,12 +36,19 @@
             <a href="/"><img class="h-8 w-auto" src="../img/LogoDestiny.svg" alt="Your Company"></a>
 
           </div>
+
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
-              <a href="#" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Pacotes</a>
-              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Passeios</a>
-              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Destinos</a>
-              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Itinerários</a>
+              <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
+                <a href="/usuario/lista" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Listar Usuários</a>
+                <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Listar Clientes</a>
+                <a href="/produto/listar" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Listar Produtos</a>
+
+              </th:block>
+              <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ESTOQUISTA'}">
+                <a href="/produto/listar" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Listar Produtos</a>
+              </th:block>
+
             </div>
           </div>
         </div>
@@ -65,8 +73,8 @@
             <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
 
               <div class="px-4 py-3">
-                <span class="block text-sm text-gray-900 dark:text-white" th:text="${cliente.nome}"></span>
-                <span class="block text-sm  text-gray-500 truncate dark:text-gray-400" th:text="${cliente.email}"></span>
+                <span class="block text-sm text-gray-900 dark:text-white" th:text="${usuario.getNome}"></span>
+                <span class="block text-sm  text-gray-500 truncate dark:text-gray-400" th:text="${usuario.getUsername()}"></span>
                 <hr>
               </div>
               <a href="/" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Home</a>

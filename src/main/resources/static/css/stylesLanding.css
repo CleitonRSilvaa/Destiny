@@ -61,3 +61,32 @@ footer {
   object-fit: cover;
   min-width: 100%;
 }
+
+.bg-gray-800{
+    background-color: #030418;
+}
+
+.bg-gray-200{
+    background-color: #E9F2EA;
+}
+
+.bg-blue-700 {
+    background-color: #F97316;
+}
+
+.bg-blue-700:hover {
+    transition: 0.3s;
+    color: #f97316;
+    background-color: white;
+
+}
+
+.bg-gray-900{
+    background-color: #F97316;
+}
+
+.text-gray-400:hover {
+    transition: 0.3s;
+    color: white;
+    background-color: #f97316;
+}

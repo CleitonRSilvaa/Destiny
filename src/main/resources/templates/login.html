@@ -6,16 +6,48 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Login - Destiny E-commerce</title>
-	<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+	<link href="../css/tailwind.min.css" rel="stylesheet">
 	<link rel="icon" href="../img/LogoDestiny.png">
 </head>
+
+<style>
+	.bg-gray-200 {
+		background-color: #E9F2EA;
+	}
+
+	.w-full {
+		border: 2px solid #FDC7A2;
+	}
+
+	.p-2:focus {
+		border-color: #F97316;
+	}
+
+
+	.bg-blue-500 {
+		background-color: #f97316;
+		border-color: #f97316;
+		color: white;
+	}
+
+	.bg-blue-500:hover {
+		transition: 0.3s;
+		color: #f97316;
+		background-color: white;
+		border: 1px solid #f97316;
+		/* Adicione a borda ao passar o mouse */
+	}
+</style>
 
 <body class="bg-gray-200 h-screen flex justify-center items-center">
 
 	<div class="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
-		<div class="flex justify-center">
-			<img src="/img/LogoDestiny.svg" style="filter: invert(1)" alt="Destiny E-commerce Logo" class="mb-4 w-1/2 black-svg">
+		<div class="mt-4 flex justify-center ">
+			<a href="/" class="text-sm text-blue-600 hover:text-blue-500">
+				<img src="/img/LogoDestiny.svg" style="filter: invert(1)" alt="Destiny E-commerce Logo" class="mb-4 w-48 black-svg">
+			</a>
 		</div>
+
 		<form th:action="@{/login}" method="POST">
 			<div class="mb-4">
 				<label for="email" class="block text-sm font-medium text-gray-600 mb-2">E-mail:</label>
@@ -37,8 +69,18 @@
 		<div class="mt-4 text-center">
 			<p class="text-sm text-gray-600">Não tem uma conta? <a href="/cliente/registra-me" class="text-blue-500 hover:text-blue-600">Cadastre-se</a></p>
 		</div>
+		<div class="mt-6 flex justify-center text-center text-sm text-gray-500">
+			<p>
+				ou
+				<a href="/" class="text-sm text-blue-600 hover:text-blue-500">
+					voltar a home
+					<span aria-hidden="true"> &rarr;</span>
+				</a>
+			</p>
+		</div>
 	</div>
 
 </body>
+
 
 </html>

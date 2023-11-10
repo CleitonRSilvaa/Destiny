@@ -6,10 +6,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Destiny</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+  <link href="../css/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/all.min.css">
   <link rel="icon" href="../img/LogoDestiny2.svg">
   <link rel="stylesheet" href="../css/stylesLanding.css">
 </head>
@@ -17,15 +16,30 @@
 <body class="bg-gray-200">
 
   <!-- Create By Joker Banny -->
-<style>
-  @layer utilities {
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-}
-</style>
+  <style>
+    @layer utilities {
+
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+    }
+
+    .bg-blue-500 {
+      background-color: #f97316;
+      border-color: #f97316;
+      color: white;
+    }
+
+    .bg-blue-500:hover {
+      transition: 0.3s;
+      color: #f97316;
+      background-color: white;
+      border: 1px solid #f97316;
+      /* Adicione a borda ao passar o mouse */
+    }
+  </style>
 
   <nav class="bg-gray-800">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -49,7 +63,7 @@
           </div>
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
-              <a href="#" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Pacotes</a>
+              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Pacotes</a>
               <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Passeios</a>
               <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Destinos</a>
               <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Itinerários</a>
@@ -97,7 +111,7 @@
               <a href="/" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Home</a>
               <a href="/cliente/perfil" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Meu Perfil</a>
               <a href="/cliente/alterar-senha" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Alterar Senha</a>
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Meus pedidos</a>
+              <a href="/cliente/meus-pedidos" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Meus pedidos</a>
               <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-3">Configurações</a>
               <a href="/logout" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-4">Sair</a>
             </div>
@@ -122,130 +136,262 @@
     </div>
   </nav>
 
-  <div class="h-screen bg-gray-100 pt-20">
-    <h1 class="mb-10 text-center text-2xl font-bold">Itens do Carrinho</h1>
-    <div class="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
-      <div class="rounded-lg md:w-2/3">
-        <div class="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
-          <img src="https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="product-image" class="w-full rounded-lg sm:w-40" />
-          <div class="sm:ml-4 sm:flex sm:w-full sm:justify-between">
-            <div class="mt-5 sm:mt-0">
-              <h2 class="text-lg font-bold text-gray-900">Nike Air Max 2019</h2>
-              <p class="mt-1 text-xs text-gray-700">Tamanho: 36</p>
-            </div>
-            <div class="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
-              <div class="flex items-center border-gray-100">
-                <span class="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"> - </span>
-                <input class="h-8 w-8 border bg-white text-center text-xs outline-none" type="number" value="2" min="1" />
-                <span class="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"> + </span>
-              </div>
-              <div class="flex items-center space-x-4">
-                <p class="text-sm">R$259.00</p>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 cursor-pointer duration-150 hover:text-red-500">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
-          <img src="https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1131&q=80" alt="product-image" class="w-full rounded-lg sm:w-40" />
-          <div class="sm:ml-4 sm:flex sm:w-full sm:justify-between">
-            <div class="mt-5 sm:mt-0">
-              <h2 class="text-lg font-bold text-gray-900">Nike Air Max 2019</h2>
-              <p class="mt-1 text-xs text-gray-700">Tamanho: 39</p>
-            </div>
-            <div class="mt-4 flex justify-between im sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
-              <div class="flex items-center border-gray-100">
-                <span class="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"> - </span>
-                <input class="h-8 w-8 border bg-white text-center text-xs outline-none" type="number" value="2" min="1" />
-                <span class="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"> + </span>
-              </div>
-              <div class="flex items-center space-x-4">
-                <p class="text-sm">R$259.00</p>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 cursor-pointer duration-150 hover:text-red-500">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
+  <div id="modalNotification" class="fixed top-5 right-5 z-50 hidden p-4 bg-white shadow-lg rounded-lg border-t-8">
+    <p id="modalNotification-text" class="font-bold"></p>
+  </div>
 
-        <div class="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
-          <img src="https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1131&q=80" alt="product-image" class="w-full rounded-lg sm:w-40" />
-          <div class="sm:ml-4 sm:flex sm:w-full sm:justify-between">
-            <div class="mt-5 sm:mt-0">
-              <h2 class="text-lg font-bold text-gray-900">Nike Air Max 2019</h2>
-              <p class="mt-1 text-xs text-gray-700">Tamanho: 20</p>
-            </div>
-            <div class="mt-4 flex justify-between im sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
-              <div class="flex items-center border-gray-100">
-                <span class="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"> - </span>
-                <input class="h-8 w-8 border bg-white text-center text-xs outline-none" type="number" value="2" min="1" />
-                <span class="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"> + </span>
-              </div>
-              <div class="flex items-center space-x-4">
-                <p class="text-sm">R$259.00</p>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 cursor-pointer duration-150 hover:text-red-500">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <div class="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
-          <img src="https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1131&q=80" alt="product-image" class="w-full rounded-lg sm:w-40" />
-          <div class="sm:ml-4 sm:flex sm:w-full sm:justify-between">
-            <div class="mt-5 sm:mt-0">
-              <h2 class="text-lg font-bold text-gray-900">Nike Air Max 2019</h2>
-              <p class="mt-1 text-xs text-gray-700">Tamanho: 34</p>
-            </div>
-            <div class="mt-4 flex justify-between im sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
-              <div class="flex items-center border-gray-100">
-                <span class="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"> - </span>
-                <input class="h-8 w-8 border bg-white text-center text-xs outline-none" type="number" value="2" min="1" />
-                <span class="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"> + </span>
-              </div>
-              <div class="flex items-center space-x-4">
-                <p class="text-sm">R$259.00</p>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 cursor-pointer duration-150 hover:text-red-500">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
+  <div class="bg-gray-200 pt-20 mb-10 flex-1">
+    <h1 id="titulo" class="mb-10 text-center text-2xl font-bold">Itens do Carrinho</h1>
 
-        
+    <div class="hidden text-center m-10" id="carrinho-vazio">
+      <p class="mb-5 text-xl text-gray-800">Conheça nossos produtos</p>
+      <a href="/" class="bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600">
+        Voltar para a loja
+      </a>
+    </div>
+    <div class="mx-auto max-w5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
+
+      <div id="carrinho-items" class="rounded-lg md:w-2/3">
       </div>
-      <!-- Sub total -->
-      <div class="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
-        <div class="mb-2 flex justify-between">
+
+      <div id="detalhesValores" class="hidden mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
+        <div class="pt-2">
+          <label for="hs-trailing-button-add-on-with-icon-and-button" class="sr-only">CEP</label>
+          <div id="dados-enredeco" class="relative flex rounded-lg shadow-sm" style="height: 50px !important; border-radius: 10px !important;">
+            <input type="text" id="cep" onclick="" name="hs-trailing-button-add-on-with-icon-and-button" class="py-3 px-4 ps-11 block w-full border-gray-400 shadow-sm rounded-s-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" placeholder="Digite seu CEP">
+            <div class="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-4">
+              <svg class="flex-shrink-0 h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+            </div>
+            <button type="button" onclick="fetchAddress()" class="py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-e-md border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" style="background-color: #f97316 !important;">Calcular
+              Frete</button>
+          </div>
+        </div>
+
+        <div id="endereco" class="pt-2" th:if="${#authentication.authorities[0].authority == 'ROLE_CLIENTE'}">
+          <th:block th:each="endereco, iterStat : ${cliente.enderecos}">
+            <th:block th:if="${endereco.principal}">
+              <div id="dados-enredeco-data" th:data-cep="${endereco.cep}" class="p-4 border-2 border-current rounded cursor-pointer hover:bg-gray-100">
+                <p th:text="${endereco.Logradouro} + ', ' + ${endereco.numero} + ', ' + ${endereco.bairro} + ' - ' + ${endereco.uf}">
+                </p>
+              </div>
+            </th:block>
+          </th:block>
+        </div>
+
+
+        <th:block sec:authorize="!isAuthenticated()">
+          <div id="dados-enredeco-data" class="hidden m-2 p-2 border border-current rounded cursor-pointer hover:bg-gray-100">
+          </div>
+        </th:block>
+
+        <div class="mt-2 pt-2">
+          <p class="text-gray-700 p-1">Frete</p>
+          <select id="frete" class="block p-2 text-gray-600 w-full text-sm flex justify-between border border-sky-300 ">
+            <option class="text-gray-700" value="10">Entrega padrão (até 7 dias) - R$ 10.00</option>
+            <option class="text-gray-700" value="30">Entrega expresa (até 3 dias) - R$ 30.00</option>
+            <option class="text-gray-700" value="60">Entrega agendada - R$ 60.00</option>
+          </select>
+        </div>
+
+
+        <div class="mt-2 flex justify-between">
           <p class="text-gray-700">Subtotal</p>
-          <p class="text-gray-700">$2.072,00</p>
+          <p class="text-gray-700">
+            R$
+            <span id="subtotal"></span>
+          </p>
         </div>
-        <div class="flex justify-between">
-          <p class="text-gray-700">Frete</p>
-          <p class="text-gray-700">$4,99</p>
-        </div>
+
         <hr class="my-4" />
         <div class="flex justify-between">
           <p class="text-lg font-bold">Total</p>
           <div class="">
-            <p class="mb-1 text-lg font-bold">$2.076,99</p>
+            <p class="mb-1 text-lg font-bold">
+              R$
+              <span id="total"></span>
+            </p>
           </div>
         </div>
-        <button class="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">Finalizar Compra</button>
+        <div class="text-center w-full mt-6 " id="carrinho-vazio">
+          <button onclick="fazerPedido()" class="bg-blue-500 text-white rounded-md px-8 py-3 hover:bg-blue-600">
+            Finalizar pedido
+          </button>
+        </div>
+
+        <div class="mt-6 flex justify-center text-center text-sm text-gray-500">
+          <p>
+            ou
+            <a href="/" class="font-medium text-indigo-600 hover:text-indigo-500">
+              Continue comprando
+              <span aria-hidden="true"> &rarr;</span>
+            </a>
+          </p>
+        </div>
       </div>
     </div>
+
   </div>
 
 
+  <div id="popup-modal" tabindex="-1" class="fixed inset-0 z-50 hidden overflow-x-hidden overflow-y-auto md:px-4 md:py-20">
+    <div class="flex items-center justify-center min-h-full p-4 text-center sm:p-0">
+      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 inline-block align-bottom">
+        <button type="button" onclick="toggleModal('popup-modal','')" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal">
+          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+        <div class="p-6 text-center">
+          <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+          <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400"> Você tem certeza de que deseja remover
+            o item do carrinho?</h3>
+          <input type="hidden" id="id-item-remove" value="">
+          <button onclick="removerItemModalConfirme()" data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+            Remover
+          </button>
+          <button onclick="toggleModal('popup-modal','')" data-modal-hide="popup-modal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="popup-modal-backdrop"></div>
+
+
+  <div id="popup-modal-error" tabindex="-1" class="fixed inset-0 z-50 hidden overflow-x-hidden overflow-y-auto md:px-4 md:py-20">
+    <div class="flex items-center justify-center min-h-full p-4 text-center sm:p-0">
+      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 inline-block align-bottom">
+        <button type="button" onclick="toggleModal('popup-modal-error','')" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal-error">
+          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+        <div class="p-6 text-center">
+          <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+          <h3 id="teste-erro" class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400"></h3>
+          <input type="hidden" id="id-item-remove" value="">
+
+          <button onclick="toggleModal('popup-modal-error','')" data-modal-hide="popup-modal-error" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="popup-modal-error-backdrop"></div>
 
 
 
-  
+  <script src="../jquery/jquery.min.js"></script>
+  <script src="../jquery/jquery.mask.min.js"></script>
+  <script src="../js/bootstrap.bundle.min.js"></script>
+  <script src="../js/popper.min.js"></script>
+  <script src="../js/carrinho.js"></script>
+
+
+  <script>
+    // let carrinho2 = JSON.parse(localStorage.getItem("carrinho")) || [];
+
+    (carrinho.length > 0) ? comItem() : semItem()
+
+    function comItem() {
+
+      console.log(carrinho)
+      document.getElementById("detalhesValores").classList.toggle("hidden")
+      document.getElementById("titulo").innerText = 'Itens do Carrinho'
+
+      // Seleciona o elemento pai onde os itens do carrinho serão adicionados
+      let carrinhoContainer = document.getElementById("carrinho-items");
+
+      // Itera sobre os itens do carrinho e cria a marcação HTML para cada um
+      carrinho.forEach(item => {
+        let itemDiv = `
+    <div class="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
+        <img src="${item.img}" alt="${item.nome}" class="w-full rounded-lg sm:w-40" />
+        <div class="sm:ml-4 sm:flex sm:w-full sm:justify-between">
+            <div class="mt-5 sm:mt-0">
+                <h2 class="text-lg font-bold text-gray-900">${item.nome}</h2>
+                <p class="mt-1 text-xs text-gray-700">Quantidade: ${item.quantidade}</p>
+            </div>
+            <div class="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
+                <div class="flex items-center border-gray-100">
+                    <span onclick="diminuirQuantidade(${item.id})" class="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"> - </span>
+                    <input  class="h-8 w-8 border bg-white text-center text-xs outline-none" type="number" value="${item.quantidade}" min="1" disabled/>
+                    <span onclick="aumentarQuantidade(${item.id})" class="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"> + </span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <p class="text-sm">R$${item.subTotal.toFixed(2)}</p>
+                   
+                    <button onclick="toggleModal('popup-modal',${item.id})">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 cursor-pointer duration-150 hover:text-red-500">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+            </div>
+        </div>
+    </div>
+`;
+
+        // Adiciona o itemDiv no carrinhoContainer
+        carrinhoContainer.insertAdjacentHTML('beforeend', itemDiv);
+      });
+
+
+
+      const lixeira = `
+      <div class="mt-6 flex justify-center text-center text-sm text-gray-500">
+        <p>
+          <button onclick="limpaCarrinho()" class="font-medium text-red-600 hover:text-indigo-500">
+            Limpar carrinho
+            <span aria-hidden="true">✕</span>
+          </button>
+        </p>
+      </div>
+    `
+
+
+      carrinhoContainer.insertAdjacentHTML('beforeend', lixeira)
+      calcularValores()
+      function calcularValores() {
+        let subTotalValor = carrinho.reduce(
+          (acc, produto) => acc + produto.quantidade * produto.valor,
+          0
+        );
+
+        let frete = parseFloat(document.getElementById("frete").value);
+        let subTotal = parseFloat(subTotalValor);
+        let total = subTotal + frete;
+
+        document.getElementById("subtotal").innerText = subTotal.toFixed(2)
+        document.getElementById("total").innerText = total.toFixed(2)
+
+      };
+      document.getElementById('frete').addEventListener('change', calcularValores);
+
+    }
+    function semItem() {
+      document.getElementById("carrinho-vazio").classList.toggle("hidden")
+      document.getElementById("titulo").innerText = 'Seu carrinho está vazio!'
+    }
+
+
+
+
+
+  </script>
+
+
+
+
+
   <footer class="relative bg-gray-800 pt-8 pb-6">
     <div class="container mx-auto px-4">
       <div class="flex flex-wrap text-left lg:text-left">
@@ -277,10 +423,14 @@
               <span class="block uppercase text-white text-sm font-semibold mb-2">Compra Segura</span>
               <ul class="list-unstyled">
                 <li>
-                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Termos e Condições</a>
-                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Política de Privacidade</a>
-                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Black Friday</a>
-                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Oferta Destiny</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Termos e
+                    Condições</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Política de
+                    Privacidade</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Black
+                    Friday</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Oferta
+                    Destiny</a>
                 </li>
               </ul>
             </div>
@@ -301,20 +451,16 @@
       <div class="flex flex-wrap items-center md:justify-between justify-center">
         <div class="w-full md:w-4/12 px-4 mx-auto text-center">
           <div class="text-sm text-white font-semibold py-1">
-            Copyright © <span id="get-current-year">2023</span><a href="#" class="text-white hover:text-blueGray-800"> Destiny by
-              <a href="https://github.com/CleitonRSilvaa/Destiny" class="text-white hover:text-blueGray-800">Eco Coders</a>.
+            Copyright © <span id="get-current-year">2023</span><a href="#" class="text-white hover:text-blueGray-800">
+              Destiny by
+              <a href="https://github.com/CleitonRSilvaa/Destiny" class="text-white hover:text-blueGray-800">Eco
+                Coders</a>.
           </div>
         </div>
       </div>
     </div>
   </footer>
 
-  <script src="https://kit.fontawesome.com/9ef98eb577.js" crossorigin="anonymous"></script>
-  <script src="../jquery/jquery.min.js"></script>
-  <script src="../jquery/jquery.mask.min.js"></script>
-  <script src="../js/bootstrap.bundle.min.js"></script>
-  <script src="../js/popper.min.js"></script>
-  <script src="../js/carrinho.js"></script>
 
 
 
@@ -323,9 +469,9 @@
 
 
 
-  <!-- Initialize Owl Carousel -->
-  <script>
 
+
+  <script th:if="${#authentication.authorities[0].authority == 'ROLE_CLIENTE'}">
     document.addEventListener('DOMContentLoaded', function () {
       // Toggle do menu mobile
       let menuButton = document.querySelector('[aria-controls="mobile-menu"]');
@@ -343,60 +489,13 @@
         userMenuDropdown.classList.toggle('hidden');
       });
     });
-
-    $(document).ready(function () {
-      $('.owl-carousel').owlCarousel({
-        loop: true,
-        margin: 10,
-        responsiveClass: true,
-        autoplay: true, // this allows the items to rotate automatically
-        autoplayTimeout: 3000, // this is the time delay between transitions in milliseconds (i.e., 3 seconds)
-        responsive: {
-          0: {
-            items: 1,
-            nav: true
-          },
-          600: {
-            items: 1,  // changed this to show only one image
-            nav: false
-          },
-          1000: {
-            items: 1,  // changed this to show only one image
-            nav: true,
-            loop: true
-          }
-        }
-      });
-    });
-
-    function renderStarRatings() {
-      $('.star-rating').each(function () {
-        const rating = parseFloat($(this).data('rating'));
-        $(this).empty(); // clear previous stars
-
-        for (let i = 1; i <= 5; i++) {
-          if (i <= rating) {
-            $(this).append('<i class="fas fa-star"></i>');
-          } else if (i - rating === 0.5) {
-            $(this).append('<i class="fas fa-star-half-alt"></i>');
-          } else {
-            $(this).append('<i class="far fa-star"></i>');
-          }
-        }
-      });
-    }
-
-    $(document).ready(function () {
-      renderStarRatings();
-    });
-
-
-
   </script>
 
-  <!-- Owl Carousel JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-  <script src="https://unpkg.com/@material-tailwind/html@latest/scripts/ripple.js"></script>
+
+
+
+
+
 </body>
 
 </html>

@@ -1,11 +1,16 @@
 package com.destiny.controller;
 
+import com.destiny.model.Cliente;
 import com.destiny.model.CustomUserDetails;
+import com.destiny.model.Endereco;
 import com.destiny.model.MensagemResponse;
 import com.destiny.model.Produto;
+import com.destiny.model.StatusConta;
 import com.destiny.model.StatusProduto;
+import com.destiny.model.TipoConta;
 import com.destiny.repository.ProdutoRepository;
 import com.destiny.repository.UsuarioRepository;
+import com.destiny.service.ClienteService;
 import com.destiny.service.ProdutoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +40,9 @@ public class AcessoController {
     @Autowired
     private ProdutoService produtoService;
 
+    @Autowired
+    private ClienteService clienteService;
+
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
     public String landingPage(Model model) {
@@ -53,7 +61,7 @@ public class AcessoController {
         return "landingPage";
     }
 
-     @GetMapping("/carrinho")
+    @GetMapping("/carrinho")
     @ResponseStatus(HttpStatus.OK)
     public String carrinhoCompras(Model model) {
         var listaProdutos = produtoService.buscarProdutosPorStatus(StatusProduto.ATIVO);
@@ -64,11 +72,38 @@ public class AcessoController {
         CustomUserDetails userDetails = null;
         if (auth.getPrincipal() instanceof CustomUserDetails) {
             userDetails = (CustomUserDetails) auth.getPrincipal();
+            if (userDetails.getTipoConta().equals(TipoConta.CLIENTE)) {
+                Cliente cliente = clienteService.getClienteBySection(auth);
+
+                cliente.setEnderecos(clienteService.findByClienteIdAndStatusAndTipoOrderByPrincipalDesc(cliente));
+                model.addAttribute("cliente", cliente);
+            }
         }
 
         model.addAttribute("usuario", userDetails);
 
         return "carrinhoCompras";
+    }
+
+    @GetMapping("/checkout")
+    @ResponseStatus(HttpStatus.OK)
+    public String checkout(Model model) {
+        var listaProdutos = produtoService.buscarProdutosPorStatus(StatusProduto.ATIVO);
+        model.addAttribute("produtoPage", listaProdutos);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        CustomUserDetails userDetails = null;
+        if (auth.getPrincipal() instanceof CustomUserDetails) {
+            userDetails = (CustomUserDetails) auth.getPrincipal();
+        }
+        Cliente cliente = clienteService.getClienteBySection(auth);
+        model.addAttribute("usuario", userDetails);
+
+        cliente.setEnderecos(clienteService.findByClienteIdAndStatusAndTipoOrderByPrincipalDesc(cliente));
+        model.addAttribute("cliente", cliente);
+
+        return "pagCheckout";
     }
 
     @GetMapping("/admin/dashboard")
@@ -90,6 +125,15 @@ public class AcessoController {
             model.addAttribute("errorMessage", session.getAttribute("message"));
             session.removeAttribute("message"); // Limpa a mensagem da sessão após lê-la
         }
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        CustomUserDetails userDetails = null;
+        if (auth.getPrincipal() instanceof CustomUserDetails) {
+            userDetails = (CustomUserDetails) auth.getPrincipal();
+        }
+
+        model.addAttribute("usuario", userDetails);
         return "index";
     }
 

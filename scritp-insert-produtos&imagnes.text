@@ -1,0 +1,2 @@
+INSERT INTO PRODUTO SELECT * FROM CSVREAD('tabela_produto.csv');
+INSERT INTO IMAGEM SELECT * FROM CSVREAD('tabela_imagem.csv');
