@@ -4,11 +4,14 @@ import com.destiny.model.Cliente;
 import com.destiny.model.CustomUserDetails;
 import com.destiny.model.Endereco;
 import com.destiny.model.MensagemResponse;
+import com.destiny.model.Pedido;
 import com.destiny.model.StatusConta;
 import com.destiny.model.TipoConta;
 import com.destiny.model.ValidationException;
 import com.destiny.repository.ClienteRepository;
 import com.destiny.repository.EnderecoRepository;
+import com.destiny.repository.PedidoDetalheRepository;
+import com.destiny.repository.PedidoRepository;
 import com.destiny.repository.UsuarioRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLDataException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +45,12 @@ public class ClienteController {
 
     @Autowired
     private EnderecoRepository enderecoRepository;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
+
+    @Autowired
+    private PedidoDetalheRepository pedidoDetalheRepository;
 
     @GetMapping("/registra-me")
     public String telaRegistarCliente() {
@@ -76,11 +87,44 @@ public class ClienteController {
         Cliente cliente = (Cliente) optionalCliente.get();
         cliente.setSenha("");
         cliente.setEnderecos(null);
+
+        cliente.getPedidos().sort((p1, p2) -> {
+            if (p1.getId() > p2.getId()) {
+                return -1;
+            }
+            if (p1.getId() < p2.getId()) {
+                return 1;
+            }
+            return 0;
+        });
+
         model.addAttribute("cliente", cliente);
         model.addAttribute("usuario", userDetails);
 
         System.out.println(cliente.getPedidos());
         return "cliente/meusPedidos";
+    }
+
+    @GetMapping("/detalhes-pedido/{id}")
+    public String telaPedidoDetalhes(@PathVariable Long id, Model model) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+            return "/login";
+        }
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+        Optional optionalCliente = clienteRepository.findById(userDetails.getId());
+        Cliente cliente = (Cliente) optionalCliente.get();
+        cliente.setSenha("");
+        cliente.setEnderecos(null);
+        cliente.setPedidos(null);
+        Pedido pedido = pedidoRepository.findById(id).get();
+        model.addAttribute("cliente", cliente);
+        model.addAttribute("usuario", userDetails);
+        model.addAttribute("pedido", pedido);
+
+        System.out.println(cliente.getPedidos());
+        return "cliente/detalhes-pedido";
     }
 
     @PostMapping("/alterar-senha")
