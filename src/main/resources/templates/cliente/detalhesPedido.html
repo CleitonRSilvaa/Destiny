@@ -7,15 +7,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Destiny</title>
   <link href="/css/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
   <link rel="icon" href="/img/LogoDestiny2.svg">
   <link rel="stylesheet" href="/css/stylesLanding.css">
-  <script src="../js/menu.js"></script>
+  <script src="/js/menu.js"></script>
 </head>
 
-<body class="bg-gray-200">
+<body class="flex flex-col min-h-screen bg-gray-200">
 
   <nav class="bg-gray-800">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -37,7 +34,7 @@
         <!-- Logotipo e links de navegação -->
         <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
           <div class="flex-shrink-0 flex items-center">
-            <a href="/"><img class="h-8 w-auto" src="../img/LogoDestiny.svg" alt="Your Company"></a>
+            <a href="/"><img class="h-8 w-auto" src="http://localhost:8080/img/LogoDestiny.svg" alt="Your Company"></a>
           </div>
           <div class="hidden sm:block sm:ml-6">
             <div class="flex space-x-4">
@@ -140,53 +137,74 @@
     </div>
   </nav>
 
-  <section id="carousel" class="mt-5 mb-5">
-    <div class="owl-carousel owl-theme">
-      <div class="item"><img src="/img/ExperienciasExoticas.png" alt="Advertisement 1"></div>
-      <div class="item"><img src="/img/HoraDoDestiny.png" alt="Advertisement 2"></div>
-      <div class="item"><img src="/img/HoraDeViajar.png" alt="Advertisement 3"></div>
-      <div class="item"><img src="/img/SPA.png" alt="Advertisement 3"></div>
+  <!-- Container do conteúdo principal -->
+  <div class="flex-grow container mx-auto px-4 py-10">
+    <h2 class="text-xl font-bold mb-6 border-b pb-2">Detalhes do pedido</h2>
 
-    </div>
-  </section>
+    <div class="bg-white rounded-lg pt-0 px-4 py-10 flex items-center shadow-lg  justify-between">
+      <div>
 
-  <section class="flex flex-wrap p-4 justify-center">
-    <th:block th:each="produto : ${produtoPage}">
-      <div class="relative flex w-72 mx-2 my-6 flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
-        <div class="relative mx-4 -mt-6 h-40 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
-          <th:block th:each="imagem, iterStat : ${produto.imagens}">
-            <img th:if="${imagem.principal}" th:src="${imagem.caminho}" class="card-img-top card-img-custom" alt="..." layout="fill">
-          </th:block>
-        </div>
-        <div class="star-rating" th:attr="data-rating=${produto.avaliacao}">
-          <span th:each=" star : ${#numbers.sequence(1,5)}" th:switch="${star}">
-            <i th:case="*{produto.avaliacao >= star}" class="fas fa-star"></i>
-            <i th:case="*{produto.avaliacao == star - 0.5}" class="fas fa-star-half-alt"></i>
-            <i th:case="*{produto.avaliacao < star}" class="far fa-star"></i>
-          </span>
-        </div>
-        <div class="p-6">
-          <h5 class="mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased" th:text="${produto.nome}">
-          </h5>
-          <p class="text-center" th:text="${'R$ '+ produto.valor}"></p>
+        <div class="container mx-auto mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Lista de Produtos -->
+          <div id="produto-list" class="md:col-span-2">
+            <th:block th:each="itemPedido, iterStat : ${pedido.itemsPedido}">
+              <div class="flex items-center mb-5">
+                <div class="w-1/6">
+                  <img th:src="${itemPedido.img}" alt="Parque temático Monopoly de Melbourne" class="w-full h-auto object-cover rounded">
+                </div>
+                <div class="w-6/6 pl-4">
+                  <h2 class="text-lg font-semibold" th:text="${itemPedido.nome}"></h2>
+                  <p class="text-sm" th:text="${'Valor unitario: R$ '+itemPedido.valor}"></p>
+                  <p class="text-sm" th:text="${'Quantidade: '+itemPedido.quantidade}"></p>
+                  <p class="text-lg font-semibold" th:text="${'SubTotal: '+itemPedido.quantidade * itemPedido.valor}"></p>
+                </div>
+              </div>
+            </th:block>
+          </div>
+
+          <!-- Resumo do Pedido -->
+          <div class="md:col-span-1 bg-white p-6 rounded-lg shadow-md">
+
+            <div class="mb-4">
+              <h3 class="font-semibold">Endereço de Entrega</h3>
+              <p id="resumo-endereco" th:text="${endereco.logradouro +', '+endereco.numero+', '+endereco.bairro+' - '+endereco.uf + ' / '+endereco.cep}"></p>
+            </div>
+            <div class="mb-4">
+              <h3 class="font-semibold">Frete</h3>
+
+              <p id="resumo-frete" th:text="${'R$ '+pedido.valorFrete}"></p>
+            </div>
+            <div class="mb-4">
+              <h3 class="font-semibold">Forma de Pagamento</h3>
+              <p id="resumo-pagamento" th:text="${pedido.metodoPagamento}"></p>
+            </div>
+            <div id="parcelasInfo" th:if="${pedido.metodoPagamento=='CARTAO'}" class="mb-4">
+              <h3 class="font-semibold">Parcelas</h3>
+              <p id="resumo-percelas" th:text="${pedido.parcelas+'x'+' de R$: '+ valorParcela }"></p>
+            </div>
+            <div class="mb-4">
+              <h3 class="font-semibold">Subtotal</h3>
+              <p id="resumo-subtotal" th:text="${'R$ '+(pedido.valorTotal - pedido.valorFrete)}"></p>
+            </div>
+            <div class="mb-6">
+              <h3 class="font-semibold text-lg">Total</h3>
+              <p id="resumo-total" class="text-lg" th:text="${'R$ '+pedido.valorTotal}"></p>
+            </div>
+
+            <a id="btnVolta" href="/cliente/meus-pedidos" class="text-white w-40 block mx-auto focus:outline-none border border-transparent py-2 px-5 rounded-lg shadow-sm text-center text-white bg-blue-500 hover:bg-blue-600 font-medium">Voltar</a>
+          </div>
         </div>
 
-        <div class="p-6 pt-0">
-          <a th:href="@{'/produto/informacao?id=' + ${produto.id}}" class="select-none rounded-lg bg-pink-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button" data-ripple-light="true">
-            Saiba Mais
-          </a>
-        </div>
+
       </div>
-    </th:block>
-
-  </section>
-
+    </div>
+  </div>
 
   <footer class="relative bg-gray-800 pt-8 pb-6">
     <div class="container mx-auto px-4">
       <div class="flex flex-wrap text-left lg:text-left">
         <div class="w-full lg:w-6/12 px-4">
-          <img class="h-8 w-auto" src="../img/LogoDestiny.svg" alt="Your Company">
+          <img class="h-8 w-auto" src="/img/LogoDestiny.svg" alt="Your Company">
           <h1 class="text-2xl font-semibold text-white mt-6">Centrais de Atendimento</h1>
           <h5 class="text-lg mt-0 mb-2 text-white">
             Suporte Pós Venda 11 4002 8922 <br>
@@ -229,7 +247,7 @@
               <span class="block uppercase text-white text-sm font-semibold mb-2">Forma de Pagamento</span>
               <ul class="list-unstyled">
                 <li>
-                  <img class="h-25 w-auto" src="../img/formasPagamento.png" alt="Forma de Pagamento">
+                  <img class="h-25 w-auto" src="/img/formasPagamento.png" alt="Forma de Pagamento">
                 </li>
               </ul>
             </div>
@@ -251,64 +269,9 @@
     </div>
   </footer>
 
-  <script src="../jquery/jquery.min.js"></script>
-
-
-  <script>
-
-    $(document).ready(function () {
-      $('.owl-carousel').owlCarousel({
-        loop: true,
-        margin: 10,
-        responsiveClass: true,
-        autoplay: true, // this allows the items to rotate automatically
-        autoplayTimeout: 4000, // this is the time delay between transitions in milliseconds (i.e., 3 seconds)
-        responsive: {
-          0: {
-            items: 1,
-            nav: true
-          },
-          600: {
-            items: 1,  // changed this to show only one image
-            nav: false
-          },
-          1000: {
-            items: 1,  // changed this to show only one image
-            nav: true,
-            loop: true
-          }
-        }
-      });
-    });
-
-    function renderStarRatings() {
-      $('.star-rating').each(function () {
-        const rating = parseFloat($(this).data('rating'));
-        $(this).empty(); // clear previous stars
-
-        for (let i = 1; i <= 5; i++) {
-          if (i <= rating) {
-            $(this).append('<i class="fas fa-star"></i>');
-          } else if (i - rating === 0.5) {
-            $(this).append('<i class="fas fa-star-half-alt"></i>');
-          } else {
-            $(this).append('<i class="far fa-star"></i>');
-          }
-        }
-      });
-    }
-
-    $(document).ready(function () {
-      renderStarRatings();
-    });
 
 
 
-  </script>
-
-  <!-- Owl Carousel JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-  <script src="https://unpkg.com/@material-tailwind/html@latest/scripts/ripple.js"></script>
 </body>
 
 </html>

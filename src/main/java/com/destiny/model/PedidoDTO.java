@@ -23,6 +23,12 @@ public class PedidoDTO {
   private BigDecimal valorTotal;
 
   @NotNull
+  private BigDecimal valorFrete;
+
+  @NotNull
+  private int parcelas;
+
+  @NotNull
   private List<PedidoDetalhe> itemsPedido;
 
   @Override

@@ -407,6 +407,7 @@ function app() {
       });
 
       pedido.clienteId = parseInt(idcliente);
+      pedido.valorFrete = frete;
       pedido.itemsPedido = listaDeObjetos;
       pedido.valorTotal = total.toFixed(2);
 

@@ -22,4 +22,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
     List<Pedido> findByClienteNome(String nome);
 
+    @Query("SELECT MAX(p.numeroPedido) FROM Pedido p")
+    Integer findMaxNumeroPedido();
+
 }
