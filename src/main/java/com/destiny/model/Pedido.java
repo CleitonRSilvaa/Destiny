@@ -31,9 +31,12 @@ public class Pedido {
 
   public static enum StatusPedido {
     AGUARDANDO_PAGAMENTO("Aguardando Pagamento"),
-    PENDENTE("Pendente"),
-    APROVADO("Aprovado"),
-    CANCELADO("Cancelado");
+    PAGEMTNO_REJEITADO("Pagamento Rejeitado"),
+    APROVADO("Pagamento com sucesso"),
+    CANCELADO("Cancelado"),
+    RETIRADA("Aguardando Retirada"),
+    TRANSITO("Em Transito"),
+    ENTREGUE("Entregue");
 
     private final String descricao;
 

@@ -1,15 +1,19 @@
 <!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="https://thymeleaf.org">
 
-<html lang="pt-BR">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meus Pedidos</title>
+  <title>Pedidos Clientes</title>
+
+
   <link href="/css/tailwind.dashboard.css" rel="stylesheet">
   <link href="/css/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../css/stylesLanding.css">
-  <script src="/js/menu.js"></script>
+  <link rel="stylesheet" href="../css/sweetalert2.min.css">
+  <script src="../js/sweetalert2.min.js"></script>
+  <link rel="icon" href="../img/LogoDestiny.svg">
+  <script src="../js/menu.js"></script>
 </head>
 
 <body class="bg-gray-200">
@@ -36,44 +40,26 @@
           <div class="flex-shrink-0 flex items-center">
             <a href="/"><img class="h-8 w-auto" src="../img/LogoDestiny.svg" alt="Your Company"></a>
           </div>
-          <div class="hidden sm:block sm:ml-6">
+          <div th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}" class="hidden sm:block sm:ml-6">
             <div class="flex space-x-4">
-              <a href="#" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Pacotes</a>
-              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Passeios</a>
-              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Destinos</a>
-              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Itinerários</a>
+              <a class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page" href="/">Home</a>
+              <a class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page" href="/usuario/lista">Listar Usuários</a>
+              <a class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page" href="#">Listar Clientes</a>
+              <a class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page" href="/produto/listar">Listar Produtos</a>
             </div>
           </div>
+          <div th:if="${#authentication.authorities[0].authority == 'ROLE_ESTOQUISTA'}" class="hidden sm:block sm:ml-6">
+            <div class="flex space-x-4">
+              <a class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page" href="/">Home</a>
+              <a class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page" href="/produto/listar">Listar Produtos</a>
+              <a class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page" href="">Listar Pedidos</a>
+            </div>
+          </div>
+
         </div>
 
-        <!-- Campo de pesquisa -->
-        <!-- <div class="flex items-center mx-6">
-          <form action="/buscar" method="GET">
-            <label for="search" class="sr-only">Pesquisar</label>
-            <div class="relative">
-              <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 6h13M8 12h13m-7 6h7" />
-                </svg>
-              </div>
-              <input id="search" name="q" class="block w-full pl-10 pr-3 py-2 border border-transparent rounded-md leading-5 bg-gray-100 text-gray-900 placeholder-gray-500 focus:outline-none focus:bg-white focus:border-gray-300 focus:ring-0 sm:text-sm" placeholder="Pesquisar produtos..." type="search">
-            </div>
-          </form>
-        </div> -->
-
-        <!-- Ícones de carrinho e perfil -->
         <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-
-          <div class="relative">
-            <a href="/carrinho" class="flex items-center justify-center mr-3 relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-              <span class="sr-only">Ver carrinho</span>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="file:  h-6 w-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-              </svg>
-              <span id="carrinhoCount" class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full"></span>
-            </a>
-          </div>
-
+          <input type="hidden" name="" id="carrinhoCount">
 
           <!-- Dropdown de perfil -->
           <div class="relative ml-3" th:if="${#authentication.authorities[0].authority == 'ROLE_CLIENTE'}">
@@ -92,8 +78,6 @@
               <a href="/cliente/perfil" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Meu Perfil</a>
               <a href="/cliente/alterar-senha" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Alterar Senha</a>
               <a href="/cliente/meus-pedidos" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Meus pedidos</a>
-              <!--              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1"-->
-              <!--                id="user-menu-item-3">Configurações</a>-->
               <a href="/logout" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-4">Sair</a>
             </div>
           </div>
@@ -140,7 +124,7 @@
 
   <!-- component -->
 
-  <div class="flex flex-wrap -mx-3 mb-5">
+  <div class="flex flex-wrap mx-3 mb-5">
     <div class="w-full max-w-full px-3 mb-6  mx-auto">
       <div class="relative flex-[1_auto] flex flex-col break-words min-w-0 bg-clip-border rounded-[.95rem] bg-white m-5">
         <div class="relative flex flex-col min-w-0 break-words border border-dashed bg-clip-border rounded-2xl border-stone-200 bg-light/30">
@@ -162,33 +146,33 @@
                     <th class="pb-3 text-start min-w-[175px]">NÚMERO DO PEDIDO</th>
                     <th class="pb-3 text-start min-w-[100px]">DATA</th>
                     <th class="pb-3 text-start min-w-[100px]">VALOR TOTAL</th>
-                    <th class="pb-3 text-start min-w-[175px]">STATUS</th>
-                    <th class="pb-3 text-start min-w-[50px]">DETALHES</th>
+                    <th class="pb-3 text-center min-w-[175px]">STATUS</th>
+                    <th class="pb-3 text-center min-w-[50px]">OPÇÔES</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <th:block th:each="pedido, iterStat : ${cliente.pedidos}">
-                    <tr class="border-b border-dashed last:border-b-0">
-                      <td class="p-2 pr-0">
-                        <span class="font-semibold text-light-inverse text-md/normal" th:text="${pedido.numeroPedido}"></span>
-                      </td>
-                      <td class="p-2 pr-0 text-start">
-                        <span class="font-semibold text-light-inverse text-md/normal" th:text="${#temporals.format(pedido.dataPedido, 'dd/MM/yyyy')}"></span>
-                      </td>
-                      <td class="p-2 pr-0 text-start">
-                        <span class="font-semibold text-light-inverse text-md/normal" th:text="${'R$ '+pedido.valorTotal}"></span>
-                      </td>
+                  <tr th:each="pedido : ${pedidoPage.content}" th:attr="data-id=${pedido.id}, data-status=${pedido.statusPedido}" class="border-b border-dashed last:border-b-0">
+                    <td class="p-2 pr-0">
+                      <span class="font-semibold text-light-inverse text-md/normal" th:text="${pedido.numeroPedido}"></span>
+                    </td>
+                    <td class="p-2 pr-0 text-start">
+                      <span class="font-semibold text-light-inverse text-md/normal" th:text="${#temporals.format(pedido.dataPedido, 'dd/MM/yyyy')}"></span>
+                    </td>
+                    <td class="p-2 pr-0 text-start">
+                      <span class="font-semibold text-light-inverse text-md/normal" th:text="${'R$ '+pedido.valorTotal}"></span>
+                    </td>
 
-                      <td class="p-2 pr-0 text-start">
-                        <span class="text-center align-baseline inline-flex px-4 py-3 mr-auto items-center font-semibold text-[.95rem] leading-none text-primary bg-primary-light rounded-lg" th:text="${pedido.statusPedido.getDescricao}"></span>
-                      </td>
+                    <td class="p-2 pr-0 text-center">
+                      <span class="text-center align-baseline inline-flex px-4 py-3 mr-auto items-center font-semibold text-[.95rem] leading-none text-primary bg-primary-light rounded-lg" th:text="${pedido.statusPedido.getDescricao}"></span>
+                    </td>
 
 
-                      <td class="p-2 pr-0 text-start">
-                        <a th:href="${'/cliente/detalhes-pedido/'+pedido.id}" class="inline-block text-[.925rem] font-medium leading-normal text-center align-middle cursor-pointer rounded-2xl transition-colors duration-150 ease-in-out text-light-inverse bg-light-dark border-light shadow-none border-0 py-2 px-5 hover:bg-secondary active:bg-light focus:bg-light"> Ver detalhes </a>
-                      </td>
-                    </tr>
-                  </th:block>
+                    <td class="text-center">
+                      <button type="button" class="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200" onclick="updateStatusProduto(this)">
+                        ALTERAR STATUS<i class="p-2 bi bi-pencil-square"></i>
+                      </button>
+                    </td>
+                  </tr>
 
                 </tbody>
               </table>
@@ -274,7 +258,82 @@
   <script src="../js/bootstrap.bundle.min.js"></script>
   <script src="../js/popper.min.js"></script>
 
+  <script th:if="${mensagem}" th:inline="javascript">
+    Swal.fire({
+      position: 'top-end',
+      icon: /*[[${tipo}]]*/"",
+      title: /*[[${mensagem}]]*/"",
+      showConfirmButton: false,
+      timer: 1500
+    });
+  </script>
+  <script>
+    function updateStatusProduto(e) {
+      let t = e.closest("tr"),
+        id = t.getAttribute("data-id"),
+        status = t.getAttribute("data-status");
+      Swal.fire({
+        title: 'Selecione o status',
+        html: `
+      <select class="form-select w-100" aria-label="Selecione o status" id="statusSelect">
+        <option   value="AGUARDANDO_PAGAMENTO" ${status === 'AGUARDANDO_PAGAMENTO' ? 'selected' : ''}>Aguardando Pagamento</option>
+      <option  value="PAGEMTNO_REJEITADO" ${status === 'PAGEMTNO_REJEITADO' ? 'selected' : ''}>Pagamento Rejeitado</option>
+      <option value="APROVADO" ${status === 'APROVADO' ? 'selected' : ''}>Pagamento Aprovado</option>
+      <option value="RETIRADA" ${status === 'RETIRADA' ? 'selected' : ''}>Aguardando Retirada</option>
+      <option value="TRANSITO" ${status === 'TRANSITO' ? 'selected' : ''}>Em Trânsito</option>
+      <option value="ENTREGUE" ${status === 'ENTREGUE' ? 'selected' : ''}>Entregue</option>
+      </select>
+  `,
+        showCancelButton: true,
+        confirmButtonText: 'Sim',
+        preConfirm: () => {
+          return document.getElementById('statusSelect').value;
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          boby = { id: id, status: result.value };
+          console.log(boby)
+          makeRequest("POST", "/usuario/pedido/update-status", boby, "Status atualizado com sucesso!");
+        }
+      });
+    }
+    function makeRequest(e, t, a, i) {
+      console.log(a),
+        $.ajax({
+          type: e,
+          url: `http://localhost:8080${t}`,
+          data: JSON.stringify(a),
+          contentType: "application/json; charset=utf-8",
+          success: function (e) {
+            [200, 201].includes(e.status) && "success" === e.message
+              ? (Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: i,
+                showConfirmButton: !1,
+                timer: 1900,
+              }),
+                setTimeout(() => location.reload(), 1900))
+              : Swal.fire({
+                icon: "error",
+                title: "Erro",
+                text: "Resposta inesperada do servidor. Por favor, tente novamente.",
+              });
+          },
+          error: function (e) {
+            let t = e.responseJSON,
+              a = t.message + "\n\n";
+            t.details && (a += t.details.map((e) => "- " + e).join("\n")),
+              Swal.fire({ icon: "error", title: "Erro", text: a });
+          },
+        });
+    }
+
+  </script>
+
+
 
 </body>
+
 
 </html>

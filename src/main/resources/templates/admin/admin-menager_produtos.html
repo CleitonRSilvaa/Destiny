@@ -47,6 +47,9 @@
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="/produto/listar">Listar Produtos</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="">Listar Pedidos</a>
+            </li>
           </th:block>
 
         </ul>
@@ -391,7 +394,7 @@
       console.log(a),
         $.ajax({
           type: e,
-          url: `https://destinyproject.azurewebsites.net${t}`,
+          url: `http://localhost:8080${t}`,
           data: JSON.stringify(a),
           contentType: "application/json; charset=utf-8",
           success: function (e) {

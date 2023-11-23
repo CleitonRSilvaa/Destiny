@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+  atualizaVisualizacaoCarrinho();
   // Toggle do menu mobile
   let menuButton = document.querySelector('[aria-controls="mobile-menu"]');
   let mobileMenu = document.getElementById("mobile-menu");
@@ -22,8 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
   userMenuButton.addEventListener("click", function () {
     userMenuDropdown.classList.toggle("hidden");
   });
-
-  atualizaVisualizacaoCarrinho();
 });
 
 function atualizaVisualizacaoCarrinho() {
