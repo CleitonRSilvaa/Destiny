@@ -50,9 +50,10 @@
           </div>
           <div th:if="${#authentication.authorities[0].authority == 'ROLE_ESTOQUISTA'}" class="hidden sm:block sm:ml-6">
             <div class="flex space-x-4">
-              <a class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page" href="/">Home</a>
-              <a class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page" href="/produto/listar">Listar Produtos</a>
-              <a class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page" href="">Listar Pedidos</a>
+              <a href="/" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Home</a>
+
+              <a href="/produto/listar" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Listar Produtos</a>
+              <a href="/usuario/pedidos-gerenciar" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Listar Pedidos</a>
             </div>
           </div>
 

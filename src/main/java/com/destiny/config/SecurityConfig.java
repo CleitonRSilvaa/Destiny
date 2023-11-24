@@ -60,9 +60,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                                                 "/cliente/registra-me/**",
                                                                 "/cliente/add/**", "/carrinho/**")
                                                 .permitAll()
-                                                .antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN") // Adicionado o
-                                                                                                        // prefixo
-                                                                                                        // 'ROLE_'
+                                                .antMatchers("/usuario/pedidos-gerenciar/**")
+                                                .hasAnyAuthority("ROLE_ESTOQUISTA")
+                                                .antMatchers("/usuario/pedido/update-status/**")
+                                                .hasAnyAuthority("ROLE_ESTOQUISTA")
+                                                .antMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN")
                                                 .antMatchers("/usuario/**").hasAnyAuthority("ROLE_ADMIN")
                                                 .antMatchers("/checkout/**").hasAnyAuthority("ROLE_CLIENTE")
                                                 .antMatchers("/estoque/**")

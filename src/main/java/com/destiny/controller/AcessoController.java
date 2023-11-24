@@ -109,12 +109,28 @@ public class AcessoController {
     @GetMapping("/admin/dashboard")
     @ResponseStatus(HttpStatus.OK)
     public String admin(@RequestParam(required = false) String nomeBusca, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        CustomUserDetails userDetails = null;
+        if (auth.getPrincipal() instanceof CustomUserDetails) {
+            userDetails = (CustomUserDetails) auth.getPrincipal();
+        }
+
+        model.addAttribute("usuario", userDetails);
         return "admin/index";
     }
 
     @GetMapping("/estoque/dashboard")
     @ResponseStatus(HttpStatus.OK)
     public String estoque(@RequestParam(required = false) String nomeBusca, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        CustomUserDetails userDetails = null;
+        if (auth.getPrincipal() instanceof CustomUserDetails) {
+            userDetails = (CustomUserDetails) auth.getPrincipal();
+        }
+
+        model.addAttribute("usuario", userDetails);
         return "estoque/index";
     }
 
