@@ -122,8 +122,9 @@ public class ClienteController {
         BigDecimal valorParcela = new BigDecimal(0);
         if (pedido.getMetodoPagamento().equals("CARTAO")) {
             BigDecimal parcelas = new BigDecimal(pedido.getParcelas());
-            valorParcela = pedido.getValorTotal().divide(parcelas);
-            valorParcela = valorParcela.setScale(2, RoundingMode.HALF_UP);
+
+            valorParcela = pedido.getValorTotal().divide(parcelas, 2, RoundingMode.HALF_UP);
+
         }
 
         Endereco endereco = enderecoRepository.findById(pedido.getEnderecoEntregaId()).get();
