@@ -494,12 +494,12 @@ function app() {
       return true;
     },
 
-    submitCompra: function () {
+    submitCompra: async function () {
       document.getElementById("loader").style.display = "block";
       document.getElementById("btnComprar").disabled = true;
       document.getElementById("btnVolta").disabled = true;
 
-      makeRequest("POST", "/pedido", pedido, "Pedido gerado com sucesso");
+      await makeRequest("POST", "/pedido", pedido, "Pedido gerado com sucesso");
       document.getElementById("loader").style.display = "none";
       document.getElementById("btnComprar").disabled = false;
       document.getElementById("btnVolta").disabled = false;
