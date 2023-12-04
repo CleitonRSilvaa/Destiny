@@ -53,7 +53,6 @@ public class ProdutoService {
   @Autowired
   private AzureBlobAdapter azureBlobAdapter;
 
-  @Transactional
   public Produto cadastrarProduto(Produto produto, MultipartFile[] imagens, int imgPrincipal) {
     try {
 

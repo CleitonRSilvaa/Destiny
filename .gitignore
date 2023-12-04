@@ -40,4 +40,4 @@ build/
 mvnw.cmd
 
 
-# **/imagens/produtos/**
+**/imagens/produtos/**
