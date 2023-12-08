@@ -30,10 +30,23 @@ public class Pedido {
   private static final Random random = new Random();
 
   public static enum StatusPedido {
-    AGUARDANDO_PAGAMENTO,
-    PENDENTE,
-    APROVADO,
-    CANCELADO
+    AGUARDANDO_PAGAMENTO("Aguardando Pagamento"),
+    PAGEMTNO_REJEITADO("Pagamento Rejeitado"),
+    APROVADO("Pagamento com sucesso"),
+    CANCELADO("Cancelado"),
+    RETIRADA("Aguardando Retirada"),
+    TRANSITO("Em Transito"),
+    ENTREGUE("Entregue");
+
+    private final String descricao;
+
+    StatusPedido(String descricao) {
+      this.descricao = descricao;
+    }
+
+    public String getDescricao() {
+      return descricao;
+    }
   }
 
   @Id
@@ -66,13 +79,11 @@ public class Pedido {
   @Column(nullable = false)
   private BigDecimal valorTotal;
 
+  // @Column(nullable = false)
+  private BigDecimal valorFrete;
+
   @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
   private List<PedidoDetalhe> itemsPedido;
-
-  public void setNumeroPedido() {
-
-    this.numeroPedido = gerarNumeroUnico5Digitos();
-  }
 
   public int gerarNumeroUnico5Digitos() {
     return 10000 + random.nextInt(90000);

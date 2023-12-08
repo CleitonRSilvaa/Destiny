@@ -64,9 +64,34 @@ function toggleModal(modalID) {
   document.getElementById(modalID + "-backdrop").classList.toggle("flex");
 }
 
+function textoAleatorio(tamanho) {
+  const caracteres =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+  let texto = "";
+
+  for (let i = 0; i < tamanho; i++) {
+    const indiceAleatorio = Math.floor(Math.random() * caracteres.length);
+    texto += caracteres.charAt(indiceAleatorio);
+  }
+
+  return texto;
+}
+
+function numerosAleatorio(tamanho) {
+  const caracteres = "1234567890";
+  let texto = "";
+
+  for (let i = 0; i < tamanho; i++) {
+    const indiceAleatorio = Math.floor(Math.random() * caracteres.length);
+    texto += caracteres.charAt(indiceAleatorio);
+  }
+
+  return texto;
+}
+
 function togglePaymentMethod(method) {
   const pagamentos = document.querySelectorAll(".payment-item");
-  var cardDetails = document.getElementById("card-details");
+
   pagamentos.forEach((pagamento) => {
     pagamento.classList.remove("selected");
     if (pagamento.id === method) {
@@ -74,10 +99,54 @@ function togglePaymentMethod(method) {
     }
   });
 
+  let cardDetails = document.getElementById("card-details");
+  let pixDetails = document.getElementById("pix-details");
+  let boletoDetails = document.getElementById("boleto-details");
+
   if (method === "payment-card") {
     cardDetails.classList.remove("hidden");
   } else {
     cardDetails.classList.add("hidden");
+  }
+
+  if (method === "pix") {
+    // const qrcode = document.querySelector("#qrcode");
+    const textoPix = textoAleatorio(100);
+
+    let qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(
+      textoPix
+    )}`;
+
+    fetch(qrApiUrl)
+      .then((response) => {
+        if (response.ok) {
+          document.getElementById("qrcode").src = qrApiUrl;
+        } else {
+          document.getElementById("qrcode").src = "/img/qr-code.png";
+        }
+      })
+      .catch((error) => {
+        console.error("Error gerar qr-code:", error);
+        document.getElementById("qrcode").src = localImageSrc;
+      });
+
+    document.getElementById("pixCode").value = textoPix;
+
+    pixDetails.classList.remove("hidden");
+  } else {
+    pixDetails.classList.add("hidden");
+  }
+
+  if (method === "boleto") {
+    let numerosAleatorioGerado = numerosAleatorio(48);
+
+    JsBarcode("#codBarras", numerosAleatorioGerado);
+
+    document.getElementById("numeroCodeBar").value = numerosAleatorioGerado;
+
+    boletoDetails.classList.remove("hidden");
+  } else {
+    boletoDetails.classList.add("hidden");
   }
 }
 
@@ -410,6 +479,7 @@ function app() {
       });
 
       pedido.clienteId = parseInt(idcliente);
+      pedido.valorFrete = frete;
       pedido.itemsPedido = listaDeObjetos;
       pedido.valorTotal = total.toFixed(2);
 
@@ -427,12 +497,12 @@ function app() {
       return true;
     },
 
-    submitCompra: function () {
+    submitCompra: async function () {
       document.getElementById("loader").style.display = "block";
       document.getElementById("btnComprar").disabled = true;
       document.getElementById("btnVolta").disabled = true;
 
-      makeRequest("POST", "/pedido", pedido, "Pedido gerado com sucesso");
+      await makeRequest("POST", "/pedido", pedido, "Pedido gerado com sucesso");
       document.getElementById("loader").style.display = "none";
       document.getElementById("btnComprar").disabled = false;
       document.getElementById("btnVolta").disabled = false;

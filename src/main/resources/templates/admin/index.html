@@ -4,150 +4,128 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard</title>
- <link href="../css/bootstrap.min.css" rel="stylesheet">
-  <link href="../css/tailwind.min.css" rel="stylesheet">
+  <title>Dashboard Destiny</title>
+
+
+  <link href="/css/tailwind.dashboard.css" rel="stylesheet">
+  <link href="/css/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../css/sweetalert2.min.css">
-  <link href="../css/style.css" rel="stylesheet">
   <script src="../js/sweetalert2.min.js"></script>
   <link rel="icon" href="../img/LogoDestiny.svg">
-
+  <script src="../js/menu.js"></script>
 </head>
 
-<body class="d-flex flex-column">
-<nav class="bg-gray-800">
-  <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-    <div class="relative flex h-16 items-center justify-between">
-      <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
-        <button type="button" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
-          <span class="absolute -inset-0.5"></span>
-          <span class="sr-only">Open main menu</span>
-          <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
-          </svg>
-          <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
-      </div>
-      <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-        <div class="flex flex-shrink-0 items-center">
-          <a href="/"><img class="h-8 w-auto" src="../img/LogoDestiny.svg" alt="Your Company"></a>
+<body class="flex flex-col bg-gray-200 h-screen w-screen">
+
+  <nav class="bg-gray-800">
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+      <div class="relative flex h-16 items-center justify-between">
+        <!-- Botão do menu mobile -->
+        <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+          <button type="button" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+            <span class="sr-only">Open main menu</span>
+            <!-- Ícone do menu -->
+            <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+            <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Logotipo e links de navegação -->
+        <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+          <div class="flex-shrink-0 flex items-center">
+            <a href="/"><img class="h-8 w-auto" src="../img/LogoDestiny.svg" alt="Your Company"></a>
+          </div>
+          <div th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}" class="hidden sm:block sm:ml-6">
+            <div class="flex space-x-4">
+              <a class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page" href="/">Home</a>
+              <a class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page" href="/usuario/lista">Listar Usuários</a>
+              <a class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page" href="#">Listar Clientes</a>
+              <a class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page" href="/produto/listar">Listar Produtos</a>
+            </div>
+          </div>
+          <div th:if="${#authentication.authorities[0].authority == 'ROLE_ESTOQUISTA'}" class="hidden sm:block sm:ml-6">
+            <div class="flex space-x-4">
+              <a href="/" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Home</a>
+
+              <a href="/produto/listar" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Listar Produtos</a>
+              <a href="/usuario/pedidos-gerenciar" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Listar Pedidos</a>
+            </div>
+          </div>
 
         </div>
 
-        <div class="hidden sm:ml-6 sm:block">
-          <div class="flex space-x-4">
+        <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+          <input type="hidden" name="" id="carrinhoCount">
 
-            <a href="/" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">HOME</a>
-            <a href="/usuario/lista" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Listar Usuários</a>
-            <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Listar Clientes</a>
-            <a href="/produto/listar" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Listar Produtos</a>
+          <!-- Dropdown de perfil -->
+          <div class="relative ml-3" th:if="${#authentication.authorities[0].authority == 'ROLE_CLIENTE'}">
+            <button type="button" class="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button">
+              <span class="sr-only">Open user menu</span>
+              <img class="h-8 w-8 rounded-full" src="https://destinyproject.blob.core.windows.net/destinypodruto/perfil.png" alt="">
+            </button>
+            <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
 
+              <div class="px-4 py-3">
+                <span class="block text-sm text-gray-900 dark:text-white" th:text="${usuario.getNome}"></span>
+                <span class="block text-sm  text-gray-500 truncate dark:text-gray-400" th:text="${usuario.getUsername()}"></span>
+                <hr>
+              </div>
+              <a href="/" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Home</a>
+              <a href="/cliente/perfil" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Meu Perfil</a>
+              <a href="/cliente/alterar-senha" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Alterar Senha</a>
+              <a href="/cliente/meus-pedidos" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Meus pedidos</a>
+              <a href="/logout" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-4">Sair</a>
+            </div>
+          </div>
 
+          <div class="relative ml-3" sec:authorize="isAuthenticated()" th:if="${#authentication.authorities.?[authority == 'ROLE_ADMIN' || authority == 'ROLE_ESTOQUISTA'].size() > 0}">
+            <button type="button" class="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button">
+              <span class="sr-only">Open user menu</span>
+              <img class="h-8 w-8 rounded-full" src="https://destinyproject.blob.core.windows.net/destinypodruto/perfil.png" alt="">
+            </button>
+            <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+
+              <div class="px-4 py-3">
+                <span class="block text-sm text-gray-900 dark:text-white" th:text="${usuario.getNome}"></span>
+                <span class="block text-sm  text-gray-500 truncate dark:text-gray-400" th:text="${usuario.getUsername()}"></span>
+                <hr>
+              </div>
+              <a href="/" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Home</a>
+              <a href="/home" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Menu</a>
+              <a href="/logout" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-4">Sair</a>
+            </div>
+          </div>
+
+          <div class="relative ml-3" sec:authorize="!isAuthenticated()">
+
+            <a href="/login" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm mx-2 px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Entrar</a>
 
           </div>
         </div>
       </div>
+    </div>
+    </div>
 
-      <div sec:authorize="isAuthenticated()">
-        <spam class='text-white px-2' th:text="${#authentication.name}"></spam>
-        <input type="hidden" id="usernameBeingEdited" th:value="${#authentication.name}">
+    <!-- Menu mobile -->
+    <div class="sm:hidden hidden" id="mobile-menu">
+      <div class="space-y-1 px-2 pb-3 pt-2">
+        <a href="#" class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" aria-current="page">Pacotes</a>
+        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Passeios</a>
+        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Destinos</a>
+        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Itinerários</a>
       </div>
-
-      <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-        <button type="button" class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-          <span class="absolute -inset-1.5"></span>
-          <a class="btn btn-outline-danger" href="/logout"><i class="bi bi-box-arrow-right px-1"></i>Sair</a>
-        </button>
+    </div>
+  </nav>
+  <div class="container mt-4 h-full">
 
 
-            <div class="sm:hidden" id="mobile-menu">
-              <div class="space-y-1 px-2 pb-3 pt-2">
-                <a href="#" class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" aria-current="page">Pacotes</a>
-                <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Passeios</a>
-                <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Destinos</a>
-                <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Itinerários</a>
-              </div>
-            </div>
-          </nav>
 
-<div class="container mt-4 flex-grow-1">
-     <div class="container p-5">
-      </div>
   </div>
-
-          <!--<nav class="bg-gray-800">-->
-<!--  <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">-->
-<!--    <div class="relative flex h-16 items-center justify-between">-->
-<!--      <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">-->
-<!--        <button type="button" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">-->
-<!--          <span class="absolute -inset-0.5"></span>-->
-<!--          <span class="sr-only">Open main menu</span>-->
-<!--          <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">-->
-<!--            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />-->
-<!--          </svg>-->
-<!--          <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">-->
-<!--            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />-->
-<!--          </svg>-->
-<!--        </button>-->
-<!--      </div>-->
-<!--      <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">-->
-<!--        <div class="flex flex-shrink-0 items-center">-->
-<!--          <a href="/"><img class="h-8 w-auto" src="../img/LogoDestiny.svg" alt="Your Company"></a>-->
-
-<!--        </div>-->
-<!--        <div class="hidden sm:ml-6 sm:block">-->
-<!--          <div class="flex space-x-4">-->
-<!--          &lt;!&ndash; Link para Home. Todos os usuários terão acesso &ndash;&gt;-->
-<!--            <a href="/" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Home</a>-->
-
-
-<!--            &lt;!&ndash; Links exclusivos para ROLE_ADMIN &ndash;&gt;-->
-<!--          <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">-->
-
-<!--            <div class="hidden sm:ml-6 sm:block">-->
-<!--              <div class="flex space-x-4">-->
-<!--                <a class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page" href="/usuario/lista">Listar Usuários</a>-->
-<!--                <a class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page" href="#">Listar Clientes</a>-->
-<!--                <a class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page" href="/produto/listar">Listar Produtos</a>-->
-<!--              </div>-->
-<!--            </div>-->
-
-<!--          </th:block>-->
-
-<!--      </div>-->
-<!--    </div>-->
-
-<!--      <div sec:authorize="isAuthenticated()">-->
-<!--        <spam class='text-white px-2' th:text="${#authentication.name}"></spam>-->
-<!--        <input type="hidden" id="usernameBeingEdited" th:value="${#authentication.name}">-->
-
-<!--      </div>-->
-
-<!--      <a class="btn btn-outline-danger" href="/logout"><i class="bi bi-box-arrow-right px-1"></i>Sair</a>-->
-<!--    </div>-->
-<!--  </nav>-->
-
-<!--  <div class="container mt-4 flex-grow-1">-->
-<!--    <div class="container p-5">-->
-<!--    </div>-->
-<!--  </div>-->
-
-
-  <span th:if="${errorMessage}">
-    <script th:inline="javascript">
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: /*[[${errorMessage}]]*/"",
-        showConfirmButton: false,
-        timer: 1700
-      });
-    </script>
-  </span>
 
 
   <footer class="relative bg-gray-800 pt-8 pb-6">
@@ -181,10 +159,14 @@
               <span class="block uppercase text-white text-sm font-semibold mb-2">Compra Segura</span>
               <ul class="list-unstyled">
                 <li>
-                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Termos e Condições</a>
-                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Política de Privacidade</a>
-                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Black Friday</a>
-                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Oferta Destiny</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Termos e
+                    Condições</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Política de
+                    Privacidade</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Black
+                    Friday</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Oferta
+                    Destiny</a>
                 </li>
               </ul>
             </div>
@@ -205,20 +187,35 @@
       <div class="flex flex-wrap items-center md:justify-between justify-center">
         <div class="w-full md:w-4/12 px-4 mx-auto text-center">
           <div class="text-sm text-white font-semibold py-1">
-            Copyright © <span id="get-current-year">2023</span><a href="#" class="text-white hover:text-blueGray-800"> Destiny by
-            <a href="https://github.com/CleitonRSilvaa/Destiny" class="text-white hover:text-blueGray-800">Eco Coders</a>.
+            Copyright © <span id="get-current-year">2023</span><a href="#" class="text-white hover:text-blueGray-800">
+              Destiny by
+              <a href="https://github.com/CleitonRSilvaa/Destiny" class="text-white hover:text-blueGray-800">Eco
+                Coders</a>.
           </div>
         </div>
       </div>
     </div>
   </footer>
 
+  <!-- Footer -->
+
+  <span th:if="${errorMessage}">
+    <script th:inline="javascript">
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: /*[[${errorMessage}]]*/"",
+        showConfirmButton: false,
+        timer: 1700
+      });
+    </script>
+  </span>
+
 
   <script src="../jquery/jquery.min.js"></script>
   <script src="../jquery/jquery.mask.min.js"></script>
   <script src="../js/bootstrap.bundle.min.js"></script>
   <script src="../js/popper.min.js"></script>
-  <!-- MDB -->
 
 </body>
 

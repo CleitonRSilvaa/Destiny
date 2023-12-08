@@ -1,13 +1,22 @@
 package com.destiny.controller;
 
+import com.destiny.model.Cliente;
+import com.destiny.model.CustomUserDetails;
 import com.destiny.model.MensagemResponse;
+import com.destiny.model.Pedido;
+import com.destiny.model.Produto;
 import com.destiny.model.StatusConta;
+import com.destiny.model.TipoConta;
 import com.destiny.model.Usuario;
 import com.destiny.model.ValidationException;
+import com.destiny.repository.PedidoRepository;
 import com.destiny.repository.UsuarioRepository;
+import com.destiny.service.PedidoService;
+import com.destiny.service.ProdutoService;
 import com.destiny.utils.CpfValidator;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -29,6 +38,9 @@ public class UsuarioController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private PedidoService pedidoService;
+
     @GetMapping("/lista")
     public String listarSenhas(@RequestParam(required = false) String nomeBusca, Model model) {
         List<UsuarioRepository.UsuarioResumo> listaDeUsuarios;
@@ -42,6 +54,65 @@ public class UsuarioController {
         model.addAttribute("listaDeUsuarios", listaDeUsuarios);
 
         return "admin/admin-menager_usuarios";
+    }
+
+    @GetMapping("/pedidos-gerenciar")
+    public String telaProdutos(Model model,
+            @RequestParam("page") Optional<Integer> page,
+            @RequestParam("size") Optional<Integer> size,
+            @RequestParam("numeroPedido") Optional<Integer> numeroPedido) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        CustomUserDetails userDetails = null;
+        if (auth.getPrincipal() instanceof CustomUserDetails) {
+            userDetails = (CustomUserDetails) auth.getPrincipal();
+        }
+
+        model.addAttribute("usuario", userDetails);
+
+        Page<Pedido> pedidoPage = pedidoService.buscarPedidos(page, size, numeroPedido);
+        model.addAttribute("pedidoPage", pedidoPage);
+        return "estoque/admin-menager_pedidos";
+    }
+
+    @ResponseBody
+    @PostMapping("/pedido/update-status")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<MensagemResponse> updateStatusPedido(@RequestBody StatusUpdateRequestPedido statusObj) {
+        MensagemResponse mensagemResponse = new MensagemResponse();
+        List<String> detalhes = new ArrayList<>();
+        long longId = 0;
+
+        try {
+            longId = Long.valueOf(statusObj.getId());
+        } catch (NumberFormatException e) {
+            detalhes.add("id not INT");
+        }
+        if (!detalhes.isEmpty()) {
+            throw new ValidationException("parametro invalido", detalhes);
+        }
+
+        if (!pedidoService.valiadePedido(longId)) {
+            mensagemResponse.setStatus(400);
+            mensagemResponse.setMessage("erro");
+            detalhes.add("Id não existe");
+            mensagemResponse.setDetails(detalhes);
+            return new ResponseEntity<>(mensagemResponse, HttpStatus.BAD_REQUEST);
+        }
+
+        if (!pedidoService.updateStatusPedido(statusObj.getStatus(), longId)) {
+            mensagemResponse.setStatus(400);
+            mensagemResponse.setMessage("erro");
+            detalhes.add("Erro ao atualizar status");
+            mensagemResponse.setDetails(detalhes);
+            return new ResponseEntity<>(mensagemResponse, HttpStatus.BAD_REQUEST);
+        }
+        mensagemResponse.setStatus(200);
+        mensagemResponse.setMessage("success");
+        mensagemResponse.setDetails(detalhes);
+
+        return new ResponseEntity<>(mensagemResponse, HttpStatus.OK);
     }
 
     @GetMapping("usuarioList")
@@ -303,4 +374,27 @@ public class UsuarioController {
             this.id = id;
         }
     }
+
+    public static class StatusUpdateRequestPedido {
+
+        private Pedido.StatusPedido status;
+        private Long id;
+
+        public Pedido.StatusPedido getStatus() {
+            return status;
+        }
+
+        public void setStatus(Pedido.StatusPedido status) {
+            this.status = status;
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+    }
+
 }

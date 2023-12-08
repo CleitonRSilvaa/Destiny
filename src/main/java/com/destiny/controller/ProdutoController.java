@@ -46,6 +46,13 @@ public class ProdutoController {
 
         Page<Produto> produtoPage = produtoService.buscarProdutos(page, size, nome);
         model.addAttribute("produtoPage", produtoPage);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        CustomUserDetails userDetails = userDetails = (CustomUserDetails) auth.getPrincipal();
+
+        model.addAttribute("usuario", userDetails);
+
         return "admin/admin-menager_produtos";
     }
 

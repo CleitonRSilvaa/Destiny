@@ -4,76 +4,217 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tela Exemplo</title>
-  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <title>Dashboard Destiny</title>
+
+
+  <link href="/css/tailwind.dashboard.css" rel="stylesheet">
+  <link href="/css/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../css/sweetalert2.min.css">
-  <link href="../css/style.css" rel="stylesheet">
   <script src="../js/sweetalert2.min.js"></script>
+  <link rel="icon" href="../img/LogoDestiny.svg">
+  <script src="../js/menu.js"></script>
 </head>
 
-<body class="d-flex flex-column">
+<body class="flex flex-col bg-gray-200 h-screen w-screen">
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand px-2" href="/">Destiny</a>
-    <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+  <nav class="bg-gray-800">
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+      <div class="relative flex h-16 items-center justify-between">
+        <!-- Botão do menu mobile -->
+        <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+          <button type="button" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+            <span class="sr-only">Open main menu</span>
+            <!-- Ícone do menu -->
+            <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+            <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
 
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="/">home</a>
-          </li>
+        <!-- Logotipo e links de navegação -->
+        <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+          <div class="flex-shrink-0 flex items-center">
+            <a href="/"><img class="h-8 w-auto" src="../img/LogoDestiny.svg" alt="Your Company"></a>
+          </div>
+          <div th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}" class="hidden sm:block sm:ml-6">
+            <div class="flex space-x-4">
+              <a class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page" href="/">Home</a>
+              <a class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page" href="/usuario/lista">Listar Usuários</a>
+              <a class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page" href="#">Listar Clientes</a>
+              <a class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page" href="/produto/listar">Listar Produtos</a>
+            </div>
+          </div>
+          <div th:if="${#authentication.authorities[0].authority == 'ROLE_ESTOQUISTA'}" class="hidden sm:block sm:ml-6">
+            <div class="flex space-x-4">
+              <a href="/" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Home</a>
 
-          <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}">
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="/usuario/lista">Listar Usuários</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="#">Listar Clientes</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="/produto/listar">Listar Produtos</a>
-            </li>
-          </th:block>
-          <th:block th:if="${#authentication.authorities[0].authority == 'ROLE_ESTOQUISTA'}">
+              <a href="/produto/listar" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Listar Produtos</a>
+              <a href="/usuario/pedidos-gerenciar" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Listar Pedidos</a>
+            </div>
+          </div>
 
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="/produto/listar">Listar Produtos</a>
-            </li>
-          </th:block>
-        </ul>
+        </div>
+
+        <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+          <input type="hidden" name="" id="carrinhoCount">
+
+          <!-- Dropdown de perfil -->
+          <div class="relative ml-3" th:if="${#authentication.authorities[0].authority == 'ROLE_CLIENTE'}">
+            <button type="button" class="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button">
+              <span class="sr-only">Open user menu</span>
+              <img class="h-8 w-8 rounded-full" src="https://destinyproject.blob.core.windows.net/destinypodruto/perfil.png" alt="">
+            </button>
+            <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+
+              <div class="px-4 py-3">
+                <span class="block text-sm text-gray-900 dark:text-white" th:text="${usuario.getNome}"></span>
+                <span class="block text-sm  text-gray-500 truncate dark:text-gray-400" th:text="${usuario.getUsername()}"></span>
+                <hr>
+              </div>
+              <a href="/" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Home</a>
+              <a href="/cliente/perfil" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Meu Perfil</a>
+              <a href="/cliente/alterar-senha" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Alterar Senha</a>
+              <a href="/cliente/meus-pedidos" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Meus pedidos</a>
+              <a href="/logout" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-4">Sair</a>
+            </div>
+          </div>
+
+          <div class="relative ml-3" sec:authorize="isAuthenticated()" th:if="${#authentication.authorities.?[authority == 'ROLE_ADMIN' || authority == 'ROLE_ESTOQUISTA'].size() > 0}">
+            <button type="button" class="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button">
+              <span class="sr-only">Open user menu</span>
+              <img class="h-8 w-8 rounded-full" src="https://destinyproject.blob.core.windows.net/destinypodruto/perfil.png" alt="">
+            </button>
+            <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+
+              <div class="px-4 py-3">
+                <span class="block text-sm text-gray-900 dark:text-white" th:text="${usuario.getNome}"></span>
+                <span class="block text-sm  text-gray-500 truncate dark:text-gray-400" th:text="${usuario.getUsername()}"></span>
+                <hr>
+              </div>
+              <a href="/" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Home</a>
+              <a href="/home" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Menu</a>
+              <a href="/logout" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-4">Sair</a>
+            </div>
+          </div>
+
+          <div class="relative ml-3" sec:authorize="!isAuthenticated()">
+
+            <a href="/login" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm mx-2 px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Entrar</a>
+
+          </div>
+        </div>
       </div>
+    </div>
+    </div>
 
-      <div sec:authorize="isAuthenticated()">
-        <spam class='text-white px-2' th:text="${#authentication.name}"></spam>
+    <!-- Menu mobile -->
+    <div class="sm:hidden hidden" id="mobile-menu">
+      <div class="space-y-1 px-2 pb-3 pt-2">
+        <a href="#" class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" aria-current="page">Pacotes</a>
+        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Passeios</a>
+        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Destinos</a>
+        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Itinerários</a>
       </div>
-
-      <a class="btn btn-outline-danger" href="/logout"><i class="bi bi-box-arrow-right px-1"></i>Sair</a>
     </div>
   </nav>
+  <div class="container mt-4 h-full">
 
-  <div class="container mt-4 flex-grow-1">
-    <div class="container p-5">
 
-    </div>
+
   </div>
 
-  <footer style="position: absolute; bottom: 0;" class="text-center text-lg-start bg-dark text-muted p-0 w-100">
-    <div class="text-center text-white">
-      &copy; 2023 Destiny. Todos os direitos reservados.</p>
+
+  <footer class="relative bg-gray-800 pt-8 pb-6">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-wrap text-left lg:text-left">
+        <div class="w-full lg:w-6/12 px-4">
+          <img class="h-8 w-auto" src="../img/LogoDestiny.svg" alt="Your Company">
+          <h1 class="text-2xl font-semibold text-white mt-6">Centrais de Atendimento</h1>
+          <h5 class="text-lg mt-0 mb-2 text-white">
+            Suporte Pós Venda 11 4002 8922 <br>
+            Segunda à Sexta: 09h às 21h <br>
+            Sábado e Feriados Nacionais: 09h às 16h <br>
+          </h5>
+          <div class="mt-6 lg:mb-0 mb-6">
+            <!-- Aqui deixei os botões como estavam pois parecem ter cores específicas -->
+
+          </div>
+        </div>
+        <div class="w-full lg:w-6/12 px-4">
+          <div class="flex flex-wrap items-top mb-6">
+            <div class="w-full lg:w-4/12 px-4 ml-auto">
+              <span class="block uppercase text-white text-sm font-semibold mb-2">Links Úteis</span>
+              <ul class="list-unstyled">
+                <li>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Sobre Nós</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="https://github.com/CleitonRSilvaa/Destiny">GitHub</a>
+                </li>
+              </ul>
+            </div>
+            <div class="w-full lg:w-4/12 px-4">
+              <span class="block uppercase text-white text-sm font-semibold mb-2">Compra Segura</span>
+              <ul class="list-unstyled">
+                <li>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Termos e
+                    Condições</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Política de
+                    Privacidade</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Black
+                    Friday</a>
+                  <a class="text-white hover:text-blueGray-800 font-semibold block pb-2 text-sm" href="#">Oferta
+                    Destiny</a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="w-full lg:w-4/12 px-4">
+              <span class="block uppercase text-white text-sm font-semibold mb-2">Forma de Pagamento</span>
+              <ul class="list-unstyled">
+                <li>
+                  <img class="h-25 w-auto" src="../img/formasPagamento.png" alt="Forma de Pagamento">
+                </li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <hr class="my-6 border-blueGray-300">
+      <div class="flex flex-wrap items-center md:justify-between justify-center">
+        <div class="w-full md:w-4/12 px-4 mx-auto text-center">
+          <div class="text-sm text-white font-semibold py-1">
+            Copyright © <span id="get-current-year">2023</span><a href="#" class="text-white hover:text-blueGray-800">
+              Destiny by
+              <a href="https://github.com/CleitonRSilvaa/Destiny" class="text-white hover:text-blueGray-800">Eco
+                Coders</a>.
+          </div>
+        </div>
+      </div>
     </div>
   </footer>
+
   <!-- Footer -->
+
+  <span th:if="${errorMessage}">
+    <script th:inline="javascript">
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: /*[[${errorMessage}]]*/"",
+        showConfirmButton: false,
+        timer: 1700
+      });
+    </script>
+  </span>
 
 
   <script src="../jquery/jquery.min.js"></script>
   <script src="../jquery/jquery.mask.min.js"></script>
   <script src="../js/bootstrap.bundle.min.js"></script>
-  <script src="../js/admin/main.js"></script>
   <script src="../js/popper.min.js"></script>
 
 </body>

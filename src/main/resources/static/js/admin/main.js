@@ -15,7 +15,7 @@ $(document).ready(function () {
   });
 });
 
-const BASE_URL = "https://destinyproject.azurewebsites.net",
+const BASE_URL = "http://localhost:8080",
   FormManager = {
     regexNumero: (e) => e.replace(/[^\d]+/g, ""),
     isValidEmail: (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e),
@@ -122,7 +122,7 @@ function makeRequest(e, t, a, i) {
   console.log(a),
     $.ajax({
       type: e,
-      url: `https://destinyproject.azurewebsites.net${t}`,
+      url: `http://localhost:8080${t}`,
       data: JSON.stringify(a),
       contentType: "application/json; charset=utf-8",
       success: function (e) {
