@@ -2,7 +2,7 @@ $(document).ready(function () {
   $("#cpf, #editCpf").mask("000.000.000-00");
 });
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = "http://destiny.eastus2.cloudapp.azure.com:8080";
 
 const FormManager = {
   regexNumero(dado) {
